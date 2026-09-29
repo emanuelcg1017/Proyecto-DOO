@@ -1,12 +1,18 @@
 package com.ketra.dao.datos.entidad.sqlserver;
 
+import java.sql.Connection;
 import java.util.List;
 import java.util.UUID;
 
 import com.ketra.dao.datos.entidad.PaisDAO;
+import com.ketra.dao.datos.entidad.SqlDAO;
 import com.ketra.entidad.PaisEntidad;
 
-public class PaisSqlServerDAO implements PaisDAO{
+public class PaisSqlServerDAO extends SqlDAO  implements PaisDAO{
+
+	public PaisSqlServerDAO(Connection conexion) {
+		super(conexion);
+	}
 
 	@Override
 	public PaisEntidad consultarPorId(UUID id) {
