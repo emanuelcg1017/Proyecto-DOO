@@ -24,7 +24,7 @@ public class CEDIEntidad {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	private void setId(UUID id) {
 		this.id = UtilUUID.obtenerValorDefecto(id);
 	}
 
@@ -32,7 +32,7 @@ public class CEDIEntidad {
 		return nombre;
 	}
 
-	public void setNombre(String nombre) {
+	private void setNombre(String nombre) {
 		this.nombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nombre);
 	}
 
@@ -40,7 +40,7 @@ public class CEDIEntidad {
 		return direccion;
 	}
 
-	public void setDireccion(DireccionEntidad direccion) {
+	private void setDireccion(DireccionEntidad direccion) {
 		this.direccion = UtilObjeto.obtenerValorDefectoSiNulo(direccion, new DireccionEntidad());
 	}
 
