@@ -24,7 +24,7 @@ public class CEDIDTO {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	private void setId(UUID id) {
 		this.id = UtilUUID.obtenerValorDefecto(id);
 	}
 
@@ -32,7 +32,7 @@ public class CEDIDTO {
 		return nombre;
 	}
 
-	public void setNombre(String nombre) {
+	private void setNombre(String nombre) {
 		this.nombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nombre);
 	}
 
@@ -40,7 +40,7 @@ public class CEDIDTO {
 		return direccion;
 	}
 
-	public void setDireccion(DireccionDTO direccion) {
+	private void setDireccion(DireccionDTO direccion) {
 		this.direccion = UtilObjeto.obtenerValorDefectoSiNulo(direccion, new DireccionDTO());
 	}
 
