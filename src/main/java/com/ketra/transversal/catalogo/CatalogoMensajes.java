@@ -49,4 +49,26 @@ public class CatalogoMensajes {
 
 		public static final String TECNICO_ERROR_CONEXION_SQL_SERVER ="Se presentó un error tratando de establecer la conexión con SQL Server. Detalle técnico: ";
 	}
+	
+	public static class SqlServerDAO {
+
+		private SqlServerDAO() {
+		}
+
+		public static final String USUARIO_ERROR_CREAR ="No fue posible realizar el registro solicitado.";
+
+		public static final String TECNICO_ERROR_CREAR ="Se presentó un error al ejecutar la operación de registro en la fuente de datos. Detalle técnico: ";
+
+		public static final String USUARIO_ERROR_CONSULTAR ="No fue posible realizar la consulta solicitada.";
+
+		public static final String TECNICO_ERROR_CONSULTAR ="Se presentó un error al ejecutar la operación de consulta en la fuente de datos. Detalle técnico: ";
+
+		public static final String USUARIO_ERROR_ACTUALIZAR ="No fue posible realizar la actualización solicitada.";
+
+		public static final String TECNICO_ERROR_ACTUALIZAR ="Se presentó un error al ejecutar la operación de actualización en la fuente de datos. Detalle técnico: ";
+
+		public static final String USUARIO_ERROR_ELIMINAR ="No fue posible realizar la eliminación solicitada.";
+
+		public static final String TECNICO_ERROR_ELIMINAR ="Se presentó un error al ejecutar la operación de eliminación en la fuente de datos. Detalle técnico: ";
+	}
 }
