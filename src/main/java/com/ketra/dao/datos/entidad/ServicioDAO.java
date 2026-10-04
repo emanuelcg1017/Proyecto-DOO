@@ -4,7 +4,8 @@ import java.util.UUID;
 import com.ketra.dao.datos.ActualizarDAO;
 import com.ketra.dao.datos.ConsultarDAO;
 import com.ketra.dao.datos.CrearDAO;
+import com.ketra.entidad.ServicioEntidad;
 
-public interface ServicioDAO extends CrearDAO<ServicioDAO>, ConsultarDAO<ServicioDAO, UUID>, ActualizarDAO<ServicioDAO, UUID>{
+public interface ServicioDAO extends CrearDAO<ServicioEntidad>, ConsultarDAO<ServicioEntidad, UUID>, ActualizarDAO<ServicioEntidad, UUID>{
 
 }

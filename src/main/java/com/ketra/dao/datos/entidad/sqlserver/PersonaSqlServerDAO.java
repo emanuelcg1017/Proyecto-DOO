@@ -14,35 +14,36 @@ import com.ketra.entidad.PersonaEntidad;
 import com.ketra.entidad.TipoDocumentoEntidad;
 import com.ketra.transversal.catalogo.CatalogoMensajes;
 import com.ketra.transversal.excepciones.KETRADatosException;
+import com.ketra.transversal.utilitarios.UtilUUID;
 
 public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 
-	public PersonaSqlServerDAO(final Connection conexion) {
+	public PersonaSqlServerDAO(Connection conexion) {
 		super(conexion);
 	}
 
 	@Override
-	public void crear(final PersonaEntidad entidad) {
+	public void crear(PersonaEntidad entidad) {
 
 		final String sql = """
 				INSERT INTO Persona (
-					ID,
-					IDTipoDocumento,
-					NumeroIdentificacion,
-					PrimerNombre,
-					SegundoNombre,
-					PrimerApellido,
-					SegundoApellido,
-					NumeroTelefonico,
-					CorreoElectronico
+					id,
+					idTipoDocumento,
+					numeroIdentificacion,
+					primerNombre,
+					segundoNombre,
+					primerApellido,
+					segundoApellido,
+					numeroTelefonico,
+					correoElectronico
 				)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 				""";
 
-		try (PreparedStatement sentencia =getConexion().prepareStatement(sql)) {
+		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
-			sentencia.setString(1,entidad.getId().toString());
-			sentencia.setString(2,entidad.getTipoDocumento().getId().toString());
+			sentencia.setObject(1,entidad.getId());
+			sentencia.setObject(2,entidad.getTipoDocumento().getId());
 			sentencia.setString(3,entidad.getNumeroIdentificacion());
 			sentencia.setString(4,entidad.getPrimerNombre());
 			sentencia.setString(5,entidad.getSegundoNombre());
@@ -50,49 +51,75 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 			sentencia.setString(7,entidad.getSegundoApellido());
 			sentencia.setString(8,entidad.getNumeroTelefonico());
 			sentencia.setString(9,entidad.getCorreoElectronico());
+
 			sentencia.executeUpdate();
 
 		} catch (SQLException excepcion) {
 
-			throw KETRADatosException.crear(CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CREAR,
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CREAR,
 					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CREAR + excepcion.getMessage(),
+					excepcion);
+
+		} catch (Exception excepcion) {
+
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CREAR,
+					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CREAR + excepcion.getMessage(),
 					excepcion);
 		}
 	}
 
 	@Override
-	public PersonaEntidad consultarPorId(final UUID id) {
+	public PersonaEntidad consultarPorId(UUID id) {
 
 		final String sql = """
 				SELECT
-					ID,
-					IDTipoDocumento,
-					NumeroIdentificacion,
-					PrimerNombre,
-					SegundoNombre,
-					PrimerApellido,
-					SegundoApellido,
-					NumeroTelefonico,
-					CorreoElectronico
-				FROM Persona
-				WHERE ID = ?
+					p.id,
+					p.idTipoDocumento,
+					td.nombre AS nombreTipoDocumento,
+					p.numeroIdentificacion,
+					p.primerNombre,
+					p.segundoNombre,
+					p.primerApellido,
+					p.segundoApellido,
+					p.numeroTelefonico,
+					p.correoElectronico
+				FROM Persona p
+				INNER JOIN TipoDocumento td
+					ON p.idTipoDocumento = td.id
+				WHERE p.id = ?
 				""";
 
-		try (PreparedStatement sentencia =getConexion().prepareStatement(sql)) {
+		try (PreparedStatement sentencia =
+				getConexion().prepareStatement(sql)) {
 
-			sentencia.setString(1,id.toString());
-			
-			try (ResultSet resultado =sentencia.executeQuery()) {
+			sentencia.setObject(
+					1,
+					id);
+
+			try (ResultSet resultado =
+					sentencia.executeQuery()) {
 
 				if (resultado.next()) {
-					return construirPersonaEntidad(resultado);
+
+					return construirPersonaEntidad(
+							resultado);
 				}
 			}
 
 		} catch (SQLException excepcion) {
 
-			throw KETRADatosException.crear(CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
 					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					excepcion);
+
+		} catch (Exception excepcion) {
+
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
+					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
 					excepcion);
 		}
 
@@ -102,54 +129,96 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 	@Override
 	public List<PersonaEntidad> consultarTodos() {
 
-		return consultarPorFiltro(new PersonaEntidad.Builder().build());
+		return consultarPorFiltro(null);
 	}
 
 	@Override
-	public List<PersonaEntidad> consultarPorFiltro(
-			final PersonaEntidad filtro) {
+	public List<PersonaEntidad> consultarPorFiltro(PersonaEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
 						SELECT
-							ID,
-							IDTipoDocumento,
-							NumeroIdentificacion,
-							PrimerNombre,
-							SegundoNombre,
-							PrimerApellido,
-							SegundoApellido,
-							NumeroTelefonico,
-							CorreoElectronico
-						FROM Persona
-						WHERE 1 = 1
+							p.id,
+							p.idTipoDocumento,
+							td.nombre AS nombreTipoDocumento,
+							p.numeroIdentificacion,
+							p.primerNombre,
+							p.segundoNombre,
+							p.primerApellido,
+							p.segundoApellido,
+							p.numeroTelefonico,
+							p.correoElectronico
+						FROM Persona p
+						INNER JOIN TipoDocumento td
+							ON p.idTipoDocumento = td.id
 						""");
+
+		final List<String> condiciones = new ArrayList<>();
 
 		final List<Object> parametros = new ArrayList<>();
 
 		if (filtro != null) {
-			
-			if (filtro.getNumeroIdentificacion() != null && !filtro.getNumeroIdentificacion().isBlank()) {sql.append(" AND NumeroIdentificacion = ?");
 
+			final UUID idDefecto = UtilUUID.obtenerValorDefecto(null);
+
+			if (filtro.getId() != null && !idDefecto.equals(filtro.getId())) {
+
+				condiciones.add("p.id = ?");
+				parametros.add(filtro.getId());
+			}
+
+			if (filtro.getTipoDocumento() != null && filtro.getTipoDocumento().getId() != null && !idDefecto.equals(filtro.getTipoDocumento().getId())) {
+
+				condiciones.add("p.idTipoDocumento = ?");
+				parametros.add(filtro.getTipoDocumento().getId());
+			}
+
+			if (tieneValor(filtro.getNumeroIdentificacion())) {
+
+				condiciones.add("p.numeroIdentificacion = ?");
 				parametros.add(filtro.getNumeroIdentificacion());
 			}
 
-			if (filtro.getPrimerNombre() != null && !filtro.getPrimerNombre().isBlank()) {
+			if (tieneValor(filtro.getPrimerNombre())) {
 
-				sql.append(" AND PrimerNombre = ?");
+				condiciones.add("p.primerNombre = ?");
 				parametros.add(filtro.getPrimerNombre());
 			}
 
-			if (filtro.getPrimerApellido() != null && !filtro.getPrimerApellido().isBlank()) {
+			if (tieneValor(filtro.getSegundoNombre())) {
 
-				sql.append(" AND PrimerApellido = ?");
+				condiciones.add("p.segundoNombre = ?");
+				parametros.add(filtro.getSegundoNombre());
+			}
+
+			if (tieneValor(filtro.getPrimerApellido())) {
+
+				condiciones.add("p.primerApellido = ?");
 				parametros.add(filtro.getPrimerApellido());
 			}
 
-			if (filtro.getCorreoElectronico() != null && !filtro.getCorreoElectronico().isBlank()) {
+			if (tieneValor(filtro.getSegundoApellido())) {
 
-				sql.append(" AND CorreoElectronico = ?");
+				condiciones.add("p.segundoApellido = ?");
+				parametros.add(filtro.getSegundoApellido());
+			}
+
+			if (tieneValor(filtro.getNumeroTelefonico())) {
+
+				condiciones.add("p.numeroTelefonico = ?");
+				parametros.add(filtro.getNumeroTelefonico());
+			}
+
+			if (tieneValor(filtro.getCorreoElectronico())) {
+
+				condiciones.add("p.correoElectronico = ?");
 				parametros.add(filtro.getCorreoElectronico());
 			}
+		}
+
+		if (!condiciones.isEmpty()) {
+
+			sql.append(" WHERE ");
+			sql.append(String.join(" AND ", condiciones));
 		}
 
 		final List<PersonaEntidad> resultados = new ArrayList<>();
@@ -171,8 +240,16 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 
 		} catch (SQLException excepcion) {
 
-			throw KETRADatosException.crear(CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
 					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					excepcion);
+
+		} catch (Exception excepcion) {
+
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
+					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
 					excepcion);
 		}
 
@@ -180,50 +257,55 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 	}
 
 	@Override
-	public void eliminar(final UUID id) {
+	public void eliminar(UUID id) {
 
 		final String sql = """
 				DELETE FROM Persona
-				WHERE ID = ?
+				WHERE id = ?
 				""";
 
-		try (PreparedStatement sentencia =
-				getConexion().prepareStatement(sql)) {
+		try (PreparedStatement sentencia =getConexion().prepareStatement(sql)) {
 
-			sentencia.setString(1,id.toString());
+			sentencia.setObject(1,id);
+
 			sentencia.executeUpdate();
 
 		} catch (SQLException excepcion) {
 
-			throw KETRADatosException.crear(CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ELIMINAR,
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ELIMINAR,
 					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_ELIMINAR + excepcion.getMessage(),
+					excepcion);
+
+		} catch (Exception excepcion) {
+
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ELIMINAR,
+					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_ELIMINAR + excepcion.getMessage(),
 					excepcion);
 		}
 	}
 
 	@Override
-	public void actualizar(
-			final UUID id,
-			final PersonaEntidad entidad) {
+	public void actualizar(UUID id, PersonaEntidad entidad) {
 
 		final String sql = """
 				UPDATE Persona
 				SET
-					IDTipoDocumento = ?,
-					NumeroIdentificacion = ?,
-					PrimerNombre = ?,
-					SegundoNombre = ?,
-					PrimerApellido = ?,
-					SegundoApellido = ?,
-					NumeroTelefonico = ?,
-					CorreoElectronico = ?
-				WHERE ID = ?
+					idTipoDocumento = ?,
+					numeroIdentificacion = ?,
+					primerNombre = ?,
+					segundoNombre = ?,
+					primerApellido = ?,
+					segundoApellido = ?,
+					numeroTelefonico = ?,
+					correoElectronico = ?
+				WHERE id = ?
 				""";
 
-		try (PreparedStatement sentencia =
-				getConexion().prepareStatement(sql)) {
+		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
-			sentencia.setString(1,entidad.getTipoDocumento().getId().toString());
+			sentencia.setObject(1,entidad.getTipoDocumento().getId());
 			sentencia.setString(2,entidad.getNumeroIdentificacion());
 			sentencia.setString(3,entidad.getPrimerNombre());
 			sentencia.setString(4,entidad.getSegundoNombre());
@@ -231,13 +313,22 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 			sentencia.setString(6,entidad.getSegundoApellido());
 			sentencia.setString(7,entidad.getNumeroTelefonico());
 			sentencia.setString(8,entidad.getCorreoElectronico());
-			sentencia.setString(9,id.toString());
+			sentencia.setObject(9,id);
+
 			sentencia.executeUpdate();
 
 		} catch (SQLException excepcion) {
 
-			throw KETRADatosException.crear(CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ACTUALIZAR,
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ACTUALIZAR,
 					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_ACTUALIZAR + excepcion.getMessage(),
+					excepcion);
+
+		} catch (Exception excepcion) {
+
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ACTUALIZAR,
+					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_ACTUALIZAR + excepcion.getMessage(),
 					excepcion);
 		}
 	}
@@ -247,19 +338,23 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 			throws SQLException {
 
 		final TipoDocumentoEntidad tipoDocumento = new TipoDocumentoEntidad.Builder()
-						.id(UUID.fromString(resultado.getString("IDTipoDocumento")))
-						.build();
+						.id(UUID.fromString(resultado.getString("idTipoDocumento")))
+						.nombre(resultado.getString("nombreTipoDocumento")).build();
 
 		return new PersonaEntidad.Builder()
-				.id(UUID.fromString(resultado.getString("ID")))
+				.id(UUID.fromString(resultado.getString("id")))
 				.tipoDocumento(tipoDocumento)
-				.numeroIdentificacion(resultado.getString("NumeroIdentificacion"))
-				.primerNombre(resultado.getString("PrimerNombre"))
-				.segundoNombre(resultado.getString("SegundoNombre"))
-				.primerApellido(resultado.getString("PrimerApellido"))
-				.segundoApellido(resultado.getString("SegundoApellido"))
-				.numeroTelefonico(resultado.getString("NumeroTelefonico"))
-				.correoElectronico(resultado.getString("CorreoElectronico"))
-				.build();
+				.numeroIdentificacion(resultado.getString("numeroIdentificacion"))
+				.primerNombre(resultado.getString("primerNombre"))
+				.segundoNombre(resultado.getString("segundoNombre"))
+				.primerApellido(resultado.getString("primerApellido"))
+				.segundoApellido(resultado.getString("segundoApellido"))
+				.numeroTelefonico(resultado.getString("numeroTelefonico"))
+				.correoElectronico(resultado.getString("correoElectronico")).build();
+	}
+
+	private boolean tieneValor(String valor) {
+
+		return valor != null && !valor.isBlank();
 	}
 }
