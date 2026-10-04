@@ -56,19 +56,44 @@ public class CatalogoMensajes {
 		}
 
 		public static final String USUARIO_ERROR_CREAR ="No fue posible realizar el registro solicitado.";
-
+		
 		public static final String TECNICO_ERROR_CREAR ="Se presentó un error al ejecutar la operación de registro en la fuente de datos. Detalle técnico: ";
+		
+		public static final String TECNICO_ERROR_NO_CONTROLADO_CREAR ="Se presentó un error no controlado al realizar la operación de registro. Detalle técnico: ";
 
 		public static final String USUARIO_ERROR_CONSULTAR ="No fue posible realizar la consulta solicitada.";
 
 		public static final String TECNICO_ERROR_CONSULTAR ="Se presentó un error al ejecutar la operación de consulta en la fuente de datos. Detalle técnico: ";
 
+		public static final String TECNICO_ERROR_NO_CONTROLADO_CONSULTAR ="Se presentó un error no controlado al realizar la operación de consulta. Detalle técnico: ";
+
 		public static final String USUARIO_ERROR_ACTUALIZAR ="No fue posible realizar la actualización solicitada.";
 
 		public static final String TECNICO_ERROR_ACTUALIZAR ="Se presentó un error al ejecutar la operación de actualización en la fuente de datos. Detalle técnico: ";
 
+		public static final String TECNICO_ERROR_NO_CONTROLADO_ACTUALIZAR ="Se presentó un error no controlado al realizar la operación de actualización. Detalle técnico: ";
+
 		public static final String USUARIO_ERROR_ELIMINAR ="No fue posible realizar la eliminación solicitada.";
 
 		public static final String TECNICO_ERROR_ELIMINAR ="Se presentó un error al ejecutar la operación de eliminación en la fuente de datos. Detalle técnico: ";
+
+		public static final String TECNICO_ERROR_NO_CONTROLADO_ELIMINAR ="Se presentó un error no controlado al realizar la operación de eliminación. Detalle técnico: ";
+		
+	}
+	
+	public static final class UtilidadNegocioImpl {
+		
+		private UtilidadNegocioImpl() {
+		}
+
+		public static final String ID_SERVICIO_REQUERIDO ="Se requiere un servicio válido para generar la utilidad.";
+
+		public static final String SERVICIO_NO_EXISTE = "El servicio indicado no existe.";
+
+		public static final String SERVICIO_DEBE_ESTAR_FINALIZADO = "La utilidad solo puede generarse cuando el servicio esté finalizado.";
+
+		public static final String UTILIDAD_YA_GENERADA = "La utilidad del servicio ya fue generada.";
+
+
 	}
 }

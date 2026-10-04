@@ -6,8 +6,12 @@ import java.sql.SQLException;
 
 import com.ketra.dao.datos.entidad.DepartamentoDAO;
 import com.ketra.dao.datos.entidad.PaisDAO;
+import com.ketra.dao.datos.entidad.ServicioDAO;
+import com.ketra.dao.datos.entidad.UtilidadDAO;
 import com.ketra.dao.datos.entidad.sqlserver.DepartamentoSqlServerDAO;
 import com.ketra.dao.datos.entidad.sqlserver.PaisSqlServerDAO;
+import com.ketra.dao.datos.entidad.sqlserver.ServicioSqlServerDAO;
+import com.ketra.dao.datos.entidad.sqlserver.UtilidadSqlServerDAO;
 import com.ketra.dao.factoria.DAOFactory;
 import com.ketra.transversal.catalogo.CatalogoMensajes;
 import com.ketra.transversal.excepciones.KETRADatosException;
@@ -30,7 +34,7 @@ public class SqlServerDAOFactory extends DAOFactory{
 
 		try {
 
-			String url = "jdbc:sqlserver://Emanuel:1433;"
+			String url = "jdbc:sqlserver://localhost:1433;"
 					+ "databaseName=KETRA;"
 					+ "integratedSecurity=true;"
 					+ "encrypt=true;"
@@ -63,5 +67,17 @@ public class SqlServerDAOFactory extends DAOFactory{
 		return new DepartamentoSqlServerDAO(getConexion());
 		
 	}
+
+	@Override
+	public UtilidadDAO obtenerUtilidadDAO() {
+		return new UtilidadSqlServerDAO(getConexion());
+	}
+
+	@Override
+	public ServicioDAO obtenerServicioDAO() {
+		return new ServicioSqlServerDAO(getConexion());
+	}
+	
+	
 
 }

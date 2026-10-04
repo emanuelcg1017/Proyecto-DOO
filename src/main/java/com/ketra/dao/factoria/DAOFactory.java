@@ -1,9 +1,10 @@
 package com.ketra.dao.factoria;
 
 import java.sql.Connection;
-
 import com.ketra.dao.datos.entidad.DepartamentoDAO;
 import com.ketra.dao.datos.entidad.PaisDAO;
+import com.ketra.dao.datos.entidad.ServicioDAO;
+import com.ketra.dao.datos.entidad.UtilidadDAO;
 import com.ketra.transversal.utilitarios.UtilSQL;
 
 
@@ -57,5 +58,9 @@ public abstract class DAOFactory {
 	public abstract PaisDAO obtenerPaisDAO();
 	
 	public abstract DepartamentoDAO obtenerDepartamentoDAO();
+
+	public abstract UtilidadDAO obtenerUtilidadDAO();
+
+	public abstract ServicioDAO obtenerServicioDAO();
 
 }

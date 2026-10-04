@@ -1,38 +1,45 @@
 package com.ketra.dao.datos.entidad.sqlserver;
 
+import java.sql.Connection;
 import java.util.List;
 import java.util.UUID;
 
 import com.ketra.dao.datos.entidad.ServicioDAO;
+import com.ketra.dao.datos.entidad.SqlDAO;
+import com.ketra.entidad.ServicioEntidad;
 
-public class ServicioSqlServerDAO implements ServicioDAO{
+public class ServicioSqlServerDAO extends SqlDAO implements ServicioDAO{
+
+	public ServicioSqlServerDAO(Connection conexion) {
+		super(conexion);
+	}
 
 	@Override
-	public void crear(ServicioDAO entidad) {
+	public void crear(ServicioEntidad entidad) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public ServicioDAO consultarPorId(UUID id) {
+	public ServicioEntidad consultarPorId(UUID id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<ServicioDAO> consultarPorFiltro(ServicioDAO filtro) {
+	public List<ServicioEntidad> consultarPorFiltro(ServicioEntidad filtro) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<ServicioDAO> consultarTodos() {
+	public List<ServicioEntidad> consultarTodos() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void actualizar(UUID id, ServicioDAO entidad) {
+	public void actualizar(UUID id, ServicioEntidad entidad) {
 		// TODO Auto-generated method stub
 		
 	}

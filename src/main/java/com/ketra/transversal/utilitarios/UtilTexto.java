@@ -2,7 +2,7 @@ package com.ketra.transversal.utilitarios;
 
 public class UtilTexto {
 	private static UtilTexto INSTANCIA;
-	public static String VACIO;
+	public static final String VACIO = "" ;
 	
 	private UtilTexto() {
 		

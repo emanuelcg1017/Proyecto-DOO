@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Consultar utilidad | KETRA</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" th:href="@{/css/consultar-utilidad.css}" href="/css/consultar-utilidad.css">
+  <script defer th:src="@{/js/consultar-utilidad.js}" src="/js/consultar-utilidad.js"></script>
+</head>
+<body>
+  <aside class="sidebar" aria-label="Navegación principal">
+    <a class="brand" th:href="@{/utilidad}" href="/utilidad"><span class="brand-mark" aria-hidden="true">K</span><span>KETRA<small>Logística Puerta a Puerta</small></span></a>
+    <nav>
+      <span class="nav-item muted">⌂ <span>Inicio</span></span>
+      <span class="nav-item muted">▤ <span>Empresas</span></span>
+      <span class="nav-item muted">▤ <span>Servicios</span></span>
+      <span class="nav-item muted">▣ <span>Entregas</span></span>
+      <span class="nav-item muted">▤ <span>Facturación</span></span>
+      <a class="nav-item active" aria-current="page" th:href="@{/utilidad}" href="/utilidad">▥ <span>Utilidades</span></a>
+      <span class="nav-item muted">▥ <span>Reportes</span></span>
+    </nav>
+    <div class="sidebar-footer">Gestión de servicios</div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><span>Operación / Utilidades</span><span class="user"><span aria-hidden="true" class="avatar">U</span> Usuario</span></header>
+    <main class="container-fluid">
+      <div class="page-heading"><span class="eyebrow">UTILIDADES</span><h1>Consultar utilidad por servicio</h1><p>Consulta los ingresos, los costos y la utilidad de un servicio finalizado.</p></div>
+      <form id="consulta-form" class="filter-card" th:attr="data-api-base=@{/api/utilidades/}" data-api-base="/api/utilidades/">
+        <div class="service-input"><label for="servicio" class="form-label">Seleccionar servicio</label><select id="servicio" name="servicio" class="form-select"><option value="SRV-001">SRV-001</option></select></div>
+        <button id="consultar" class="btn btn-primary" type="submit"><span aria-hidden="true">⌕</span> Consultar utilidad</button>
+        <p class="filter-note">La utilidad se calcula automáticamente al finalizar el servicio.</p>
+      </form>
+      <div id="mensaje" class="feedback" role="status" aria-live="polite">Selecciona el servicio y consulta su utilidad.</div>
+      <div id="resultado" class="result-layout" hidden aria-busy="false">
+        <div class="detail-column">
+          <section class="panel"><div class="panel-heading"><h2>Información del servicio</h2></div><div class="service-info"><div><span>Número de servicio</span><strong id="numero-servicio"></strong></div><div><span>Fecha del servicio</span><strong id="fecha-servicio"></strong></div><div><span>Estado del servicio</span><strong id="estado-servicio" class="status-pill"></strong></div></div></section>
+          <section class="panel"><div class="panel-heading"><h2><span class="section-number">1</span> Facturas asociadas al servicio</h2><span class="section-total">Ingresos <strong id="total-ingresos"></strong></span></div><div class="table-responsive"><table class="table"><caption class="visually-hidden">Facturas e ingresos del servicio</caption><thead><tr><th scope="col">Número factura</th><th scope="col">Fecha factura</th><th scope="col" class="amount">Valor factura</th><th scope="col">Estado</th></tr></thead><tbody id="facturas"></tbody></table></div></section>
+          <section class="panel"><div class="panel-heading"><h2><span class="section-number">2</span> Entregas asociadas al servicio</h2></div><div class="table-responsive"><table class="table"><caption class="visually-hidden">Entregas del servicio</caption><thead><tr><th scope="col">Código entrega</th><th scope="col">Fecha entrega</th><th scope="col">Estado</th></tr></thead><tbody id="entregas"></tbody></table></div></section>
+          <section class="panel"><div class="panel-heading"><h2><span class="section-number">3</span> Detalles de entrega</h2></div><div class="table-responsive"><table class="table"><caption class="visually-hidden">Detalles de las entregas del servicio</caption><thead><tr><th scope="col">Número detalle</th><th scope="col">Código entrega</th><th scope="col">Pedido</th><th scope="col" class="amount">Distancia (km)</th></tr></thead><tbody id="detalles"></tbody></table></div></section>
+          <section class="panel"><div class="panel-heading"><h2><span class="section-number">4</span> Costos de recorrido</h2></div><div class="table-responsive"><table class="table"><caption class="visually-hidden">Costos de recorrido de los detalles de entrega</caption><thead><tr><th scope="col">Número costo</th><th scope="col">Número detalle</th><th scope="col" class="amount">Valor por km</th><th scope="col" class="amount">Distancia (km)</th><th scope="col" class="amount">Valor costo</th></tr></thead><tbody id="costos"></tbody><tfoot><tr><th scope="row" colspan="4">Total costos</th><td class="amount" id="total-costos"></td></tr></tfoot></table></div></section>
+        </div>
+        <aside class="summary-column"><section class="summary-card" aria-labelledby="titulo-resultado"><span class="eyebrow">RESUMEN DEL SERVICIO</span><h2 id="titulo-resultado">Resultado de la utilidad</h2><dl><div><dt>Valor ingresos</dt><dd id="valor-ingresos"></dd></div><div><dt>Valor costos</dt><dd id="valor-costos"></dd></div><div class="profit"><dt>Valor utilidad</dt><dd id="valor-utilidad"></dd></div></dl><p>Utilidad registrada para el servicio finalizado.</p></section></aside>
+      </div>
+      <noscript><div class="alert alert-warning">Activa JavaScript para consultar la utilidad.</div></noscript>
+    </main>
+  </div>
+</body>
+</html>
