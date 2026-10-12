@@ -1,16 +1,39 @@
 package com.ketra.dao.factoria;
 
 import java.sql.Connection;
+
+
+import com.ketra.dao.datos.entidad.CostoRecorridoDAO;
 import com.ketra.dao.datos.entidad.DepartamentoDAO;
+import com.ketra.dao.datos.entidad.FacturaDAO;
 import com.ketra.dao.datos.entidad.PaisDAO;
 import com.ketra.dao.datos.entidad.ServicioDAO;
 import com.ketra.dao.datos.entidad.UtilidadDAO;
+import com.ketra.dao.factoria.enums.FactoriaEnum;
+import com.ketra.dao.factoria.impl.SqlServerDAOFactory;
+import com.ketra.transversal.catalogo.CatalogoMensajes;
+import com.ketra.transversal.excepciones.KETRAFachadaException;
 import com.ketra.transversal.utilitarios.UtilSQL;
 
 
 public abstract class DAOFactory {
 
 	private Connection conexion;
+	private static FactoriaEnum factoria = FactoriaEnum.SQLSERVER;
+	
+	public static DAOFactory obtenerFactoria() {
+		switch (factoria) {
+		
+			case SQLSERVER: {
+				return new SqlServerDAOFactory();
+			}
+			default:
+				
+				var mensajeUsuario = CatalogoMensajes.DAOFactory.FUENTE_DATOS_NO_HABILITADA;
+				throw KETRAFachadaException.crear(mensajeUsuario);
+			}
+	}
+	
 	
 	protected DAOFactory() {
 		abrirConexion();
@@ -49,7 +72,7 @@ public abstract class DAOFactory {
 		
 	}
 	
-	public void cancelarTransacion() {
+	public void cancelarTransaccion() {
 		
 		UtilSQL.cancelarTransaccion(conexion);
 		
@@ -62,5 +85,9 @@ public abstract class DAOFactory {
 	public abstract UtilidadDAO obtenerUtilidadDAO();
 
 	public abstract ServicioDAO obtenerServicioDAO();
+
+	public abstract FacturaDAO obtenerFacturaDAO();
+
+	public abstract CostoRecorridoDAO obtenerCostoRecorridoDAO();
 
 }

@@ -15,18 +15,23 @@ public class UtilidadDTO {
 	private Double valorUtilidad;
 
 	public UtilidadDTO() {
-		setId(UtilUUID.obtenerValorDefecto(id));
-		setServicio(new ServicioDTO());
-		setValorIngresos(UtilNumero.CERO_DECIMAL);
-		setValorCostos(UtilNumero.CERO_DECIMAL);
-		setValorUtilidad(UtilNumero.CERO_DECIMAL);
+		this(new Builder());
+	}
+
+	private UtilidadDTO(Builder builder) {
+
+		setId(builder.id);
+		setServicio(builder.servicio);
+		setValorIngresos(builder.valorIngresos);
+		setValorCostos(builder.valorCostos);
+		setValorUtilidad(builder.valorUtilidad);
 	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	private void setId(UUID id) {
+	public void setId(UUID id) {
 		this.id = UtilUUID.obtenerValorDefecto(id);
 	}
 
@@ -34,15 +39,15 @@ public class UtilidadDTO {
 		return servicio;
 	}
 
-	private void setServicio(ServicioDTO servicio) {
-		this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio, new ServicioDTO());
+	public void setServicio(ServicioDTO servicio) {
+		this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio, new ServicioDTO.Builder().build());
 	}
 
 	public Double getValorIngresos() {
 		return valorIngresos;
 	}
 
-	private void setValorIngresos(Double valorIngresos) {
+	public void setValorIngresos(Double valorIngresos) {
 		this.valorIngresos = UtilNumero.obtenerValorDefecto(valorIngresos, UtilNumero.CERO_DECIMAL);
 	}
 
@@ -50,7 +55,7 @@ public class UtilidadDTO {
 		return valorCostos;
 	}
 
-	private void setValorCostos(Double valorCostos) {
+	public void setValorCostos(Double valorCostos) {
 		this.valorCostos = UtilNumero.obtenerValorDefecto(valorCostos, UtilNumero.CERO_DECIMAL);
 	}
 
@@ -58,8 +63,54 @@ public class UtilidadDTO {
 		return valorUtilidad;
 	}
 
-	private void setValorUtilidad(Double valorUtilidad) {
+	public void setValorUtilidad(Double valorUtilidad) {
 		this.valorUtilidad = UtilNumero.obtenerValorDefecto(valorUtilidad, UtilNumero.CERO_DECIMAL);
 	}
 
+	public static class Builder {
+
+		private UUID id;
+		private ServicioDTO servicio;
+		private Double valorIngresos;
+		private Double valorCostos;
+		private Double valorUtilidad;
+
+		public Builder() {
+
+			id = UtilUUID.obtenerValorDefecto(id);
+			servicio = new ServicioDTO.Builder().build();
+			valorIngresos = UtilNumero.CERO_DECIMAL;
+			valorCostos = UtilNumero.CERO_DECIMAL;
+			valorUtilidad = UtilNumero.CERO_DECIMAL;
+		}
+
+		public Builder id(UUID id) {
+			this.id = id;
+			return this;
+		}
+
+		public Builder servicio(ServicioDTO servicio) {
+			this.servicio = servicio;
+			return this;
+		}
+
+		public Builder valorIngresos(Double valorIngresos) {
+			this.valorIngresos = valorIngresos;
+			return this;
+		}
+
+		public Builder valorCostos(Double valorCostos) {
+			this.valorCostos = valorCostos;
+			return this;
+		}
+
+		public Builder valorUtilidad(Double valorUtilidad) {
+			this.valorUtilidad = valorUtilidad;
+			return this;
+		}
+
+		public UtilidadDTO build() {
+			return new UtilidadDTO(this);
+		}
+	}
 }

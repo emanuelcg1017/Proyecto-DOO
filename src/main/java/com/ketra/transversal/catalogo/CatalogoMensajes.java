@@ -2,6 +2,8 @@ package com.ketra.transversal.catalogo;
 
 public class CatalogoMensajes {
 
+	
+
 	private CatalogoMensajes() {
 
 	}
@@ -96,4 +98,28 @@ public class CatalogoMensajes {
 
 
 	}
+	
+	public static final class UtilidadFachadaImpl {
+		
+		private UtilidadFachadaImpl() {
+		}
+
+		public static final String ERROR_GENERANDO_UTILIDAD = "Se presentó un problema inesperado generando la utilidad del servicio. Por favor, inténtelo nuevamente o contacte al administrador.";
+
+		public static final String ERROR_CONSULTANDO_UTILIDAD = "Se presentó un problema inesperado consultando la utilidad del servicio. Por favor, inténtelo nuevamente o contacte al administrador.";
+
+		public static final String ERROR_CERRANDO_CONEXION = "Se presentó un problema cerrando la conexión con la base de datos.";
+
+	}
+	
+	public static final class DAOFactory {
+		
+		private DAOFactory() {
+		}
+
+		public static final String FUENTE_DATOS_NO_HABILITADA = "La fuente de datos solicitada no está habilitada. Por favor, contacte al administrador de la aplicación.";
+
+	}
+	
+
 }

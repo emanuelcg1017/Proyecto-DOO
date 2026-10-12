@@ -14,6 +14,7 @@ import com.ketra.entidad.PersonaEntidad;
 import com.ketra.entidad.TipoDocumentoEntidad;
 import com.ketra.transversal.catalogo.CatalogoMensajes;
 import com.ketra.transversal.excepciones.KETRADatosException;
+import com.ketra.transversal.utilitarios.UtilTexto;
 import com.ketra.transversal.utilitarios.UtilUUID;
 
 public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
@@ -91,20 +92,15 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 				WHERE p.id = ?
 				""";
 
-		try (PreparedStatement sentencia =
-				getConexion().prepareStatement(sql)) {
+		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
-			sentencia.setObject(
-					1,
-					id);
+			sentencia.setObject(1,id);
 
-			try (ResultSet resultado =
-					sentencia.executeQuery()) {
+			try (ResultSet resultado = sentencia.executeQuery()) {
 
 				if (resultado.next()) {
 
-					return construirPersonaEntidad(
-							resultado);
+					return construirPersonaEntidad(resultado);
 				}
 			}
 
@@ -129,96 +125,102 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 	@Override
 	public List<PersonaEntidad> consultarTodos() {
 
-		return consultarPorFiltro(null);
+		return consultarPorFiltro(new PersonaEntidad.Builder().build());
 	}
 
 	@Override
 	public List<PersonaEntidad> consultarPorFiltro(PersonaEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-						SELECT
-							p.id,
-							p.idTipoDocumento,
-							td.nombre AS nombreTipoDocumento,
-							p.numeroIdentificacion,
-							p.primerNombre,
-							p.segundoNombre,
-							p.primerApellido,
-							p.segundoApellido,
-							p.numeroTelefonico,
-							p.correoElectronico
-						FROM Persona p
-						INNER JOIN TipoDocumento td
-							ON p.idTipoDocumento = td.id
-						""");
+				SELECT
+					p.id,
+					p.idTipoDocumento,
+					td.nombre AS nombreTipoDocumento,
+					p.numeroIdentificacion,
+					p.primerNombre,
+					p.segundoNombre,
+					p.primerApellido,
+					p.segundoApellido,
+					p.numeroTelefonico,
+					p.correoElectronico
+				FROM Persona p
+				INNER JOIN TipoDocumento td
+					ON p.idTipoDocumento = td.id
+				""");
 
 		final List<String> condiciones = new ArrayList<>();
 
 		final List<Object> parametros = new ArrayList<>();
 
-		if (filtro != null) {
+		if (!UtilUUID.UUID_DEFECTO.equals(filtro.getId())) {
+					
+			condiciones.add("p.id = ?");
 
-			final UUID idDefecto = UtilUUID.obtenerValorDefecto(null);
+			parametros.add(filtro.getId());
+		}
 
-			if (filtro.getId() != null && !idDefecto.equals(filtro.getId())) {
+		if (!UtilUUID.UUID_DEFECTO.equals(filtro.getTipoDocumento().getId())) {
 
-				condiciones.add("p.id = ?");
-				parametros.add(filtro.getId());
-			}
+			condiciones.add("p.idTipoDocumento = ?");
 
-			if (filtro.getTipoDocumento() != null && filtro.getTipoDocumento().getId() != null && !idDefecto.equals(filtro.getTipoDocumento().getId())) {
+			parametros.add(filtro.getTipoDocumento().getId());
+		}
 
-				condiciones.add("p.idTipoDocumento = ?");
-				parametros.add(filtro.getTipoDocumento().getId());
-			}
+		if (!UtilTexto.getUtilTexto().esVacia(filtro.getNumeroIdentificacion())) {
 
-			if (tieneValor(filtro.getNumeroIdentificacion())) {
+			condiciones.add("p.numeroIdentificacion = ?");
 
-				condiciones.add("p.numeroIdentificacion = ?");
-				parametros.add(filtro.getNumeroIdentificacion());
-			}
+			parametros.add(filtro.getNumeroIdentificacion());
+		}
 
-			if (tieneValor(filtro.getPrimerNombre())) {
+		if (!UtilTexto.getUtilTexto().esVacia(filtro.getPrimerNombre())) {
 
-				condiciones.add("p.primerNombre = ?");
-				parametros.add(filtro.getPrimerNombre());
-			}
+			condiciones.add("p.primerNombre = ?");
 
-			if (tieneValor(filtro.getSegundoNombre())) {
+			parametros.add(filtro.getPrimerNombre());
+		}
 
-				condiciones.add("p.segundoNombre = ?");
-				parametros.add(filtro.getSegundoNombre());
-			}
+		if (!UtilTexto.getUtilTexto().esVacia(filtro.getSegundoNombre())) {
 
-			if (tieneValor(filtro.getPrimerApellido())) {
+			condiciones.add("p.segundoNombre = ?");
 
-				condiciones.add("p.primerApellido = ?");
-				parametros.add(filtro.getPrimerApellido());
-			}
+			parametros.add(filtro.getSegundoNombre());
+		}
 
-			if (tieneValor(filtro.getSegundoApellido())) {
+		if (!UtilTexto.getUtilTexto().esVacia(filtro.getPrimerApellido())) {
 
-				condiciones.add("p.segundoApellido = ?");
-				parametros.add(filtro.getSegundoApellido());
-			}
+			condiciones.add("p.primerApellido = ?");
 
-			if (tieneValor(filtro.getNumeroTelefonico())) {
+			parametros.add(filtro.getPrimerApellido());
+		}
 
-				condiciones.add("p.numeroTelefonico = ?");
-				parametros.add(filtro.getNumeroTelefonico());
-			}
+		if (!UtilTexto.getUtilTexto().esVacia(filtro.getSegundoApellido())) {
 
-			if (tieneValor(filtro.getCorreoElectronico())) {
+			condiciones.add("p.segundoApellido = ?");
 
-				condiciones.add("p.correoElectronico = ?");
-				parametros.add(filtro.getCorreoElectronico());
-			}
+			parametros.add(filtro.getSegundoApellido());
+		}
+
+		if (!UtilTexto.getUtilTexto().esVacia(filtro.getNumeroTelefonico())) {
+
+			condiciones.add("p.numeroTelefonico = ?");
+
+			parametros.add(filtro.getNumeroTelefonico());
+		}
+
+		if (!UtilTexto.getUtilTexto().esVacia(filtro.getCorreoElectronico())) {
+
+			condiciones.add("p.correoElectronico = ?");
+
+			parametros.add(filtro.getCorreoElectronico());
 		}
 
 		if (!condiciones.isEmpty()) {
 
 			sql.append(" WHERE ");
+
 			sql.append(String.join(" AND ", condiciones));
+			
 		}
 
 		final List<PersonaEntidad> resultados = new ArrayList<>();
@@ -264,7 +266,7 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 				WHERE id = ?
 				""";
 
-		try (PreparedStatement sentencia =getConexion().prepareStatement(sql)) {
+		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
 			sentencia.setObject(1,id);
 
@@ -353,8 +355,4 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 				.correoElectronico(resultado.getString("correoElectronico")).build();
 	}
 
-	private boolean tieneValor(String valor) {
-
-		return valor != null && !valor.isBlank();
-	}
 }

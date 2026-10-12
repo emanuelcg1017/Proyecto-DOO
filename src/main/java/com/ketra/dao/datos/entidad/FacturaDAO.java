@@ -4,7 +4,10 @@ import java.util.UUID;
 import com.ketra.dao.datos.ActualizarDAO;
 import com.ketra.dao.datos.ConsultarDAO;
 import com.ketra.dao.datos.CrearDAO;
+import com.ketra.entidad.FacturaEntidad;
 
-public interface FacturaDAO extends CrearDAO<FacturaDAO>, ConsultarDAO<FacturaDAO, UUID>, ActualizarDAO<FacturaDAO, UUID>{
+public interface FacturaDAO extends CrearDAO<FacturaEntidad>, ConsultarDAO<FacturaEntidad, UUID>, ActualizarDAO<FacturaEntidad, UUID>{
 
+	Double consultarTotalIngresosPorServicio(UUID idServicio, String estadoFacturaExcluido);
+	
 }
