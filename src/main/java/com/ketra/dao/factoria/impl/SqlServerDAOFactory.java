@@ -1,14 +1,19 @@
 package com.ketra.dao.factoria.impl;
 
 import java.sql.Connection;
+
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import com.ketra.dao.datos.entidad.CostoRecorridoDAO;
 import com.ketra.dao.datos.entidad.DepartamentoDAO;
+import com.ketra.dao.datos.entidad.FacturaDAO;
 import com.ketra.dao.datos.entidad.PaisDAO;
 import com.ketra.dao.datos.entidad.ServicioDAO;
 import com.ketra.dao.datos.entidad.UtilidadDAO;
+import com.ketra.dao.datos.entidad.sqlserver.CostoRecorridoSqlServerDAO;
 import com.ketra.dao.datos.entidad.sqlserver.DepartamentoSqlServerDAO;
+import com.ketra.dao.datos.entidad.sqlserver.FacturaSqlServerDAO;
 import com.ketra.dao.datos.entidad.sqlserver.PaisSqlServerDAO;
 import com.ketra.dao.datos.entidad.sqlserver.ServicioSqlServerDAO;
 import com.ketra.dao.datos.entidad.sqlserver.UtilidadSqlServerDAO;
@@ -19,7 +24,7 @@ import com.ketra.transversal.utilitarios.UtilSQL;
 
 public class SqlServerDAOFactory extends DAOFactory{
 
-	protected SqlServerDAOFactory() {
+	public SqlServerDAOFactory() {
 		super();
 	}
 
@@ -63,9 +68,7 @@ public class SqlServerDAOFactory extends DAOFactory{
 
 	@Override
 	public DepartamentoDAO obtenerDepartamentoDAO() {
-		
 		return new DepartamentoSqlServerDAO(getConexion());
-		
 	}
 
 	@Override
@@ -76,6 +79,16 @@ public class SqlServerDAOFactory extends DAOFactory{
 	@Override
 	public ServicioDAO obtenerServicioDAO() {
 		return new ServicioSqlServerDAO(getConexion());
+	}
+
+	@Override
+	public FacturaDAO obtenerFacturaDAO() {
+		return new FacturaSqlServerDAO(getConexion());
+	}
+
+	@Override
+	public CostoRecorridoDAO obtenerCostoRecorridoDAO() {
+		return new CostoRecorridoSqlServerDAO(getConexion());
 	}
 	
 	

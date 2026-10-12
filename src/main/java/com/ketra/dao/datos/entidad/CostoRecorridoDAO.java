@@ -3,6 +3,10 @@ package com.ketra.dao.datos.entidad;
 import java.util.UUID;
 import com.ketra.dao.datos.ConsultarDAO;
 import com.ketra.dao.datos.CrearDAO;
-public interface CostoRecorridoDAO extends ConsultarDAO<CostoRecorridoDAO, UUID>, CrearDAO<CostoRecorridoDAO>{
+import com.ketra.entidad.CostoRecorridoEntidad;
 
+public interface CostoRecorridoDAO extends ConsultarDAO<CostoRecorridoEntidad, UUID>, CrearDAO<CostoRecorridoEntidad>{
+
+	Double consultarTotalCostosPorServicio(UUID idServicio, String estadoEntregaRequerido);
+	
 }

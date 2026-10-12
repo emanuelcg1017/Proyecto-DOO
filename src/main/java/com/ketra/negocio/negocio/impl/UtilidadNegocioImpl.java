@@ -10,33 +10,33 @@ import com.ketra.entidad.UtilidadEntidad;
 import com.ketra.negocio.negocio.UtilidadNegocio;
 import com.ketra.negocio.negocio.assembler.impl.ServicioEntidadAssembler;
 import com.ketra.negocio.negocio.assembler.impl.UtilidadEntidadAssembler;
-import com.ketra.transversal.catalogo.CatalogoMensajes;
-import com.ketra.transversal.excepciones.KETRANegocioException;
-import com.ketra.transversal.utilitarios.UtilNumero;
+import com.ketra.negocio.negocio.reglas.impl.utilidad.AsegurarServicioFinalizadoRule;
+import com.ketra.negocio.negocio.reglas.impl.utilidad.AsegurarUtilidadNoGeneradaRule;
+import com.ketra.negocio.negocio.reglas.impl.utilidad.ValidarDatosGenerarUtilidadRule;
 import com.ketra.transversal.utilitarios.UtilUUID;
 
 public class UtilidadNegocioImpl implements UtilidadNegocio {
 
 	private DAOFactory daoFactory;
 
-	protected UtilidadNegocioImpl(DAOFactory daoFactory) {
+	public UtilidadNegocioImpl(DAOFactory daoFactory) {
 
 		this.daoFactory = daoFactory;
 	}
 	
 
 	@Override
-	public UtilidadDominio generarUtilidad(UUID idServicio) {
+	public UtilidadDominio generarUtilidad(final UUID idServicio) {
 
-		asegurarDatosGeneracionUtilidadValidos(idServicio);
-		
+		ValidarDatosGenerarUtilidadRule.obtenerInstancia().ejecutar(idServicio);
+
+		var idUtilidad = generarIdUtilidadUnico();
+
 		var servicio = consultarServicio(idServicio);
 
-		asegurarServicioExista(servicio);
+		AsegurarServicioFinalizadoRule.obtenerInstancia().ejecutar(servicio);
 
-		asegurarServicioEsteFinalizado(servicio);
-
-		asegurarUtilidadNoHayaSidoGenerada(idServicio);
+		AsegurarUtilidadNoGeneradaRule.obtenerInstancia().ejecutar(idServicio, daoFactory);
 
 		var valorIngresos = calcularValorIngresos(idServicio);
 
@@ -44,88 +44,54 @@ public class UtilidadNegocioImpl implements UtilidadNegocio {
 
 		var valorUtilidad = valorIngresos - valorCostos;
 
-		var utilidad = construirUtilidad(servicio,valorIngresos,valorCostos,valorUtilidad);
+		var utilidad = construirUtilidad(idUtilidad, servicio, valorIngresos, valorCostos, valorUtilidad);
 
 		registrarUtilidad(utilidad);
 
 		return utilidad;
 	}
 	
+	
+	private UUID generarIdUtilidadUnico() {
+
+		UUID idUtilidad;
+		boolean identificadorExiste;
+
+		do {
+
+			idUtilidad = UtilUUID.generar();
+
+			var utilidadExistente = daoFactory.obtenerUtilidadDAO().consultarPorId(idUtilidad);
+			identificadorExiste = !UtilUUID.UUID_DEFECTO.equals(utilidadExistente.getId());
+
+		} while (identificadorExiste);
+
+		return idUtilidad;
+	}
 
 
-	private ServicioDominio consultarServicio(UUID idServicio) {
+	private ServicioDominio consultarServicio(final UUID idServicio) {
 
 		var servicioEntidad = daoFactory.obtenerServicioDAO().consultarPorId(idServicio);
 
 		return ServicioEntidadAssembler.getInstance().convertirADominio(servicioEntidad);
 	}
 	
-	private void asegurarDatosGeneracionUtilidadValidos(UUID idServicio) {
-
-		final UUID idDefecto =UtilUUID.obtenerValorDefecto(null);
-
-		if (idDefecto.equals(UtilUUID.obtenerValorDefecto(idServicio))) {
-
-			var mensajeUsuario = CatalogoMensajes.UtilidadNegocioImpl.ID_SERVICIO_REQUERIDO;
-
-			throw KETRANegocioException.crear(mensajeUsuario);
-		}
-	}
-	
-	private void asegurarServicioExista(ServicioDominio servicio) {
-
-		final UUID idDefecto =UtilUUID.obtenerValorDefecto(null);
-
-		if (servicio == null || idDefecto.equals(servicio.getId())) {
-
-			var mensajeUsuario = CatalogoMensajes.UtilidadNegocioImpl.SERVICIO_NO_EXISTE;
-
-			throw KETRANegocioException.crear(mensajeUsuario);
-		}
-	}
-	
-	private void asegurarServicioEsteFinalizado(ServicioDominio servicio) {
-
-		if (!"Finalizado".equalsIgnoreCase(servicio.getEstado())) {
-
-			var mensajeUsuario =CatalogoMensajes.UtilidadNegocioImpl.SERVICIO_DEBE_ESTAR_FINALIZADO;
-
-			throw KETRANegocioException.crear(mensajeUsuario);
-		}
-	}
-	
-	private void asegurarUtilidadNoHayaSidoGenerada(
-			final UUID idServicio) {
-
-		var servicioEntidad = new ServicioEntidad.Builder().id(idServicio).build();
-
-		var utilidadFiltro = new UtilidadEntidad.Builder().servicio(servicioEntidad).build();
-
-		var resultados = daoFactory.obtenerUtilidadDAO().consultarPorFiltro(utilidadFiltro);
-
-		if (!resultados.isEmpty()) {
-
-			var mensajeUsuario = CatalogoMensajes.UtilidadNegocioImpl.UTILIDAD_YA_GENERADA;
-
-			throw KETRANegocioException.crear(mensajeUsuario);
-		}
-	}
-	
 	private Double calcularValorCostos(UUID idServicio) {
-		
-		return UtilNumero.CERO_DECIMAL;
+
+		return daoFactory.obtenerCostoRecorridoDAO().consultarTotalCostosPorServicio(idServicio, "Entregada");
 	}
 
 
 	private Double calcularValorIngresos(UUID idServicio) {
-		
-		return UtilNumero.CERO_DECIMAL;
+
+		return daoFactory.obtenerFacturaDAO().consultarTotalIngresosPorServicio(idServicio, "Anulada");
 	}
 	
-	private UtilidadDominio construirUtilidad(ServicioDominio servicio, Double valorIngresos, Double valorCostos, Double valorUtilidad) {
+	private UtilidadDominio construirUtilidad(final UUID idUtilidad, final ServicioDominio servicio, final Double valorIngresos, final Double valorCostos, final Double valorUtilidad) {
 
 		return new UtilidadDominio.Builder()
-				.id(UUID.randomUUID())
+				.id(idUtilidad)
 				.servicio(servicio)
 				.valorIngresos(valorIngresos)
 				.valorCostos(valorCostos)
@@ -133,9 +99,9 @@ public class UtilidadNegocioImpl implements UtilidadNegocio {
 				.build();
 	}
 	
-	private void registrarUtilidad(UtilidadDominio utilidad) {
+	private void registrarUtilidad(final UtilidadDominio utilidad) {
 
-		var utilidadEntidad =UtilidadEntidadAssembler.getInstance().convertirAEntidad(utilidad);
+		var utilidadEntidad = UtilidadEntidadAssembler.getInstance().convertirAEntidad(utilidad);
 
 		daoFactory.obtenerUtilidadDAO().crear(utilidadEntidad);
 	}
@@ -143,8 +109,8 @@ public class UtilidadNegocioImpl implements UtilidadNegocio {
 	@Override
 	public UtilidadDominio consultarUtilidadPorServicio(UUID idServicio) {
 
-		asegurarDatosGeneracionUtilidadValidos(idServicio);
-
+		ValidarDatosGenerarUtilidadRule.obtenerInstancia().ejecutar(idServicio);
+		
 		var servicioEntidad = new ServicioEntidad.Builder()
 						.id(idServicio)
 						.build();
