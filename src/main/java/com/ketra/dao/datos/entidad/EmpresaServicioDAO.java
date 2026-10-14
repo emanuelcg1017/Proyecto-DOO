@@ -3,6 +3,8 @@ package com.ketra.dao.datos.entidad;
 import java.util.UUID;
 import com.ketra.dao.datos.ConsultarDAO;
 
-public interface EmpresaServicioDAO extends ConsultarDAO<EmpresaDAO, UUID>{
+import com.ketra.entidad.EmpresaServicioEntidad;
+
+public interface EmpresaServicioDAO extends ConsultarDAO<EmpresaServicioEntidad, UUID>{
 
 }

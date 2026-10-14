@@ -12,34 +12,53 @@ public class DetallePedidoEntidad {
 	private PedidoEntidad numeroPedido;
 	private String codigoBarras;
 
-	public DetallePedidoEntidad() {
-		setId(UtilUUID.obtenerValorDefecto(id));
-		setNumeroPedido(new PedidoEntidad());
-		setCodigoBarras(UtilTexto.VACIO);
+	private DetallePedidoEntidad(Builder builder) {
+		this.id = builder.id;
+		this.numeroPedido = builder.numeroPedido;
+		this.codigoBarras = builder.codigoBarras;
 	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	private void setId(UUID id) {
-		this.id = UtilUUID.obtenerValorDefecto(id);
-	}
-
 	public PedidoEntidad getNumeroPedido() {
 		return numeroPedido;
-	}
-
-	private void setNumeroPedido(PedidoEntidad numeroPedido) {
-		this.numeroPedido = UtilObjeto.obtenerValorDefectoSiNulo(numeroPedido, new PedidoEntidad());
 	}
 
 	public String getCodigoBarras() {
 		return codigoBarras;
 	}
 
-	private void setCodigoBarras(String codigoBarras) {
-		this.codigoBarras = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(codigoBarras);
-	}
+	public static class Builder {
 
+		private UUID id;
+		private PedidoEntidad numeroPedido;
+		private String codigoBarras;
+
+		public Builder() {
+			id = UtilUUID.obtenerValorDefecto(id);
+			numeroPedido = new PedidoEntidad.Builder().build();
+			codigoBarras = UtilTexto.VACIO;
+		}
+
+		public Builder id(UUID id) {
+			this.id = UtilUUID.obtenerValorDefecto(id);
+			return this;
+		}
+
+		public Builder numeroPedido(PedidoEntidad numeroPedido) {
+			this.numeroPedido = UtilObjeto.obtenerValorDefectoSiNulo(numeroPedido, new PedidoEntidad.Builder().build());
+			return this;
+		}
+
+		public Builder codigoBarras(String codigoBarras) {
+			this.codigoBarras = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(codigoBarras);
+			return this;
+		}
+
+		public DetallePedidoEntidad build() {
+			return new DetallePedidoEntidad(this);
+		}
+	}
 }

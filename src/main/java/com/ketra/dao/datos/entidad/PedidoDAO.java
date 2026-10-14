@@ -6,6 +6,8 @@ import java.util.UUID;
 import com.ketra.dao.datos.ConsultarDAO;
 import com.ketra.dao.datos.CrearDAO;
 
-public interface PedidoDAO extends CrearDAO<PedidoDAO>,ConsultarDAO<PedidoDAO, UUID> {
+import com.ketra.entidad.PedidoEntidad;
+
+public interface PedidoDAO extends CrearDAO<PedidoEntidad>,ConsultarDAO<PedidoEntidad, UUID> {
 
 }

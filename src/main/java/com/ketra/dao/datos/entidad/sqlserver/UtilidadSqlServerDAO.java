@@ -1,41 +1,215 @@
 package com.ketra.dao.datos.entidad.sqlserver;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.ketra.dao.datos.entidad.SqlDAO;
 import com.ketra.dao.datos.entidad.UtilidadDAO;
+import com.ketra.dao.datos.entidad.SqlDAO;
+import com.ketra.entidad.ServicioEntidad;
 import com.ketra.entidad.UtilidadEntidad;
+import com.ketra.transversal.catalogo.CatalogoMensajes;
+import com.ketra.transversal.excepciones.KETRADatosException;
+import com.ketra.transversal.utilitarios.UtilUUID;
+import com.ketra.transversal.utilitarios.UtilNumero;
 
-public class UtilidadSqlServerDAO extends SqlDAO implements UtilidadDAO{
+public class UtilidadSqlServerDAO extends SqlDAO implements UtilidadDAO {
 
 	public UtilidadSqlServerDAO(Connection conexion) {
 		super(conexion);
 	}
 
 	@Override
-	public void crear(UtilidadEntidad entidad) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public UtilidadEntidad consultarPorId(UUID id) {
-		// TODO Auto-generated method stub
-		return null;
+
+		final String sql = """
+				SELECT
+					uti.id AS id,
+					ser.id AS ser_id,
+					ser.numeroServicio AS ser_numeroServicio,
+					ser.fechaServicio AS ser_fechaServicio,
+					ser.estado AS ser_estado,
+					uti.valorIngresos AS valorIngresos,
+					uti.valorCostos AS valorCostos,
+					uti.valorUtilidad AS valorUtilidad
+				FROM Utilidad uti
+				INNER JOIN Servicio ser ON uti.idServicio = ser.id
+				WHERE uti.id = ?
+				""";
+
+		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
+
+			sentencia.setObject(1, id);
+
+			try (ResultSet resultado = sentencia.executeQuery()) {
+				if (resultado.next()) {
+					return construirUtilidadEntidad(resultado);
+				}
+			}
+
+		} catch (SQLException excepcion) {
+
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
+					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					excepcion);
+
+		} catch (Exception excepcion) {
+
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
+					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					excepcion);
+		}
+
+		return new UtilidadEntidad.Builder().build();
 	}
 
 	@Override
 	public List<UtilidadEntidad> consultarPorFiltro(UtilidadEntidad filtro) {
-		// TODO Auto-generated method stub
-		return null;
+
+		final StringBuilder sql = new StringBuilder("""
+				SELECT
+					uti.id AS id,
+					ser.id AS ser_id,
+					ser.numeroServicio AS ser_numeroServicio,
+					ser.fechaServicio AS ser_fechaServicio,
+					ser.estado AS ser_estado,
+					uti.valorIngresos AS valorIngresos,
+					uti.valorCostos AS valorCostos,
+					uti.valorUtilidad AS valorUtilidad
+				FROM Utilidad uti
+				INNER JOIN Servicio ser ON uti.idServicio = ser.id
+				""");
+		final List<String> condiciones = new ArrayList<>();
+		final List<Object> parametros = new ArrayList<>();
+
+		if (!UtilUUID.UUID_DEFECTO.equals(filtro.getId())) {
+			condiciones.add("uti.id = ?");
+			parametros.add(filtro.getId());
+		}
+
+		if (!UtilUUID.UUID_DEFECTO.equals(filtro.getServicio().getId())) {
+			condiciones.add("uti.idServicio = ?");
+			parametros.add(filtro.getServicio().getId());
+		}
+
+		if (filtro.getValorIngresos().doubleValue() != UtilNumero.CERO_DECIMAL) {
+			condiciones.add("uti.valorIngresos = ?");
+			parametros.add(filtro.getValorIngresos());
+		}
+
+		if (filtro.getValorCostos().doubleValue() != UtilNumero.CERO_DECIMAL) {
+			condiciones.add("uti.valorCostos = ?");
+			parametros.add(filtro.getValorCostos());
+		}
+
+		if (filtro.getValorUtilidad().doubleValue() != UtilNumero.CERO_DECIMAL) {
+			condiciones.add("uti.valorUtilidad = ?");
+			parametros.add(filtro.getValorUtilidad());
+		}
+
+		if (!condiciones.isEmpty()) {
+			sql.append(" WHERE ");
+			sql.append(String.join(" AND ", condiciones));
+		}
+
+		final List<UtilidadEntidad> resultados = new ArrayList<>();
+
+		try (PreparedStatement sentencia = getConexion().prepareStatement(sql.toString())) {
+
+			for (int indice = 0; indice < parametros.size(); indice++) {
+				sentencia.setObject(indice + 1, parametros.get(indice));
+			}
+
+			try (ResultSet resultado = sentencia.executeQuery()) {
+				while (resultado.next()) {
+					resultados.add(construirUtilidadEntidad(resultado));
+				}
+			}
+
+		} catch (SQLException excepcion) {
+
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
+					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					excepcion);
+
+		} catch (Exception excepcion) {
+
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
+					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					excepcion);
+		}
+
+		return resultados;
 	}
 
 	@Override
 	public List<UtilidadEntidad> consultarTodos() {
-		// TODO Auto-generated method stub
-		return null;
+		return consultarPorFiltro(new UtilidadEntidad.Builder().build());
 	}
 
+	@Override
+	public void crear(UtilidadEntidad entidad) {
+
+		final String sql = """
+				INSERT INTO Utilidad (
+					id,
+					idServicio,
+					valorIngresos,
+					valorCostos,
+					valorUtilidad
+				)
+				VALUES (?, ?, ?, ?, ?)
+				""";
+
+		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
+
+			sentencia.setObject(1, entidad.getId());
+			sentencia.setObject(2, entidad.getServicio().getId());
+			sentencia.setDouble(3, entidad.getValorIngresos());
+			sentencia.setDouble(4, entidad.getValorCostos());
+			sentencia.setDouble(5, entidad.getValorUtilidad());
+
+			sentencia.executeUpdate();
+
+		} catch (SQLException excepcion) {
+
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CREAR,
+					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CREAR + excepcion.getMessage(),
+					excepcion);
+
+		} catch (Exception excepcion) {
+
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CREAR,
+					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CREAR + excepcion.getMessage(),
+					excepcion);
+		}
+	}
+
+	private UtilidadEntidad construirUtilidadEntidad(final ResultSet resultado) throws SQLException {
+
+		final ServicioEntidad ser = new ServicioEntidad.Builder()
+				.id(UUID.fromString(resultado.getString("ser_id")))
+				.numeroServicio(resultado.getString("ser_numeroServicio"))
+				.fechaServicio(resultado.getDate("ser_fechaServicio").toLocalDate())
+				.estado(resultado.getString("ser_estado"))
+				.build();
+
+		return new UtilidadEntidad.Builder()
+				.id(UUID.fromString(resultado.getString("id")))
+				.servicio(ser)
+				.valorIngresos(resultado.getDouble("valorIngresos"))
+				.valorCostos(resultado.getDouble("valorCostos"))
+				.valorUtilidad(resultado.getDouble("valorUtilidad"))
+				.build();
+	}
 }

@@ -1,3 +1,4 @@
+
 package com.ketra.dto;
 
 import java.time.LocalDate;
@@ -15,7 +16,6 @@ public class ServicioDTO {
 	private String estado;
 
 	public ServicioDTO() {
-		
 		this(new Builder());
 	}
 
@@ -68,29 +68,29 @@ public class ServicioDTO {
 
 		public Builder() {
 
-			id = UtilUUID.obtenerValorDefecto(id);
+			id = UtilUUID.UUID_DEFECTO;
 			numeroServicio = UtilTexto.VACIO;
 			fechaServicio = UtilFecha.FECHA_DEFECTO;
 			estado = UtilTexto.VACIO;
 		}
 
 		public Builder id(UUID id) {
-			this.id = id;
+			this.id = UtilUUID.obtenerValorDefecto(id);
 			return this;
 		}
 
 		public Builder numeroServicio(String numeroServicio) {
-			this.numeroServicio = numeroServicio;
+			this.numeroServicio = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroServicio);
 			return this;
 		}
 
 		public Builder fechaServicio(LocalDate fechaServicio) {
-			this.fechaServicio = fechaServicio;
+			this.fechaServicio = UtilFecha.obtenerFechaDefecto(fechaServicio);
 			return this;
 		}
 
 		public Builder estado(String estado) {
-			this.estado = estado;
+			this.estado = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(estado);
 			return this;
 		}
 

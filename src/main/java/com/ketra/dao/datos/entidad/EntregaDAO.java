@@ -5,6 +5,8 @@ import com.ketra.dao.datos.ActualizarDAO;
 import com.ketra.dao.datos.ConsultarDAO;
 import com.ketra.dao.datos.CrearDAO;
 
-public interface EntregaDAO extends CrearDAO<EntregaDAO>, ConsultarDAO<EntregaDAO, UUID>, ActualizarDAO<EntregaDAO, UUID>{
+import com.ketra.entidad.EntregaEntidad;
+
+public interface EntregaDAO extends CrearDAO<EntregaEntidad>, ConsultarDAO<EntregaEntidad, UUID>, ActualizarDAO<EntregaEntidad, UUID>{
 
 }

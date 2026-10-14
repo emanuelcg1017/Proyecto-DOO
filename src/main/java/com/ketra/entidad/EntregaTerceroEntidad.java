@@ -11,34 +11,53 @@ public class EntregaTerceroEntidad {
 	private EntregaEntidad entrega;
 	private TerceroEntidad tercero;
 
-	public EntregaTerceroEntidad() {
-		setId(UtilUUID.obtenerValorDefecto(id));
-		setEntrega(new EntregaEntidad());
-		setTercero(new TerceroEntidad());
+	private EntregaTerceroEntidad(Builder builder) {
+		this.id = builder.id;
+		this.entrega = builder.entrega;
+		this.tercero = builder.tercero;
 	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	private void setId(UUID id) {
-		this.id = UtilUUID.obtenerValorDefecto(id);
-	}
-
 	public EntregaEntidad getEntrega() {
 		return entrega;
-	}
-
-	private void setEntrega(EntregaEntidad entrega) {
-		this.entrega = UtilObjeto.obtenerValorDefectoSiNulo(entrega, new EntregaEntidad());
 	}
 
 	public TerceroEntidad getTercero() {
 		return tercero;
 	}
 
-	private void setTercero(TerceroEntidad tercero) {
-		this.tercero = UtilObjeto.obtenerValorDefectoSiNulo(tercero, new TerceroEntidad());
-	}
+	public static class Builder {
 
+		private UUID id;
+		private EntregaEntidad entrega;
+		private TerceroEntidad tercero;
+
+		public Builder() {
+			id = UtilUUID.obtenerValorDefecto(id);
+			entrega = new EntregaEntidad.Builder().build();
+			tercero = new TerceroEntidad.Builder().build();
+		}
+
+		public Builder id(UUID id) {
+			this.id = UtilUUID.obtenerValorDefecto(id);
+			return this;
+		}
+
+		public Builder entrega(EntregaEntidad entrega) {
+			this.entrega = UtilObjeto.obtenerValorDefectoSiNulo(entrega, new EntregaEntidad.Builder().build());
+			return this;
+		}
+
+		public Builder tercero(TerceroEntidad tercero) {
+			this.tercero = UtilObjeto.obtenerValorDefectoSiNulo(tercero, new TerceroEntidad.Builder().build());
+			return this;
+		}
+
+		public EntregaTerceroEntidad build() {
+			return new EntregaTerceroEntidad(this);
+		}
+	}
 }

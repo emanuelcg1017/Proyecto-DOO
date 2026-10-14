@@ -17,70 +17,101 @@ public class DetalleEntregaEntidad {
 	private DireccionEntidad direccionDestino;
 	private Double distanciaKM;
 
-	public DetalleEntregaEntidad() {
-		setId(UtilUUID.obtenerValorDefecto(id));
-		setNumeroDetalleEntrega(UtilTexto.VACIO);
-		setPedido(new PedidoEntidad());
-		setEntrega(new EntregaEntidad());
-		setCEDIOrigen(new CEDIEntidad());
-		setDireccionDestino(new DireccionEntidad());
-		setDistanciaKM(UtilNumero.CERO_DECIMAL);
+	private DetalleEntregaEntidad(Builder builder) {
+		this.id = builder.id;
+		this.numeroDetalleEntrega = builder.numeroDetalleEntrega;
+		this.pedido = builder.pedido;
+		this.entrega = builder.entrega;
+		this.CEDIOrigen = builder.CEDIOrigen;
+		this.direccionDestino = builder.direccionDestino;
+		this.distanciaKM = builder.distanciaKM;
 	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	private void setId(UUID id) {
-		this.id = UtilUUID.obtenerValorDefecto(id);
-	}
-
 	public String getNumeroDetalleEntrega() {
 		return numeroDetalleEntrega;
-	}
-
-	private void setNumeroDetalleEntrega(String numeroDetalleEntrega) {
-		this.numeroDetalleEntrega = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroDetalleEntrega);
 	}
 
 	public PedidoEntidad getPedido() {
 		return pedido;
 	}
 
-	private void setPedido(PedidoEntidad pedido) {
-		this.pedido = UtilObjeto.obtenerValorDefectoSiNulo(pedido, new PedidoEntidad());
-	}
-
 	public EntregaEntidad getEntrega() {
 		return entrega;
-	}
-
-	private void setEntrega(EntregaEntidad entrega) {
-		this.entrega = UtilObjeto.obtenerValorDefectoSiNulo(entrega, new EntregaEntidad());
 	}
 
 	public CEDIEntidad getCEDIOrigen() {
 		return CEDIOrigen;
 	}
 
-	private void setCEDIOrigen(CEDIEntidad cEDIOrigen) {
-		CEDIOrigen = UtilObjeto.obtenerValorDefectoSiNulo(cEDIOrigen, new CEDIEntidad());
-	}
-
 	public DireccionEntidad getDireccionDestino() {
 		return direccionDestino;
-	}
-
-	private void setDireccionDestino(DireccionEntidad direccionDestino) {
-		this.direccionDestino = UtilObjeto.obtenerValorDefectoSiNulo(direccionDestino, new DireccionEntidad());
 	}
 
 	public Double getDistanciaKM() {
 		return distanciaKM;
 	}
 
-	private void setDistanciaKM(Double distanciaKM) {
-		this.distanciaKM = UtilNumero.obtenerValorDefecto(distanciaKM, UtilNumero.CERO_DECIMAL);
-	}
+	public static class Builder {
 
+		private UUID id;
+		private String numeroDetalleEntrega;
+		private PedidoEntidad pedido;
+		private EntregaEntidad entrega;
+		private CEDIEntidad CEDIOrigen;
+		private DireccionEntidad direccionDestino;
+		private Double distanciaKM;
+
+		public Builder() {
+			id = UtilUUID.obtenerValorDefecto(id);
+			numeroDetalleEntrega = UtilTexto.VACIO;
+			pedido = new PedidoEntidad.Builder().build();
+			entrega = new EntregaEntidad.Builder().build();
+			CEDIOrigen = new CEDIEntidad.Builder().build();
+			direccionDestino = new DireccionEntidad.Builder().build();
+			distanciaKM = UtilNumero.CERO_DECIMAL;
+		}
+
+		public Builder id(UUID id) {
+			this.id = UtilUUID.obtenerValorDefecto(id);
+			return this;
+		}
+
+		public Builder numeroDetalleEntrega(String numeroDetalleEntrega) {
+			this.numeroDetalleEntrega = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroDetalleEntrega);
+			return this;
+		}
+
+		public Builder pedido(PedidoEntidad pedido) {
+			this.pedido = UtilObjeto.obtenerValorDefectoSiNulo(pedido, new PedidoEntidad.Builder().build());
+			return this;
+		}
+
+		public Builder entrega(EntregaEntidad entrega) {
+			this.entrega = UtilObjeto.obtenerValorDefectoSiNulo(entrega, new EntregaEntidad.Builder().build());
+			return this;
+		}
+
+		public Builder CEDIOrigen(CEDIEntidad CEDIOrigen) {
+			this.CEDIOrigen = UtilObjeto.obtenerValorDefectoSiNulo(CEDIOrigen, new CEDIEntidad.Builder().build());
+			return this;
+		}
+
+		public Builder direccionDestino(DireccionEntidad direccionDestino) {
+			this.direccionDestino = UtilObjeto.obtenerValorDefectoSiNulo(direccionDestino, new DireccionEntidad.Builder().build());
+			return this;
+		}
+
+		public Builder distanciaKM(Double distanciaKM) {
+			this.distanciaKM = UtilNumero.obtenerValorDefecto(distanciaKM, UtilNumero.CERO_DECIMAL);
+			return this;
+		}
+
+		public DetalleEntregaEntidad build() {
+			return new DetalleEntregaEntidad(this);
+		}
+	}
 }

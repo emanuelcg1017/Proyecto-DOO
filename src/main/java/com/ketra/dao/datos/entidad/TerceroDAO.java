@@ -6,6 +6,8 @@ import com.ketra.dao.datos.ConsultarDAO;
 import com.ketra.dao.datos.CrearDAO;
 import com.ketra.dao.datos.EliminarDAO;
 
-public interface TerceroDAO extends CrearDAO<TerceroDAO>, ConsultarDAO<TerceroDAO, UUID> ,ActualizarDAO<TerceroDAO, UUID>, EliminarDAO<UUID> {
+import com.ketra.entidad.TerceroEntidad;
+
+public interface TerceroDAO extends CrearDAO<TerceroEntidad>, ConsultarDAO<TerceroEntidad, UUID> ,ActualizarDAO<TerceroEntidad, UUID>, EliminarDAO<UUID> {
 
 }

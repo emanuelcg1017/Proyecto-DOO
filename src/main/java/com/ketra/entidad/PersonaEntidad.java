@@ -18,92 +18,52 @@ public class PersonaEntidad {
 	private String numeroTelefonico;
 	private String correoElectronico;
 
-	public PersonaEntidad() {
-		this(new Builder());
-	}
-
-	private PersonaEntidad(final Builder builder) {
-		setId(builder.id);
-		setTipoDocumento(builder.tipoDocumento);
-		setNumeroIdentificacion(builder.numeroIdentificacion);
-		setPrimerNombre(builder.primerNombre);
-		setSegundoNombre(builder.segundoNombre);
-		setPrimerApellido(builder.primerApellido);
-		setSegundoApellido(builder.segundoApellido);
-		setNumeroTelefonico(builder.numeroTelefonico);
-		setCorreoElectronico(builder.correoElectronico);
+	private PersonaEntidad(Builder builder) {
+		this.id = builder.id;
+		this.tipoDocumento = builder.tipoDocumento;
+		this.numeroIdentificacion = builder.numeroIdentificacion;
+		this.primerNombre = builder.primerNombre;
+		this.segundoNombre = builder.segundoNombre;
+		this.primerApellido = builder.primerApellido;
+		this.segundoApellido = builder.segundoApellido;
+		this.numeroTelefonico = builder.numeroTelefonico;
+		this.correoElectronico = builder.correoElectronico;
 	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	private void setId(final UUID id) {
-		this.id = UtilUUID.obtenerValorDefecto(id);
-	}
-
 	public TipoDocumentoEntidad getTipoDocumento() {
 		return tipoDocumento;
-	}
-
-	private void setTipoDocumento(final TipoDocumentoEntidad tipoDocumento) {
-		this.tipoDocumento = UtilObjeto.obtenerValorDefectoSiNulo(tipoDocumento, new TipoDocumentoEntidad.Builder().build());
 	}
 
 	public String getNumeroIdentificacion() {
 		return numeroIdentificacion;
 	}
 
-	private void setNumeroIdentificacion(final String numeroIdentificacion) {
-		this.numeroIdentificacion = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroIdentificacion);
-	}
-
 	public String getPrimerNombre() {
 		return primerNombre;
-	}
-
-	private void setPrimerNombre(final String primerNombre) {
-		this.primerNombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(primerNombre);
 	}
 
 	public String getSegundoNombre() {
 		return segundoNombre;
 	}
 
-	private void setSegundoNombre(final String segundoNombre) {
-		this.segundoNombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(segundoNombre);
-	}
-
 	public String getPrimerApellido() {
 		return primerApellido;
-	}
-
-	private void setPrimerApellido(final String primerApellido) {
-		this.primerApellido = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(primerApellido);
 	}
 
 	public String getSegundoApellido() {
 		return segundoApellido;
 	}
 
-	private void setSegundoApellido(final String segundoApellido) {
-		this.segundoApellido = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(segundoApellido);
-	}
-
 	public String getNumeroTelefonico() {
 		return numeroTelefonico;
 	}
 
-	private void setNumeroTelefonico(final String numeroTelefonico) {
-		this.numeroTelefonico = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroTelefonico);
-	}
-
 	public String getCorreoElectronico() {
 		return correoElectronico;
-	}
-
-	private void setCorreoElectronico(final String correoElectronico) {
-		this.correoElectronico = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(correoElectronico);
 	}
 
 	public static class Builder {
@@ -130,47 +90,48 @@ public class PersonaEntidad {
 			correoElectronico = UtilTexto.VACIO;
 		}
 
-		public Builder id(final UUID id) {
-			this.id = id;return this;
-		}
-
-		public Builder tipoDocumento(final TipoDocumentoEntidad tipoDocumento) {
-			this.tipoDocumento = tipoDocumento;
+		public Builder id(UUID id) {
+			this.id = UtilUUID.obtenerValorDefecto(id);
 			return this;
 		}
 
-		public Builder numeroIdentificacion(final String numeroIdentificacion) {
-			this.numeroIdentificacion = numeroIdentificacion;
+		public Builder tipoDocumento(TipoDocumentoEntidad tipoDocumento) {
+			this.tipoDocumento = UtilObjeto.obtenerValorDefectoSiNulo(tipoDocumento, new TipoDocumentoEntidad.Builder().build());
 			return this;
 		}
 
-		public Builder primerNombre(final String primerNombre) {
-			this.primerNombre = primerNombre;
+		public Builder numeroIdentificacion(String numeroIdentificacion) {
+			this.numeroIdentificacion = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroIdentificacion);
 			return this;
 		}
 
-		public Builder segundoNombre(final String segundoNombre) {
-			this.segundoNombre = segundoNombre;
+		public Builder primerNombre(String primerNombre) {
+			this.primerNombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(primerNombre);
 			return this;
 		}
 
-		public Builder primerApellido(final String primerApellido) {
-			this.primerApellido = primerApellido;
+		public Builder segundoNombre(String segundoNombre) {
+			this.segundoNombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(segundoNombre);
 			return this;
 		}
 
-		public Builder segundoApellido(final String segundoApellido) {
-			this.segundoApellido = segundoApellido;
+		public Builder primerApellido(String primerApellido) {
+			this.primerApellido = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(primerApellido);
 			return this;
 		}
 
-		public Builder numeroTelefonico(final String numeroTelefonico) {
-			this.numeroTelefonico = numeroTelefonico;
+		public Builder segundoApellido(String segundoApellido) {
+			this.segundoApellido = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(segundoApellido);
 			return this;
 		}
 
-		public Builder correoElectronico(final String correoElectronico) {
-			this.correoElectronico = correoElectronico;
+		public Builder numeroTelefonico(String numeroTelefonico) {
+			this.numeroTelefonico = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroTelefonico);
+			return this;
+		}
+
+		public Builder correoElectronico(String correoElectronico) {
+			this.correoElectronico = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(correoElectronico);
 			return this;
 		}
 

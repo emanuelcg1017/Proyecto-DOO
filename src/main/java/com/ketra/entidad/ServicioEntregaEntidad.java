@@ -11,34 +11,53 @@ public class ServicioEntregaEntidad {
 	private ServicioEntidad servicio;
 	private EntregaEntidad entrega;
 
-	public ServicioEntregaEntidad() {
-		setId(UtilUUID.obtenerValorDefecto(id));
-		setServicio(new ServicioEntidad());
-		setEntrega(new EntregaEntidad());
+	private ServicioEntregaEntidad(Builder builder) {
+		this.id = builder.id;
+		this.servicio = builder.servicio;
+		this.entrega = builder.entrega;
 	}
 
 	public UUID getId() {
-		return UtilUUID.obtenerValorDefecto(id);
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
+		return id;
 	}
 
 	public ServicioEntidad getServicio() {
 		return servicio;
 	}
 
-	public void setServicio(ServicioEntidad servicio) {
-		this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio, new ServicioEntidad());
-	}
-
 	public EntregaEntidad getEntrega() {
 		return entrega;
 	}
 
-	public void setEntrega(EntregaEntidad entrega) {
-		this.entrega = UtilObjeto.obtenerValorDefectoSiNulo(entrega, new EntregaEntidad());
-	}
+	public static class Builder {
 
+		private UUID id;
+		private ServicioEntidad servicio;
+		private EntregaEntidad entrega;
+
+		public Builder() {
+			id = UtilUUID.obtenerValorDefecto(id);
+			servicio = new ServicioEntidad.Builder().build();
+			entrega = new EntregaEntidad.Builder().build();
+		}
+
+		public Builder id(UUID id) {
+			this.id = UtilUUID.obtenerValorDefecto(id);
+			return this;
+		}
+
+		public Builder servicio(ServicioEntidad servicio) {
+			this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio, new ServicioEntidad.Builder().build());
+			return this;
+		}
+
+		public Builder entrega(EntregaEntidad entrega) {
+			this.entrega = UtilObjeto.obtenerValorDefectoSiNulo(entrega, new EntregaEntidad.Builder().build());
+			return this;
+		}
+
+		public ServicioEntregaEntidad build() {
+			return new ServicioEntregaEntidad(this);
+		}
+	}
 }

@@ -10,26 +10,41 @@ public class TipoDireccionEntidad {
 	private UUID id;
 	private String nombre;
 
-	public TipoDireccionEntidad() {
-		setId(id);
-		setNombre(nombre);
+	private TipoDireccionEntidad(Builder builder) {
+		this.id = builder.id;
+		this.nombre = builder.nombre;
 	}
 
 	public UUID getId() {
 		return id;
 	}
-	
-	private void setId(UUID id) {
-		this.id = UtilUUID.obtenerValorDefecto(id);;
-	}
 
 	public String getNombre() {
 		return nombre;
 	}
-	
-	private void setNombre(String nombre) {
-		this.nombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nombre);
+
+	public static class Builder {
+
+		private UUID id;
+		private String nombre;
+
+		public Builder() {
+			id = UtilUUID.obtenerValorDefecto(id);
+			nombre = UtilTexto.VACIO;
+		}
+
+		public Builder id(UUID id) {
+			this.id = UtilUUID.obtenerValorDefecto(id);
+			return this;
+		}
+
+		public Builder nombre(String nombre) {
+			this.nombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nombre);
+			return this;
+		}
+
+		public TipoDireccionEntidad build() {
+			return new TipoDireccionEntidad(this);
+		}
 	}
-
-
 }

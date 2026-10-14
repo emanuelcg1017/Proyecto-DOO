@@ -10,27 +10,19 @@ public class TipoDocumentoEntidad {
 	private UUID id;
 	private String nombre;
 
-	private TipoDocumentoEntidad(final Builder builder) {
-		setId(builder.id);
-		setNombre(builder.nombre);
+	private TipoDocumentoEntidad(Builder builder) {
+		this.id = builder.id;
+		this.nombre = builder.nombre;
 	}
 
 	public UUID getId() {
 		return id;
 	}
-	
-	private void setId(UUID id) {
-		this.id = UtilUUID.obtenerValorDefecto(id);;
-	}
 
 	public String getNombre() {
 		return nombre;
 	}
-	
-	private void setNombre(String nombre) {
-		this.nombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nombre);
-	}
-	
+
 	public static class Builder {
 
 		private UUID id;
@@ -41,13 +33,13 @@ public class TipoDocumentoEntidad {
 			nombre = UtilTexto.VACIO;
 		}
 
-		public Builder id(final UUID id) {
-			this.id = id;
+		public Builder id(UUID id) {
+			this.id = UtilUUID.obtenerValorDefecto(id);
 			return this;
 		}
 
-		public Builder nombre(final String nombre) {
-			this.nombre = nombre;
+		public Builder nombre(String nombre) {
+			this.nombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nombre);
 			return this;
 		}
 

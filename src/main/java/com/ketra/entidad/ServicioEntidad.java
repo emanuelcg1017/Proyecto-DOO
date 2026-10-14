@@ -1,7 +1,7 @@
 package com.ketra.entidad;
 
-import java.time.LocalDate;
 import java.util.UUID;
+import java.time.LocalDate;
 
 import com.ketra.transversal.utilitarios.UtilFecha;
 import com.ketra.transversal.utilitarios.UtilTexto;
@@ -14,53 +14,27 @@ public class ServicioEntidad {
 	private LocalDate fechaServicio;
 	private String estado;
 
-	public ServicioEntidad() {
-		this(new Builder());
-	}
-
 	private ServicioEntidad(Builder builder) {
-
-		setId(builder.id);
-		setNumeroServicio(builder.numeroServicio);
-		setFechaServicio(builder.fechaServicio);
-		setEstado(builder.estado);
+		this.id = builder.id;
+		this.numeroServicio = builder.numeroServicio;
+		this.fechaServicio = builder.fechaServicio;
+		this.estado = builder.estado;
 	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	private void setId(UUID id) {
-
-		this.id = UtilUUID.obtenerValorDefecto(id);
-	}
-
 	public String getNumeroServicio() {
 		return numeroServicio;
-	}
-
-	private void setNumeroServicio(String numeroServicio) {
-
-		this.numeroServicio = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroServicio);
 	}
 
 	public LocalDate getFechaServicio() {
 		return fechaServicio;
 	}
 
-	private void setFechaServicio(
-			final LocalDate fechaServicio) {
-
-		this.fechaServicio = UtilFecha.obtenerFechaDefecto(fechaServicio);
-	}
-
 	public String getEstado() {
 		return estado;
-	}
-
-	private void setEstado(String estado) {
-
-		this.estado = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(estado);
 	}
 
 	public static class Builder {
@@ -71,39 +45,33 @@ public class ServicioEntidad {
 		private String estado;
 
 		public Builder() {
-
-			id =UtilUUID.obtenerValorDefecto(id);
-			numeroServicio =UtilTexto.VACIO;
-			fechaServicio =UtilFecha.FECHA_DEFECTO;
-			estado =UtilTexto.VACIO;
+			id = UtilUUID.obtenerValorDefecto(id);
+			numeroServicio = UtilTexto.VACIO;
+			fechaServicio = UtilFecha.FECHA_DEFECTO;
+			estado = UtilTexto.VACIO;
 		}
 
 		public Builder id(UUID id) {
-
-			this.id = id;
+			this.id = UtilUUID.obtenerValorDefecto(id);
 			return this;
 		}
 
 		public Builder numeroServicio(String numeroServicio) {
-
-			this.numeroServicio = numeroServicio;
+			this.numeroServicio = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroServicio);
 			return this;
 		}
 
 		public Builder fechaServicio(LocalDate fechaServicio) {
-
-			this.fechaServicio = fechaServicio;
+			this.fechaServicio = UtilFecha.obtenerFechaDefecto(fechaServicio);
 			return this;
 		}
 
 		public Builder estado(String estado) {
-
-			this.estado = estado;
+			this.estado = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(estado);
 			return this;
 		}
 
 		public ServicioEntidad build() {
-
 			return new ServicioEntidad(this);
 		}
 	}

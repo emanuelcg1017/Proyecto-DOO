@@ -6,41 +6,59 @@ import com.ketra.transversal.utilitarios.UtilObjeto;
 import com.ketra.transversal.utilitarios.UtilTexto;
 import com.ketra.transversal.utilitarios.UtilUUID;
 
-
 public class BarrioEntidad {
 
 	private UUID id;
 	private String nombre;
 	private MunicipioEntidad municipio;
 
-	public BarrioEntidad() {
-		setId(UtilUUID.obtenerValorDefecto(id));
-		setNombre(UtilTexto.VACIO);
-		setMunicipio(new MunicipioEntidad());
+	private BarrioEntidad(Builder builder) {
+		this.id = builder.id;
+		this.nombre = builder.nombre;
+		this.municipio = builder.municipio;
 	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	private void setId(UUID id) {
-		this.id = UtilUUID.obtenerValorDefecto(id);
-	}
-
 	public String getNombre() {
 		return nombre;
-	}
-
-	private void setNombre(String nombre) {
-		this.nombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nombre);
 	}
 
 	public MunicipioEntidad getMunicipio() {
 		return municipio;
 	}
 
-	private void setMunicipio(MunicipioEntidad municipio) {
-		this.municipio = UtilObjeto.obtenerValorDefectoSiNulo(municipio, new MunicipioEntidad());
-	}
+	public static class Builder {
 
+		private UUID id;
+		private String nombre;
+		private MunicipioEntidad municipio;
+
+		public Builder() {
+			id = UtilUUID.obtenerValorDefecto(id);
+			nombre = UtilTexto.VACIO;
+			municipio = new MunicipioEntidad.Builder().build();
+		}
+
+		public Builder id(UUID id) {
+			this.id = UtilUUID.obtenerValorDefecto(id);
+			return this;
+		}
+
+		public Builder nombre(String nombre) {
+			this.nombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nombre);
+			return this;
+		}
+
+		public Builder municipio(MunicipioEntidad municipio) {
+			this.municipio = UtilObjeto.obtenerValorDefectoSiNulo(municipio, new MunicipioEntidad.Builder().build());
+			return this;
+		}
+
+		public BarrioEntidad build() {
+			return new BarrioEntidad(this);
+		}
+	}
 }

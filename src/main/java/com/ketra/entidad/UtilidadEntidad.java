@@ -14,64 +14,32 @@ public class UtilidadEntidad {
 	private Double valorCostos;
 	private Double valorUtilidad;
 
-	public UtilidadEntidad() {
-		this(new Builder());
-	}
-
 	private UtilidadEntidad(Builder builder) {
-
-		setId(builder.id);
-		setServicio(builder.servicio);
-		setValorIngresos(builder.valorIngresos);
-		setValorCostos(builder.valorCostos);
-		setValorUtilidad(builder.valorUtilidad);
+		this.id = builder.id;
+		this.servicio = builder.servicio;
+		this.valorIngresos = builder.valorIngresos;
+		this.valorCostos = builder.valorCostos;
+		this.valorUtilidad = builder.valorUtilidad;
 	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	private void setId(UUID id) {
-
-		this.id = UtilUUID.obtenerValorDefecto(id);
-	}
-
 	public ServicioEntidad getServicio() {
 		return servicio;
-	}
-
-	private void setServicio(
-			final ServicioEntidad servicio) {
-
-		this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio,new ServicioEntidad.Builder().build());
 	}
 
 	public Double getValorIngresos() {
 		return valorIngresos;
 	}
 
-	private void setValorIngresos(
-			final Double valorIngresos) {
-
-		this.valorIngresos = UtilNumero.obtenerValorDefecto(valorIngresos, UtilNumero.CERO_DECIMAL);
-	}
-
 	public Double getValorCostos() {
 		return valorCostos;
 	}
 
-	private void setValorCostos(Double valorCostos) {
-
-		this.valorCostos = UtilNumero.obtenerValorDefecto(valorCostos,UtilNumero.CERO_DECIMAL);
-	}
-
 	public Double getValorUtilidad() {
 		return valorUtilidad;
-	}
-
-	private void setValorUtilidad(Double valorUtilidad) {
-
-		this.valorUtilidad = UtilNumero.obtenerValorDefecto(valorUtilidad,UtilNumero.CERO_DECIMAL);
 	}
 
 	public static class Builder {
@@ -83,7 +51,6 @@ public class UtilidadEntidad {
 		private Double valorUtilidad;
 
 		public Builder() {
-
 			id = UtilUUID.obtenerValorDefecto(id);
 			servicio = new ServicioEntidad.Builder().build();
 			valorIngresos = UtilNumero.CERO_DECIMAL;
@@ -92,38 +59,31 @@ public class UtilidadEntidad {
 		}
 
 		public Builder id(UUID id) {
-
-			this.id = id;
+			this.id = UtilUUID.obtenerValorDefecto(id);
 			return this;
 		}
 
-		public Builder servicio(
-				final ServicioEntidad servicio) {
-
-			this.servicio = servicio;
+		public Builder servicio(ServicioEntidad servicio) {
+			this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio, new ServicioEntidad.Builder().build());
 			return this;
 		}
 
 		public Builder valorIngresos(Double valorIngresos) {
-
-			this.valorIngresos = valorIngresos;
+			this.valorIngresos = UtilNumero.obtenerValorDefecto(valorIngresos, UtilNumero.CERO_DECIMAL);
 			return this;
 		}
 
 		public Builder valorCostos(Double valorCostos) {
-
-			this.valorCostos = valorCostos;
+			this.valorCostos = UtilNumero.obtenerValorDefecto(valorCostos, UtilNumero.CERO_DECIMAL);
 			return this;
 		}
 
 		public Builder valorUtilidad(Double valorUtilidad) {
-
-			this.valorUtilidad = valorUtilidad;
+			this.valorUtilidad = UtilNumero.obtenerValorDefecto(valorUtilidad, UtilNumero.CERO_DECIMAL);
 			return this;
 		}
 
 		public UtilidadEntidad build() {
-
 			return new UtilidadEntidad(this);
 		}
 	}

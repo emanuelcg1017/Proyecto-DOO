@@ -13,53 +13,77 @@ public class TerceroEntidad {
 	private String numeroContacto;
 	private String correoContacto;
 
-	public TerceroEntidad() {
-		setId(UtilUUID.obtenerValorDefecto(id));
-		setNombre(UtilTexto.VACIO);
-		setNIT(UtilTexto.VACIO);
-		setNumeroContacto(UtilTexto.VACIO);
-		setCorreoContacto(UtilTexto.VACIO);
-		
+	private TerceroEntidad(Builder builder) {
+		this.id = builder.id;
+		this.nombre = builder.nombre;
+		this.NIT = builder.NIT;
+		this.numeroContacto = builder.numeroContacto;
+		this.correoContacto = builder.correoContacto;
 	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	private void setId(UUID id) {
-		this.id = UtilUUID.obtenerValorDefecto(id);
-	}
-
 	public String getNombre() {
 		return nombre;
-	}
-
-	private void setNombre(String nombre) {
-		this.nombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nombre);
 	}
 
 	public String getNIT() {
 		return NIT;
 	}
 
-	private void setNIT(String nIT) {
-		NIT = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nIT);
-	}
-
 	public String getNumeroContacto() {
 		return numeroContacto;
-	}
-
-	private void setNumeroContacto(String numeroContacto) {
-		numeroContacto = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroContacto);
 	}
 
 	public String getCorreoContacto() {
 		return correoContacto;
 	}
 
-	private void setCorreoContacto(String correoContacto) {
-		this.correoContacto = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(correoContacto);
-	}
+	public static class Builder {
 
+		private UUID id;
+		private String nombre;
+		private String NIT;
+		private String numeroContacto;
+		private String correoContacto;
+
+		public Builder() {
+			id = UtilUUID.obtenerValorDefecto(id);
+			nombre = UtilTexto.VACIO;
+			NIT = UtilTexto.VACIO;
+			numeroContacto = UtilTexto.VACIO;
+			correoContacto = UtilTexto.VACIO;
+		}
+
+		public Builder id(UUID id) {
+			this.id = UtilUUID.obtenerValorDefecto(id);
+			return this;
+		}
+
+		public Builder nombre(String nombre) {
+			this.nombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nombre);
+			return this;
+		}
+
+		public Builder NIT(String NIT) {
+			this.NIT = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(NIT);
+			return this;
+		}
+
+		public Builder numeroContacto(String numeroContacto) {
+			this.numeroContacto = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroContacto);
+			return this;
+		}
+
+		public Builder correoContacto(String correoContacto) {
+			this.correoContacto = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(correoContacto);
+			return this;
+		}
+
+		public TerceroEntidad build() {
+			return new TerceroEntidad(this);
+		}
+	}
 }
