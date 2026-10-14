@@ -1,3 +1,4 @@
+
 package com.ketra.dto;
 
 import java.util.UUID;
@@ -77,7 +78,7 @@ public class UtilidadDTO {
 
 		public Builder() {
 
-			id = UtilUUID.obtenerValorDefecto(id);
+			id = UtilUUID.UUID_DEFECTO;
 			servicio = new ServicioDTO.Builder().build();
 			valorIngresos = UtilNumero.CERO_DECIMAL;
 			valorCostos = UtilNumero.CERO_DECIMAL;
@@ -85,27 +86,27 @@ public class UtilidadDTO {
 		}
 
 		public Builder id(UUID id) {
-			this.id = id;
+			this.id = UtilUUID.obtenerValorDefecto(id);
 			return this;
 		}
 
 		public Builder servicio(ServicioDTO servicio) {
-			this.servicio = servicio;
+			this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio, new ServicioDTO.Builder().build());
 			return this;
 		}
 
 		public Builder valorIngresos(Double valorIngresos) {
-			this.valorIngresos = valorIngresos;
+			this.valorIngresos = UtilNumero.obtenerValorDefecto(valorIngresos, UtilNumero.CERO_DECIMAL);
 			return this;
 		}
 
 		public Builder valorCostos(Double valorCostos) {
-			this.valorCostos = valorCostos;
+			this.valorCostos = UtilNumero.obtenerValorDefecto(valorCostos, UtilNumero.CERO_DECIMAL);
 			return this;
 		}
 
 		public Builder valorUtilidad(Double valorUtilidad) {
-			this.valorUtilidad = valorUtilidad;
+			this.valorUtilidad = UtilNumero.obtenerValorDefecto(valorUtilidad, UtilNumero.CERO_DECIMAL);
 			return this;
 		}
 

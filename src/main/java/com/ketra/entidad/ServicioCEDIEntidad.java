@@ -5,7 +5,6 @@ import java.util.UUID;
 import com.ketra.transversal.utilitarios.UtilObjeto;
 import com.ketra.transversal.utilitarios.UtilUUID;
 
-
 public class ServicioCEDIEntidad {
 
 	private UUID id;
@@ -13,44 +12,65 @@ public class ServicioCEDIEntidad {
 	private CEDIEntidad CEDI;
 	private PedidoEntidad pedido;
 
-	public ServicioCEDIEntidad() {
-		setId(UtilUUID.obtenerValorDefecto(id));
-		setServicio(new ServicioEntidad());
-		setCEDI(new CEDIEntidad());
-		setPedido(new PedidoEntidad());
+	private ServicioCEDIEntidad(Builder builder) {
+		this.id = builder.id;
+		this.servicio = builder.servicio;
+		this.CEDI = builder.CEDI;
+		this.pedido = builder.pedido;
 	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
-		this.id = UtilUUID.obtenerValorDefecto(id);
-	}
-
 	public ServicioEntidad getServicio() {
 		return servicio;
-	}
-
-	public void setServicio(ServicioEntidad servicio) {
-		this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio, new ServicioEntidad());
 	}
 
 	public CEDIEntidad getCEDI() {
 		return CEDI;
 	}
 
-	public void setCEDI(CEDIEntidad CEDI) {
-		CEDI = UtilObjeto.obtenerValorDefectoSiNulo(CEDI, new CEDIEntidad());
-	}
-
 	public PedidoEntidad getPedido() {
 		return pedido;
 	}
 
-	public void setPedido(PedidoEntidad pedido) {
-		this.pedido = UtilObjeto.obtenerValorDefectoSiNulo(pedido, new PedidoEntidad());
-	}
-	
+	public static class Builder {
 
+		private UUID id;
+		private ServicioEntidad servicio;
+		private CEDIEntidad CEDI;
+		private PedidoEntidad pedido;
+
+		public Builder() {
+			id = UtilUUID.obtenerValorDefecto(id);
+			servicio = new ServicioEntidad.Builder().build();
+			CEDI = new CEDIEntidad.Builder().build();
+			pedido = new PedidoEntidad.Builder().build();
+		}
+
+		public Builder id(UUID id) {
+			this.id = UtilUUID.obtenerValorDefecto(id);
+			return this;
+		}
+
+		public Builder servicio(ServicioEntidad servicio) {
+			this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio, new ServicioEntidad.Builder().build());
+			return this;
+		}
+
+		public Builder CEDI(CEDIEntidad CEDI) {
+			this.CEDI = UtilObjeto.obtenerValorDefectoSiNulo(CEDI, new CEDIEntidad.Builder().build());
+			return this;
+		}
+
+		public Builder pedido(PedidoEntidad pedido) {
+			this.pedido = UtilObjeto.obtenerValorDefectoSiNulo(pedido, new PedidoEntidad.Builder().build());
+			return this;
+		}
+
+		public ServicioCEDIEntidad build() {
+			return new ServicioCEDIEntidad(this);
+		}
+	}
 }

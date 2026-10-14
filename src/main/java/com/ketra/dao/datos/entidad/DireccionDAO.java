@@ -6,6 +6,8 @@ import com.ketra.dao.datos.ActualizarDAO;
 import com.ketra.dao.datos.ConsultarDAO;
 import com.ketra.dao.datos.CrearDAO;
 
-public interface DireccionDAO extends CrearDAO<DireccionDAO>, ConsultarDAO<DireccionDAO, UUID>, ActualizarDAO<DireccionDAO, UUID>{
+import com.ketra.entidad.DireccionEntidad;
+
+public interface DireccionDAO extends CrearDAO<DireccionEntidad>, ConsultarDAO<DireccionEntidad, UUID>, ActualizarDAO<DireccionEntidad, UUID>{
 
 }

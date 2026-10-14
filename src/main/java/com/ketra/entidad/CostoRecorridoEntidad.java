@@ -15,52 +15,77 @@ public class CostoRecorridoEntidad {
 	private int valorPorKM;
 	private Double valorCosto;
 
-	public CostoRecorridoEntidad() {
-		setId(UtilUUID.obtenerValorDefecto(id));
-		setNumeroCosto(UtilTexto.VACIO);
-		setDetalleEntrega(new DetalleEntregaEntidad());
-		setValorPorKM(UtilNumero.CERO);
-		setValorCosto(UtilNumero.CERO_DECIMAL);
+	private CostoRecorridoEntidad(Builder builder) {
+		this.id = builder.id;
+		this.numeroCosto = builder.numeroCosto;
+		this.detalleEntrega = builder.detalleEntrega;
+		this.valorPorKM = builder.valorPorKM;
+		this.valorCosto = builder.valorCosto;
 	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	private void setId(UUID id) {
-		this.id = UtilUUID.obtenerValorDefecto(id);
-	}
-
 	public String getNumeroCosto() {
 		return numeroCosto;
-	}
-
-	private void setNumeroCosto(String numeroCosto) {
-		this.numeroCosto = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroCosto);
 	}
 
 	public DetalleEntregaEntidad getDetalleEntrega() {
 		return detalleEntrega;
 	}
 
-	private void setDetalleEntrega(DetalleEntregaEntidad detalleEntrega) {
-		this.detalleEntrega = UtilObjeto.obtenerValorDefectoSiNulo(detalleEntrega, new DetalleEntregaEntidad());
-	}
-
 	public int getValorPorKM() {
 		return valorPorKM;
-	}
-
-	private void setValorPorKM(int valorPorKM) {
-		this.valorPorKM = UtilNumero.obtenerValorDefecto(valorPorKM, UtilNumero.CERO);
 	}
 
 	public Double getValorCosto() {
 		return valorCosto;
 	}
 
-	private void setValorCosto(Double valorCosto) {
-		this.valorCosto = UtilNumero.obtenerValorDefecto(valorCosto, UtilNumero.CERO_DECIMAL);
-	}
+	public static class Builder {
 
+		private UUID id;
+		private String numeroCosto;
+		private DetalleEntregaEntidad detalleEntrega;
+		private int valorPorKM;
+		private Double valorCosto;
+
+		public Builder() {
+			id = UtilUUID.obtenerValorDefecto(id);
+			numeroCosto = UtilTexto.VACIO;
+			detalleEntrega = new DetalleEntregaEntidad.Builder().build();
+			valorPorKM = UtilNumero.CERO;
+			valorCosto = UtilNumero.CERO_DECIMAL;
+		}
+
+		public Builder id(UUID id) {
+			this.id = UtilUUID.obtenerValorDefecto(id);
+			return this;
+		}
+
+		public Builder numeroCosto(String numeroCosto) {
+			this.numeroCosto = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroCosto);
+			return this;
+		}
+
+		public Builder detalleEntrega(DetalleEntregaEntidad detalleEntrega) {
+			this.detalleEntrega = UtilObjeto.obtenerValorDefectoSiNulo(detalleEntrega, new DetalleEntregaEntidad.Builder().build());
+			return this;
+		}
+
+		public Builder valorPorKM(int valorPorKM) {
+			this.valorPorKM = valorPorKM;
+			return this;
+		}
+
+		public Builder valorCosto(Double valorCosto) {
+			this.valorCosto = UtilNumero.obtenerValorDefecto(valorCosto, UtilNumero.CERO_DECIMAL);
+			return this;
+		}
+
+		public CostoRecorridoEntidad build() {
+			return new CostoRecorridoEntidad(this);
+		}
+	}
 }

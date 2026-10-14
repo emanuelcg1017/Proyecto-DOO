@@ -24,72 +24,24 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 	}
 
 	@Override
-	public void crear(PersonaEntidad entidad) {
-
-		final String sql = """
-				INSERT INTO Persona (
-					id,
-					idTipoDocumento,
-					numeroIdentificacion,
-					primerNombre,
-					segundoNombre,
-					primerApellido,
-					segundoApellido,
-					numeroTelefonico,
-					correoElectronico
-				)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-				""";
-
-		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
-
-			sentencia.setObject(1,entidad.getId());
-			sentencia.setObject(2,entidad.getTipoDocumento().getId());
-			sentencia.setString(3,entidad.getNumeroIdentificacion());
-			sentencia.setString(4,entidad.getPrimerNombre());
-			sentencia.setString(5,entidad.getSegundoNombre());
-			sentencia.setString(6,entidad.getPrimerApellido());
-			sentencia.setString(7,entidad.getSegundoApellido());
-			sentencia.setString(8,entidad.getNumeroTelefonico());
-			sentencia.setString(9,entidad.getCorreoElectronico());
-
-			sentencia.executeUpdate();
-
-		} catch (SQLException excepcion) {
-
-			throw KETRADatosException.crear(
-					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CREAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CREAR + excepcion.getMessage(),
-					excepcion);
-
-		} catch (Exception excepcion) {
-
-			throw KETRADatosException.crear(
-					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CREAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CREAR + excepcion.getMessage(),
-					excepcion);
-		}
-	}
-
-	@Override
 	public PersonaEntidad consultarPorId(UUID id) {
 
 		final String sql = """
 				SELECT
-					p.id,
-					p.idTipoDocumento,
-					td.nombre AS nombreTipoDocumento,
-					p.numeroIdentificacion,
-					p.primerNombre,
-					p.segundoNombre,
-					p.primerApellido,
-					p.segundoApellido,
-					p.numeroTelefonico,
-					p.correoElectronico
-				FROM Persona p
-				INNER JOIN TipoDocumento td
-					ON p.idTipoDocumento = td.id
-				WHERE p.id = ?
+					per.id,
+					per.idTipoDocumento,
+					tdo.nombre AS nombreTipoDocumento,
+					per.numeroIdentificacion,
+					per.primerNombre,
+					per.segundoNombre,
+					per.primerApellido,
+					per.segundoApellido,
+					per.numeroTelefonico,
+					per.correoElectronico
+				FROM Persona per
+				INNER JOIN TipoDocumento tdo
+					ON per.idTipoDocumento = tdo.id
+				WHERE per.id = ?
 				""";
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
@@ -123,29 +75,23 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 	}
 
 	@Override
-	public List<PersonaEntidad> consultarTodos() {
-
-		return consultarPorFiltro(new PersonaEntidad.Builder().build());
-	}
-
-	@Override
 	public List<PersonaEntidad> consultarPorFiltro(PersonaEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
 				SELECT
-					p.id,
-					p.idTipoDocumento,
-					td.nombre AS nombreTipoDocumento,
-					p.numeroIdentificacion,
-					p.primerNombre,
-					p.segundoNombre,
-					p.primerApellido,
-					p.segundoApellido,
-					p.numeroTelefonico,
-					p.correoElectronico
-				FROM Persona p
-				INNER JOIN TipoDocumento td
-					ON p.idTipoDocumento = td.id
+					per.id,
+					per.idTipoDocumento,
+					tdo.nombre AS nombreTipoDocumento,
+					per.numeroIdentificacion,
+					per.primerNombre,
+					per.segundoNombre,
+					per.primerApellido,
+					per.segundoApellido,
+					per.numeroTelefonico,
+					per.correoElectronico
+				FROM Persona per
+				INNER JOIN TipoDocumento tdo
+					ON per.idTipoDocumento = tdo.id
 				""");
 
 		final List<String> condiciones = new ArrayList<>();
@@ -154,63 +100,63 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 
 		if (!UtilUUID.UUID_DEFECTO.equals(filtro.getId())) {
 					
-			condiciones.add("p.id = ?");
+			condiciones.add("per.id = ?");
 
 			parametros.add(filtro.getId());
 		}
 
 		if (!UtilUUID.UUID_DEFECTO.equals(filtro.getTipoDocumento().getId())) {
 
-			condiciones.add("p.idTipoDocumento = ?");
+			condiciones.add("per.idTipoDocumento = ?");
 
 			parametros.add(filtro.getTipoDocumento().getId());
 		}
 
 		if (!UtilTexto.getUtilTexto().esVacia(filtro.getNumeroIdentificacion())) {
 
-			condiciones.add("p.numeroIdentificacion = ?");
+			condiciones.add("per.numeroIdentificacion = ?");
 
 			parametros.add(filtro.getNumeroIdentificacion());
 		}
 
 		if (!UtilTexto.getUtilTexto().esVacia(filtro.getPrimerNombre())) {
 
-			condiciones.add("p.primerNombre = ?");
+			condiciones.add("per.primerNombre = ?");
 
 			parametros.add(filtro.getPrimerNombre());
 		}
 
 		if (!UtilTexto.getUtilTexto().esVacia(filtro.getSegundoNombre())) {
 
-			condiciones.add("p.segundoNombre = ?");
+			condiciones.add("per.segundoNombre = ?");
 
 			parametros.add(filtro.getSegundoNombre());
 		}
 
 		if (!UtilTexto.getUtilTexto().esVacia(filtro.getPrimerApellido())) {
 
-			condiciones.add("p.primerApellido = ?");
+			condiciones.add("per.primerApellido = ?");
 
 			parametros.add(filtro.getPrimerApellido());
 		}
 
 		if (!UtilTexto.getUtilTexto().esVacia(filtro.getSegundoApellido())) {
 
-			condiciones.add("p.segundoApellido = ?");
+			condiciones.add("per.segundoApellido = ?");
 
 			parametros.add(filtro.getSegundoApellido());
 		}
 
 		if (!UtilTexto.getUtilTexto().esVacia(filtro.getNumeroTelefonico())) {
 
-			condiciones.add("p.numeroTelefonico = ?");
+			condiciones.add("per.numeroTelefonico = ?");
 
 			parametros.add(filtro.getNumeroTelefonico());
 		}
 
 		if (!UtilTexto.getUtilTexto().esVacia(filtro.getCorreoElectronico())) {
 
-			condiciones.add("p.correoElectronico = ?");
+			condiciones.add("per.correoElectronico = ?");
 
 			parametros.add(filtro.getCorreoElectronico());
 		}
@@ -259,31 +205,55 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 	}
 
 	@Override
-	public void eliminar(UUID id) {
+	public List<PersonaEntidad> consultarTodos() {
+
+		return consultarPorFiltro(new PersonaEntidad.Builder().build());
+	}
+
+	@Override
+	public void crear(PersonaEntidad entidad) {
 
 		final String sql = """
-				DELETE FROM Persona
-				WHERE id = ?
+				INSERT INTO Persona (
+					id,
+					idTipoDocumento,
+					numeroIdentificacion,
+					primerNombre,
+					segundoNombre,
+					primerApellido,
+					segundoApellido,
+					numeroTelefonico,
+					correoElectronico
+				)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 				""";
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
-			sentencia.setObject(1,id);
+			sentencia.setObject(1,entidad.getId());
+			sentencia.setObject(2,entidad.getTipoDocumento().getId());
+			sentencia.setString(3,entidad.getNumeroIdentificacion());
+			sentencia.setString(4,entidad.getPrimerNombre());
+			sentencia.setString(5,entidad.getSegundoNombre());
+			sentencia.setString(6,entidad.getPrimerApellido());
+			sentencia.setString(7,entidad.getSegundoApellido());
+			sentencia.setString(8,entidad.getNumeroTelefonico());
+			sentencia.setString(9,entidad.getCorreoElectronico());
 
 			sentencia.executeUpdate();
 
 		} catch (SQLException excepcion) {
 
 			throw KETRADatosException.crear(
-					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ELIMINAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_ELIMINAR + excepcion.getMessage(),
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CREAR,
+					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CREAR + excepcion.getMessage(),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
-					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ELIMINAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_ELIMINAR + excepcion.getMessage(),
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CREAR,
+					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CREAR + excepcion.getMessage(),
 					excepcion);
 		}
 	}
@@ -331,6 +301,36 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ACTUALIZAR,
 					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_ACTUALIZAR + excepcion.getMessage(),
+					excepcion);
+		}
+	}
+
+	@Override
+	public void eliminar(UUID id) {
+
+		final String sql = """
+				DELETE FROM Persona
+				WHERE id = ?
+				""";
+
+		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
+
+			sentencia.setObject(1,id);
+
+			sentencia.executeUpdate();
+
+		} catch (SQLException excepcion) {
+
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ELIMINAR,
+					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_ELIMINAR + excepcion.getMessage(),
+					excepcion);
+
+		} catch (Exception excepcion) {
+
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ELIMINAR,
+					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_ELIMINAR + excepcion.getMessage(),
 					excepcion);
 		}
 	}

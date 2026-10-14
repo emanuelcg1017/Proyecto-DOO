@@ -5,6 +5,8 @@ import com.ketra.dao.datos.ActualizarDAO;
 import com.ketra.dao.datos.ConsultarDAO;
 import com.ketra.dao.datos.CrearDAO;
 
-public interface CEDIDAO extends CrearDAO<CEDIDAO>, ConsultarDAO<CEDIDAO, UUID>, ActualizarDAO<CEDIDAO, UUID> {
+import com.ketra.entidad.CEDIEntidad;
+
+public interface CEDIDAO extends CrearDAO<CEDIEntidad>, ConsultarDAO<CEDIEntidad, UUID>, ActualizarDAO<CEDIEntidad, UUID> {
 
 }

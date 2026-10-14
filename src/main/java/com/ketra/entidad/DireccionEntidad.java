@@ -13,43 +13,65 @@ public class DireccionEntidad {
 	private BarrioEntidad barrio;
 	private TipoDireccionEntidad direccion;
 
-	public DireccionEntidad() {
-		setId(UtilUUID.obtenerValorDefecto(id));
-		setNombre(UtilTexto.VACIO);
-		setBarrio(new BarrioEntidad());
-		setDireccion(new TipoDireccionEntidad());
+	private DireccionEntidad(Builder builder) {
+		this.id = builder.id;
+		this.nombre = builder.nombre;
+		this.barrio = builder.barrio;
+		this.direccion = builder.direccion;
 	}
 
 	public UUID getId() {
 		return id;
 	}
 
-	private void setId(UUID id) {
-		this.id = UtilUUID.obtenerValorDefecto(id);
-	}
-
 	public String getNombre() {
 		return nombre;
-	}
-
-	private void setNombre(String nombre) {
-		this.nombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nombre);
 	}
 
 	public BarrioEntidad getBarrio() {
 		return barrio;
 	}
 
-	private void setBarrio(BarrioEntidad barrio) {
-		this.barrio = UtilObjeto.obtenerValorDefectoSiNulo(barrio, new BarrioEntidad());
-	}
-	
 	public TipoDireccionEntidad getDireccion() {
 		return direccion;
 	}
 
-	private void setDireccion(TipoDireccionEntidad direccion) {
-		this.direccion = UtilObjeto.obtenerValorDefectoSiNulo(direccion, new TipoDireccionEntidad());
-	}
+	public static class Builder {
 
+		private UUID id;
+		private String nombre;
+		private BarrioEntidad barrio;
+		private TipoDireccionEntidad direccion;
+
+		public Builder() {
+			id = UtilUUID.obtenerValorDefecto(id);
+			nombre = UtilTexto.VACIO;
+			barrio = new BarrioEntidad.Builder().build();
+			direccion = new TipoDireccionEntidad.Builder().build();
+		}
+
+		public Builder id(UUID id) {
+			this.id = UtilUUID.obtenerValorDefecto(id);
+			return this;
+		}
+
+		public Builder nombre(String nombre) {
+			this.nombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nombre);
+			return this;
+		}
+
+		public Builder barrio(BarrioEntidad barrio) {
+			this.barrio = UtilObjeto.obtenerValorDefectoSiNulo(barrio, new BarrioEntidad.Builder().build());
+			return this;
+		}
+
+		public Builder direccion(TipoDireccionEntidad direccion) {
+			this.direccion = UtilObjeto.obtenerValorDefectoSiNulo(direccion, new TipoDireccionEntidad.Builder().build());
+			return this;
+		}
+
+		public DireccionEntidad build() {
+			return new DireccionEntidad(this);
+		}
+	}
 }

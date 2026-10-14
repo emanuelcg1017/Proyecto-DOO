@@ -4,6 +4,8 @@ import java.util.UUID;
 import com.ketra.dao.datos.ConsultarDAO;
 import com.ketra.dao.datos.CrearDAO;
 
-public interface DetalleEntregaDAO extends CrearDAO<DetalleEntregaDAO>, ConsultarDAO<DetalleEntregaDAO, UUID>{
+import com.ketra.entidad.DetalleEntregaEntidad;
+
+public interface DetalleEntregaDAO extends CrearDAO<DetalleEntregaEntidad>, ConsultarDAO<DetalleEntregaEntidad, UUID>{
 
 }
