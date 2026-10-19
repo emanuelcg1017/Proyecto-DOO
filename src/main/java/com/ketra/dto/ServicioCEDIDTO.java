@@ -15,7 +15,7 @@ public class ServicioCEDIDTO {
 
 	public ServicioCEDIDTO() {
 		setId(UtilUUID.obtenerValorDefecto(id));
-		setServicio(new ServicioDTO());
+		setServicio(new ServicioDTO.Builder().build());
 		setCEDI(new CEDIDTO());
 		setPedido(new PedidoDTO());
 	}
@@ -33,7 +33,7 @@ public class ServicioCEDIDTO {
 	}
 
 	public void setServicio(ServicioDTO servicio) {
-		this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio, new ServicioDTO());
+		this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio, new ServicioDTO.Builder().build());
 	}
 
 	public CEDIDTO getCEDI() {

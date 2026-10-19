@@ -361,25 +361,18 @@ public class PreliquidacionSqlServerDAO extends SqlDAO implements Preliquidacion
 
 		final String sql = """
 				UPDATE Preliquidacion
-				SET
-					numeroPreliquidacion = ?,
-					idTercero = ?,
-					idCostoRecorrido = ?,
-					fechaPreliquidacion = ?,
-					estado = ?
+				SET estado = ?
 				WHERE id = ?
 				""";
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
-			sentencia.setString(1, entidad.getNumeroPreliquidacion());
-			sentencia.setObject(2, entidad.getTercero().getId());
-			sentencia.setObject(3, entidad.getValorCosto().getId());
-			sentencia.setDate(4, java.sql.Date.valueOf(entidad.getFechaPreliquidacion()));
-			sentencia.setString(5, entidad.getEstado());
-			sentencia.setObject(6, id);
+			sentencia.setString(1, entidad.getEstado());
+			sentencia.setObject(2, id);
 
-			sentencia.executeUpdate();
+			if (sentencia.executeUpdate() != 1) {
+				throw new SQLException(CatalogoMensajes.SqlServerDAO.TECNICO_REGISTRO_NO_ENCONTRADO);
+			}
 
 		} catch (SQLException excepcion) {
 

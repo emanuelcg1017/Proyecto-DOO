@@ -216,23 +216,18 @@ public class EntregaSqlServerDAO extends SqlDAO implements EntregaDAO {
 
 		final String sql = """
 				UPDATE Entrega
-				SET
-					codigoEntrega = ?,
-					fechaEntrega = ?,
-					estadoEntrega = ?,
-					idPersona = ?
+				SET estadoEntrega = ?
 				WHERE id = ?
 				""";
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
-			sentencia.setString(1, entidad.getCodigoEntrega());
-			sentencia.setDate(2, java.sql.Date.valueOf(entidad.getFechaEntrega()));
-			sentencia.setString(3, entidad.getEstadoEntrega());
-			sentencia.setObject(4, entidad.getPersona().getId());
-			sentencia.setObject(5, id);
+			sentencia.setString(1, entidad.getEstadoEntrega());
+			sentencia.setObject(2, id);
 
-			sentencia.executeUpdate();
+			if (sentencia.executeUpdate() != 1) {
+				throw new SQLException(CatalogoMensajes.SqlServerDAO.TECNICO_REGISTRO_NO_ENCONTRADO);
+			}
 
 		} catch (SQLException excepcion) {
 

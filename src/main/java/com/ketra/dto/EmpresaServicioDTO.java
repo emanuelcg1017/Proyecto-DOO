@@ -16,7 +16,7 @@ public class EmpresaServicioDTO {
 	public EmpresaServicioDTO() {
 		setId(UtilUUID.obtenerValorDefecto(id));
 		setEmpresa(new EmpresaDTO());
-		setServicio(new ServicioDTO());
+		setServicio(new ServicioDTO.Builder().build());
 	}
 
 	public UUID getId() {
@@ -40,7 +40,7 @@ public class EmpresaServicioDTO {
 	}
 
 	public void setServicio(ServicioDTO servicio) {
-		this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio, new ServicioDTO());
+		this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio, new ServicioDTO.Builder().build());
 	}
 
 }

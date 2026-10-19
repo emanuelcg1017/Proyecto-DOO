@@ -286,7 +286,7 @@ public class CostoRecorridoSqlServerDAO extends SqlDAO implements CostoRecorrido
 	}
 
 	@Override
-	public Double consultarTotalCostosPorServicio(UUID idServicio, String estadoEntregaRequerido) {
+	public Double consultarTotalCostosPorServicio(UUID idServicio) {
 
 		final String sql = """
 				SELECT COALESCE(SUM(cre.valorCosto), 0) AS totalCostos
@@ -295,13 +295,12 @@ public class CostoRecorridoSqlServerDAO extends SqlDAO implements CostoRecorrido
 				INNER JOIN DetalleEntrega den ON den.idEntrega = ent.id
 				INNER JOIN CostoRecorrido cre ON cre.idDetalleEntrega = den.id
 				WHERE sen.idServicio = ?
-				AND ent.estadoEntrega = ?
+				AND ent.estadoEntrega = 'Entregada'
 				""";
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
 			sentencia.setObject(1, idServicio);
-			sentencia.setString(2, estadoEntregaRequerido);
 
 			try (ResultSet resultado = sentencia.executeQuery()) {
 

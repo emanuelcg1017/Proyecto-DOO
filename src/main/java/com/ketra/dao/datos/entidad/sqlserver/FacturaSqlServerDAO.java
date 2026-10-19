@@ -150,20 +150,19 @@ public class FacturaSqlServerDAO extends SqlDAO implements FacturaDAO {
 	}
 
 	@Override
-	public Double consultarTotalIngresosPorServicio(UUID idServicio, String estadoFacturaExcluido) {
+	public Double consultarTotalIngresosPorServicio(UUID idServicio) {
 
 		final String sql = """
 				SELECT COALESCE(SUM(fac.ingresos), 0) AS totalIngresos
 				FROM ServicioFactura sfa
 				INNER JOIN Factura fac ON sfa.idFactura = fac.id
 				WHERE sfa.idServicio = ?
-				AND fac.estadoFactura <> ?
+				AND fac.estadoFactura <> 'Anulada'
 				""";
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
 			sentencia.setObject(1, idServicio);
-			sentencia.setString(2, estadoFacturaExcluido);
 
 			try (ResultSet resultado = sentencia.executeQuery()) {
 
@@ -235,23 +234,18 @@ public class FacturaSqlServerDAO extends SqlDAO implements FacturaDAO {
 
 		final String sql = """
 				UPDATE Factura
-				SET
-					numeroFactura = ?,
-					fechaFactura = ?,
-					ingresos = ?,
-					estadoFactura = ?
+				SET estadoFactura = ?
 				WHERE id = ?
 				""";
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
-			sentencia.setString(1, entidad.getNumeroFactura());
-			sentencia.setDate(2, java.sql.Date.valueOf(entidad.getFechaFactura()));
-			sentencia.setDouble(3, entidad.getIngresos());
-			sentencia.setString(4, entidad.getEstadoFactura());
-			sentencia.setObject(5, id);
+			sentencia.setString(1, entidad.getEstadoFactura());
+			sentencia.setObject(2, id);
 
-			sentencia.executeUpdate();
+			if (sentencia.executeUpdate() != 1) {
+				throw new SQLException(CatalogoMensajes.SqlServerDAO.TECNICO_REGISTRO_NO_ENCONTRADO);
+			}
 
 		} catch (SQLException excepcion) {
 

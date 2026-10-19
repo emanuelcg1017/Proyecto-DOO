@@ -13,7 +13,7 @@ import com.ketra.transversal.utilitarios.UtilUUID;
 
 	public ServicioEntregaDTO() {
 		setId(UtilUUID.obtenerValorDefecto(id));
-		setServicio(new ServicioDTO());
+		setServicio(new ServicioDTO.Builder().build());
 		setEntrega(new EntregaDTO());
 	}
 
@@ -30,7 +30,7 @@ import com.ketra.transversal.utilitarios.UtilUUID;
 	}
 
 	public void setServicio(ServicioDTO servicio) {
-		this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio, new ServicioDTO());
+		this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio, new ServicioDTO.Builder().build());
 	}
 
 	public EntregaDTO getEntrega() {
