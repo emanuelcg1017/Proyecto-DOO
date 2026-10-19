@@ -7,6 +7,6 @@ import com.ketra.entidad.CostoRecorridoEntidad;
 
 public interface CostoRecorridoDAO extends ConsultarDAO<CostoRecorridoEntidad, UUID>, CrearDAO<CostoRecorridoEntidad>{
 
-	Double consultarTotalCostosPorServicio(UUID idServicio, String estadoEntregaRequerido);
+	Double consultarTotalCostosPorServicio(UUID idServicio);
 	
 }

@@ -1,5 +1,6 @@
 package com.ketra.transversal.utilitarios;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class UtilFecha {
 	
@@ -18,6 +19,12 @@ public class UtilFecha {
 	
 	public static LocalDate obtenerFechaActual() {
 		return LocalDate.now();
+	}
+
+	public static LocalDateTime generarFechaHoraActual() {
+
+		return LocalDateTime.now();
+
 	}
 	
 	public static boolean esIgualA(LocalDate fechaUno ,LocalDate fechaDos) {

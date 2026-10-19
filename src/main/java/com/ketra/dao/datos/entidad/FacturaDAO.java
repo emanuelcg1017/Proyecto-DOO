@@ -8,6 +8,6 @@ import com.ketra.entidad.FacturaEntidad;
 
 public interface FacturaDAO extends CrearDAO<FacturaEntidad>, ConsultarDAO<FacturaEntidad, UUID>, ActualizarDAO<FacturaEntidad, UUID>{
 
-	Double consultarTotalIngresosPorServicio(UUID idServicio, String estadoFacturaExcluido);
+	Double consultarTotalIngresosPorServicio(UUID idServicio);
 	
 }

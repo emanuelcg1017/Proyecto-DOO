@@ -7,8 +7,8 @@ import com.ketra.dominio.ServicioDominio;
 import com.ketra.dominio.UtilidadDominio;
 import com.ketra.entidad.ServicioEntidad;
 import com.ketra.entidad.UtilidadEntidad;
+import com.ketra.negocio.negocio.ServicioNegocio;
 import com.ketra.negocio.negocio.UtilidadNegocio;
-import com.ketra.negocio.negocio.assembler.impl.ServicioEntidadAssembler;
 import com.ketra.negocio.negocio.assembler.impl.UtilidadEntidadAssembler;
 import com.ketra.negocio.negocio.reglas.impl.utilidad.AsegurarServicioFinalizadoRule;
 import com.ketra.negocio.negocio.reglas.impl.utilidad.AsegurarUtilidadNoGeneradaRule;
@@ -30,9 +30,9 @@ public class UtilidadNegocioImpl implements UtilidadNegocio {
 
 		ValidarDatosGenerarUtilidadRule.obtenerInstancia().ejecutar(idServicio);
 
-		var idUtilidad = generarIdUtilidadUnico();
+		ServicioNegocio servicioNegocio = new ServicioNegocioImpl(daoFactory);
 
-		var servicio = consultarServicio(idServicio);
+		var servicio = servicioNegocio.consultarPorId(idServicio);
 
 		AsegurarServicioFinalizadoRule.obtenerInstancia().ejecutar(servicio);
 
@@ -44,6 +44,8 @@ public class UtilidadNegocioImpl implements UtilidadNegocio {
 
 		var valorUtilidad = valorIngresos - valorCostos;
 
+		var idUtilidad = UtilUUID.generar();
+
 		var utilidad = construirUtilidad(idUtilidad, servicio, valorIngresos, valorCostos, valorUtilidad);
 
 		registrarUtilidad(utilidad);
@@ -52,40 +54,15 @@ public class UtilidadNegocioImpl implements UtilidadNegocio {
 	}
 	
 	
-	private UUID generarIdUtilidadUnico() {
-
-		UUID idUtilidad;
-		boolean identificadorExiste;
-
-		do {
-
-			idUtilidad = UtilUUID.generar();
-
-			var utilidadExistente = daoFactory.obtenerUtilidadDAO().consultarPorId(idUtilidad);
-			identificadorExiste = !UtilUUID.UUID_DEFECTO.equals(utilidadExistente.getId());
-
-		} while (identificadorExiste);
-
-		return idUtilidad;
-	}
-
-
-	private ServicioDominio consultarServicio(final UUID idServicio) {
-
-		var servicioEntidad = daoFactory.obtenerServicioDAO().consultarPorId(idServicio);
-
-		return ServicioEntidadAssembler.getInstance().convertirADominio(servicioEntidad);
-	}
-	
 	private Double calcularValorCostos(UUID idServicio) {
 
-		return daoFactory.obtenerCostoRecorridoDAO().consultarTotalCostosPorServicio(idServicio, "Entregada");
+		return daoFactory.obtenerCostoRecorridoDAO().consultarTotalCostosPorServicio(idServicio);
 	}
 
 
 	private Double calcularValorIngresos(UUID idServicio) {
 
-		return daoFactory.obtenerFacturaDAO().consultarTotalIngresosPorServicio(idServicio, "Anulada");
+		return daoFactory.obtenerFacturaDAO().consultarTotalIngresosPorServicio(idServicio);
 	}
 	
 	private UtilidadDominio construirUtilidad(final UUID idUtilidad, final ServicioDominio servicio, final Double valorIngresos, final Double valorCostos, final Double valorUtilidad) {

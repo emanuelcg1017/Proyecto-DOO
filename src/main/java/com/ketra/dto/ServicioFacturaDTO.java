@@ -14,7 +14,7 @@ public class ServicioFacturaDTO {
 
 	public ServicioFacturaDTO() {
 		setId(UtilUUID.obtenerValorDefecto(id));
-		setServicio(new ServicioDTO());
+		setServicio(new ServicioDTO.Builder().build());
 		setFactura(new FacturaDTO());
 	}
 
@@ -31,7 +31,7 @@ public class ServicioFacturaDTO {
 	}
 
 	public void setServicio(ServicioDTO servicio) {
-		this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio, new ServicioDTO());
+		this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio, new ServicioDTO.Builder().build());
 	}
 
 	public FacturaDTO getFactura() {

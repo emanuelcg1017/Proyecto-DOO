@@ -1,4 +1,3 @@
-
 package com.ketra.negocio.fachada.impl;
 
 import java.util.UUID;
@@ -12,23 +11,38 @@ import com.ketra.negocio.negocio.impl.UtilidadNegocioImpl;
 import com.ketra.transversal.catalogo.CatalogoMensajes;
 import com.ketra.transversal.excepciones.KETRAExcepcion;
 import com.ketra.transversal.excepciones.KETRAFachadaException;
-import com.ketra.transversal.utilitarios.UtilObjeto;
 
 public class UtilidadFachadaImpl implements UtilidadFachada {
+
+	private final DAOFactory daoFactory;
+
+	private final UtilidadNegocio utilidadNegocio;
+
+	public UtilidadFachadaImpl() {
+
+		daoFactory = DAOFactory.obtenerFactoria();
+
+		utilidadNegocio = new UtilidadNegocioImpl(daoFactory);
+
+	}
+
+	public UtilidadFachadaImpl(DAOFactory daoFactory) {
+
+		this.daoFactory = daoFactory;
+
+		utilidadNegocio = new UtilidadNegocioImpl(daoFactory);
+
+	}
 
 	@Override
 	public UtilidadDTO generarUtilidad(UUID idServicio) {
 
-		DAOFactory daoFactory = null;
 		boolean transaccionIniciada = false;
 
 		try {
 
-			daoFactory = DAOFactory.obtenerFactoria();
-
-			UtilidadNegocio utilidadNegocio = new UtilidadNegocioImpl(daoFactory);
-
 			daoFactory.iniciarTransaccion();
+
 			transaccionIniciada = true;
 
 			var utilidadDominio = utilidadNegocio.generarUtilidad(idServicio);
@@ -36,6 +50,7 @@ public class UtilidadFachadaImpl implements UtilidadFachada {
 			var utilidadDTO = UtilidadDTOAssembler.getInstance().convertirADTO(utilidadDominio);
 
 			daoFactory.confirmarTransaccion();
+
 			transaccionIniciada = false;
 
 			return utilidadDTO;
@@ -43,7 +58,9 @@ public class UtilidadFachadaImpl implements UtilidadFachada {
 		} catch (KETRAExcepcion excepcion) {
 
 			if (transaccionIniciada) {
+
 				daoFactory.cancelarTransaccion();
+
 			}
 
 			throw excepcion;
@@ -51,7 +68,9 @@ public class UtilidadFachadaImpl implements UtilidadFachada {
 		} catch (Exception excepcion) {
 
 			if (transaccionIniciada) {
+
 				daoFactory.cancelarTransaccion();
+
 			}
 
 			var mensajeUsuario = CatalogoMensajes.UtilidadFachadaImpl.ERROR_GENERANDO_UTILIDAD;
@@ -60,22 +79,16 @@ public class UtilidadFachadaImpl implements UtilidadFachada {
 
 		} finally {
 
-			if (!UtilObjeto.esNulo(daoFactory)) {
-				daoFactory.cerrarConexion();
-			}
+			daoFactory.cerrarConexion();
+
 		}
+
 	}
 
 	@Override
 	public UtilidadDTO consultarUtilidadPorServicio(UUID idServicio) {
 
-		DAOFactory daoFactory = null;
-
 		try {
-
-			daoFactory = DAOFactory.obtenerFactoria();
-
-			UtilidadNegocio utilidadNegocio = new UtilidadNegocioImpl(daoFactory);
 
 			var utilidadDominio = utilidadNegocio.consultarUtilidadPorServicio(idServicio);
 
@@ -93,9 +106,10 @@ public class UtilidadFachadaImpl implements UtilidadFachada {
 
 		} finally {
 
-			if (!UtilObjeto.esNulo(daoFactory)) {
-				daoFactory.cerrarConexion();
-			}
+			daoFactory.cerrarConexion();
+
 		}
+
 	}
+
 }

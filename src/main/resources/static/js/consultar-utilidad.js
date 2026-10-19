@@ -70,6 +70,14 @@ function render(data) {
 
 form.addEventListener('submit', async event => {
   event.preventDefault();
+  if (!form.dataset.apiBase) {
+    message.textContent = 'La consulta de utilidad no está disponible por el momento.';
+    return;
+  }
+  if (!document.getElementById('servicio').value) {
+    message.textContent = 'Selecciona un servicio para consultar su utilidad.';
+    return;
+  }
   if (button.disabled) return;
   button.disabled = true;
   button.textContent = 'Consultando…';

@@ -14,7 +14,7 @@
     <nav>
       <span class="nav-item muted">⌂ <span>Inicio</span></span>
       <span class="nav-item muted">▤ <span>Empresas</span></span>
-      <span class="nav-item muted">▤ <span>Servicios</span></span>
+      <a class="nav-item" th:href="@{/servicios.html}" href="/servicios.html">▤ <span>Servicios</span></a>
       <span class="nav-item muted">▣ <span>Entregas</span></span>
       <span class="nav-item muted">▤ <span>Facturación</span></span>
       <a class="nav-item active" aria-current="page" th:href="@{/utilidad}" href="/utilidad">▥ <span>Utilidades</span></a>
@@ -26,12 +26,12 @@
     <header class="topbar"><span>Operación / Utilidades</span><span class="user"><span aria-hidden="true" class="avatar">U</span> Usuario</span></header>
     <main class="container-fluid">
       <div class="page-heading"><span class="eyebrow">UTILIDADES</span><h1>Consultar utilidad por servicio</h1><p>Consulta los ingresos, los costos y la utilidad de un servicio finalizado.</p></div>
-      <form id="consulta-form" class="filter-card" th:attr="data-api-base=@{/api/utilidades/}" data-api-base="/api/utilidades/">
-        <div class="service-input"><label for="servicio" class="form-label">Seleccionar servicio</label><select id="servicio" name="servicio" class="form-select"><option value="SRV-001">SRV-001</option></select></div>
+      <form id="consulta-form" class="filter-card" data-api-base="">
+        <div class="service-input"><label for="servicio" class="form-label">Seleccionar servicio</label><select id="servicio" name="servicio" class="form-select"><option value="">Seleccione un servicio</option></select></div>
         <button id="consultar" class="btn btn-primary" type="submit"><span aria-hidden="true">⌕</span> Consultar utilidad</button>
         <p class="filter-note">La utilidad se calcula automáticamente al finalizar el servicio.</p>
       </form>
-      <div id="mensaje" class="feedback" role="status" aria-live="polite">Selecciona el servicio y consulta su utilidad.</div>
+      <div id="mensaje" class="feedback" role="status" aria-live="polite">La consulta de utilidad no está disponible por el momento.</div>
       <div id="resultado" class="result-layout" hidden aria-busy="false">
         <div class="detail-column">
           <section class="panel"><div class="panel-heading"><h2>Información del servicio</h2></div><div class="service-info"><div><span>Número de servicio</span><strong id="numero-servicio"></strong></div><div><span>Fecha del servicio</span><strong id="fecha-servicio"></strong></div><div><span>Estado del servicio</span><strong id="estado-servicio" class="status-pill"></strong></div></div></section>
