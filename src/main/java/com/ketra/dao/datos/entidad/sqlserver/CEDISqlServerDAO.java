@@ -30,7 +30,7 @@ public class CEDISqlServerDAO extends SqlDAO implements CEDIDAO {
 
 	@Override
 	public CEDIEntidad consultarPorId(UUID id) {
-
+		
 		final String sql = """
 				SELECT
 					ced.id AS id,

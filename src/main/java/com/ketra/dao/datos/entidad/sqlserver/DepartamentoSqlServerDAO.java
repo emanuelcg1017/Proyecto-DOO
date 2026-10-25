@@ -51,14 +51,14 @@ public class DepartamentoSqlServerDAO extends SqlDAO implements DepartamentoDAO 
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 		}
 
@@ -118,14 +118,14 @@ public class DepartamentoSqlServerDAO extends SqlDAO implements DepartamentoDAO 
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 		}
 

@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.ketra.transversal.utilitarios.UtilFecha;
 import com.ketra.transversal.utilitarios.UtilTexto;
 import com.ketra.transversal.utilitarios.UtilUUID;
+import com.ketra.transversal.utilitarios.UtilNumero;
 
 public class FacturaDominio {
 
@@ -54,7 +55,7 @@ public class FacturaDominio {
 			id = UtilUUID.obtenerValorDefecto(id);
 			numeroFactura = UtilTexto.VACIO;
 			fechaFactura = UtilFecha.FECHA_DEFECTO;
-			ingresos = 0.0;
+			ingresos = UtilNumero.CERO_DECIMAL;
 			estadoFactura = UtilTexto.VACIO;
 		}
 
@@ -74,7 +75,7 @@ public class FacturaDominio {
 		}
 
 		public Builder ingresos(Double ingresos) {
-			this.ingresos = ingresos;
+			this.ingresos = UtilNumero.obtenerValorDefecto(ingresos, UtilNumero.CERO_DECIMAL);
 			return this;
 		}
 

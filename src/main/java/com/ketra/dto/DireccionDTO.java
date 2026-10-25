@@ -9,47 +9,139 @@ import com.ketra.transversal.utilitarios.UtilUUID;
 public class DireccionDTO {
 
 	private UUID id;
+
 	private String nombre;
+
 	private BarrioDTO barrio;
+
 	private TipoDireccionDTO direccion;
 
 	public DireccionDTO() {
-		setId(UtilUUID.obtenerValorDefecto(id));
-		setNombre(UtilTexto.VACIO);
-		setBarrio(new BarrioDTO());
-		setDireccion(new TipoDireccionDTO());
+
+		this(new Builder());
+
+	}
+
+	private DireccionDTO(Builder builder) {
+
+		this.id = builder.id;
+
+		this.nombre = builder.nombre;
+
+		this.barrio = builder.barrio;
+
+		this.direccion = builder.direccion;
+
 	}
 
 	public UUID getId() {
+
 		return id;
+
 	}
 
-	private void setId(UUID id) {
+	public void setId(UUID id) {
+
 		this.id = UtilUUID.obtenerValorDefecto(id);
+
 	}
 
 	public String getNombre() {
+
 		return nombre;
+
 	}
 
-	private void setNombre(String nombre) {
+	public void setNombre(String nombre) {
+
 		this.nombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nombre);
+
 	}
 
 	public BarrioDTO getBarrio() {
+
 		return barrio;
+
 	}
 
-	private void setBarrio(BarrioDTO barrio) {
-		this.barrio = UtilObjeto.obtenerValorDefectoSiNulo(barrio, new BarrioDTO());
+	public void setBarrio(BarrioDTO barrio) {
+
+		this.barrio = UtilObjeto.obtenerValorDefectoSiNulo(barrio, new BarrioDTO.Builder().build());
+
 	}
-	
+
 	public TipoDireccionDTO getDireccion() {
+
 		return direccion;
+
 	}
 
-	private void setDireccion(TipoDireccionDTO direccion) {
-		this.direccion = UtilObjeto.obtenerValorDefectoSiNulo(direccion, new TipoDireccionDTO());
+	public void setDireccion(TipoDireccionDTO direccion) {
+
+		this.direccion = UtilObjeto.obtenerValorDefectoSiNulo(direccion, new TipoDireccionDTO.Builder().build());
+
+	}
+
+	public static class Builder {
+
+		private UUID id;
+
+		private String nombre;
+
+		private BarrioDTO barrio;
+
+		private TipoDireccionDTO direccion;
+
+		public Builder() {
+
+			id = UtilUUID.UUID_DEFECTO;
+
+			nombre = UtilTexto.VACIO;
+
+			barrio = new BarrioDTO.Builder().build();
+
+			direccion = new TipoDireccionDTO.Builder().build();
+
+		}
+
+		public Builder id(UUID id) {
+
+			this.id = UtilUUID.obtenerValorDefecto(id);
+
+			return this;
+
+		}
+
+		public Builder nombre(String nombre) {
+
+			this.nombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nombre);
+
+			return this;
+
+		}
+
+		public Builder barrio(BarrioDTO barrio) {
+
+			this.barrio = UtilObjeto.obtenerValorDefectoSiNulo(barrio, new BarrioDTO.Builder().build());
+
+			return this;
+
+		}
+
+		public Builder direccion(TipoDireccionDTO direccion) {
+
+			this.direccion = UtilObjeto.obtenerValorDefectoSiNulo(direccion, new TipoDireccionDTO.Builder().build());
+
+			return this;
+
+		}
+
+		public DireccionDTO build() {
+
+			return new DireccionDTO(this);
+
+		}
+
 	}
 
 }

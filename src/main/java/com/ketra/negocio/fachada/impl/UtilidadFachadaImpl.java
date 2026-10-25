@@ -4,7 +4,16 @@ import java.util.UUID;
 
 import com.ketra.dao.factoria.DAOFactory;
 import com.ketra.dto.UtilidadDTO;
+import com.ketra.transversal.utilitarios.UtilUUID;
 import com.ketra.negocio.fachada.UtilidadFachada;
+import com.ketra.negocio.fachada.assembler.impl.CostoRecorridoDTOAssembler;
+import com.ketra.negocio.negocio.impl.CostoRecorridoNegocioImpl;
+import com.ketra.negocio.fachada.assembler.impl.DetalleEntregaDTOAssembler;
+import com.ketra.negocio.negocio.impl.DetalleEntregaNegocioImpl;
+import com.ketra.negocio.fachada.assembler.impl.EntregaDTOAssembler;
+import com.ketra.negocio.negocio.impl.EntregaNegocioImpl;
+import com.ketra.negocio.fachada.assembler.impl.FacturaDTOAssembler;
+import com.ketra.negocio.negocio.impl.FacturaNegocioImpl;
 import com.ketra.negocio.fachada.assembler.impl.UtilidadDTOAssembler;
 import com.ketra.negocio.negocio.UtilidadNegocio;
 import com.ketra.negocio.negocio.impl.UtilidadNegocioImpl;
@@ -92,7 +101,33 @@ public class UtilidadFachadaImpl implements UtilidadFachada {
 
 			var utilidadDominio = utilidadNegocio.consultarUtilidadPorServicio(idServicio);
 
-			return UtilidadDTOAssembler.getInstance().convertirADTO(utilidadDominio);
+			var utilidad = UtilidadDTOAssembler.getInstance().convertirADTO(utilidadDominio);
+
+			if (UtilUUID.UUID_DEFECTO.equals(utilidad.getId())) {
+
+				return utilidad;
+
+			}
+
+			var facturas = new FacturaNegocioImpl(daoFactory).consultarPorServicio(idServicio);
+
+			var entregas = new EntregaNegocioImpl(daoFactory).consultarPorServicio(idServicio);
+
+			var detalles = new DetalleEntregaNegocioImpl(daoFactory).consultarPorServicio(idServicio);
+
+			var costos = new CostoRecorridoNegocioImpl(daoFactory).consultarPorServicio(idServicio);
+
+			return new UtilidadDTO.Builder()
+					.id(utilidad.getId())
+					.servicio(utilidad.getServicio())
+					.valorIngresos(utilidad.getValorIngresos())
+					.valorCostos(utilidad.getValorCostos())
+					.valorUtilidad(utilidad.getValorUtilidad())
+					.facturas(FacturaDTOAssembler.getInstance().convertirADTO(facturas))
+					.entregas(EntregaDTOAssembler.getInstance().convertirADTO(entregas))
+					.detallesEntrega(DetalleEntregaDTOAssembler.getInstance().convertirADTO(detalles))
+					.costosRecorrido(CostoRecorridoDTOAssembler.getInstance().convertirADTO(costos))
+					.build();
 
 		} catch (KETRAExcepcion excepcion) {
 

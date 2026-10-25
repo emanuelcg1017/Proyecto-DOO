@@ -14,10 +14,10 @@ import com.ketra.entidad.EntregaEntidad;
 import com.ketra.entidad.PersonaEntidad;
 import com.ketra.entidad.ServicioEntidad;
 import com.ketra.entidad.ServicioEntregaEntidad;
-import com.ketra.entidad.TipoDocumentoEntidad;
 import com.ketra.transversal.catalogo.CatalogoMensajes;
 import com.ketra.transversal.excepciones.KETRADatosException;
 import com.ketra.transversal.utilitarios.UtilUUID;
+import com.ketra.transversal.utilitarios.UtilTexto;
 
 public class ServicioEntregaSqlServerDAO extends SqlDAO implements ServicioEntregaDAO {
 
@@ -39,21 +39,10 @@ public class ServicioEntregaSqlServerDAO extends SqlDAO implements ServicioEntre
 					ent.codigoEntrega AS ent_codigoEntrega,
 					ent.fechaEntrega AS ent_fechaEntrega,
 					ent.estadoEntrega AS ent_estadoEntrega,
-					per.id AS per_id,
-					tdo.id AS tdo_id,
-					tdo.nombre AS tdo_nombre,
-					per.numeroIdentificacion AS per_numeroIdentificacion,
-					per.primerNombre AS per_primerNombre,
-					per.segundoNombre AS per_segundoNombre,
-					per.primerApellido AS per_primerApellido,
-					per.segundoApellido AS per_segundoApellido,
-					per.numeroTelefonico AS per_numeroTelefonico,
-					per.correoElectronico AS per_correoElectronico
+					ent.idPersona AS ent_idPersona
 				FROM ServicioEntrega sen
 				INNER JOIN Servicio ser ON sen.idServicio = ser.id
 				INNER JOIN Entrega ent ON sen.idEntrega = ent.id
-				INNER JOIN Persona per ON ent.idPersona = per.id
-				INNER JOIN TipoDocumento tdo ON per.idTipoDocumento = tdo.id
 				WHERE sen.id = ?
 				""";
 
@@ -71,14 +60,14 @@ public class ServicioEntregaSqlServerDAO extends SqlDAO implements ServicioEntre
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 		}
 
@@ -99,21 +88,10 @@ public class ServicioEntregaSqlServerDAO extends SqlDAO implements ServicioEntre
 					ent.codigoEntrega AS ent_codigoEntrega,
 					ent.fechaEntrega AS ent_fechaEntrega,
 					ent.estadoEntrega AS ent_estadoEntrega,
-					per.id AS per_id,
-					tdo.id AS tdo_id,
-					tdo.nombre AS tdo_nombre,
-					per.numeroIdentificacion AS per_numeroIdentificacion,
-					per.primerNombre AS per_primerNombre,
-					per.segundoNombre AS per_segundoNombre,
-					per.primerApellido AS per_primerApellido,
-					per.segundoApellido AS per_segundoApellido,
-					per.numeroTelefonico AS per_numeroTelefonico,
-					per.correoElectronico AS per_correoElectronico
+					ent.idPersona AS ent_idPersona
 				FROM ServicioEntrega sen
 				INNER JOIN Servicio ser ON sen.idServicio = ser.id
 				INNER JOIN Entrega ent ON sen.idEntrega = ent.id
-				INNER JOIN Persona per ON ent.idPersona = per.id
-				INNER JOIN TipoDocumento tdo ON per.idTipoDocumento = tdo.id
 				""");
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
@@ -156,14 +134,14 @@ public class ServicioEntregaSqlServerDAO extends SqlDAO implements ServicioEntre
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 		}
 
@@ -184,21 +162,8 @@ public class ServicioEntregaSqlServerDAO extends SqlDAO implements ServicioEntre
 				.estado(resultado.getString("ser_estado"))
 				.build();
 
-		final TipoDocumentoEntidad tdo = new TipoDocumentoEntidad.Builder()
-				.id(UUID.fromString(resultado.getString("tdo_id")))
-				.nombre(resultado.getString("tdo_nombre"))
-				.build();
-
 		final PersonaEntidad per = new PersonaEntidad.Builder()
-				.id(UUID.fromString(resultado.getString("per_id")))
-				.tipoDocumento(tdo)
-				.numeroIdentificacion(resultado.getString("per_numeroIdentificacion"))
-				.primerNombre(resultado.getString("per_primerNombre"))
-				.segundoNombre(resultado.getString("per_segundoNombre"))
-				.primerApellido(resultado.getString("per_primerApellido"))
-				.segundoApellido(resultado.getString("per_segundoApellido"))
-				.numeroTelefonico(resultado.getString("per_numeroTelefonico"))
-				.correoElectronico(resultado.getString("per_correoElectronico"))
+				.id(UUID.fromString(resultado.getString("ent_idPersona")))
 				.build();
 
 		final EntregaEntidad ent = new EntregaEntidad.Builder()

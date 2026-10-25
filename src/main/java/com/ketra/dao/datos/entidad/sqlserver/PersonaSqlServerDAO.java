@@ -60,14 +60,14 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 		}
 
@@ -190,14 +190,14 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 		}
 
@@ -246,14 +246,14 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CREAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CREAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CREAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CREAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CREAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CREAR, excepcion.getMessage()),
 					excepcion);
 		}
 	}
@@ -293,14 +293,14 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ACTUALIZAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_ACTUALIZAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_ACTUALIZAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ACTUALIZAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_ACTUALIZAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_ACTUALIZAR, excepcion.getMessage()),
 					excepcion);
 		}
 	}
@@ -323,14 +323,14 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ELIMINAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_ELIMINAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_ELIMINAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ELIMINAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_ELIMINAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_ELIMINAR, excepcion.getMessage()),
 					excepcion);
 		}
 	}

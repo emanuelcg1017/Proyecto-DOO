@@ -7,10 +7,6 @@ import com.ketra.transversal.utilitarios.UtilFecha;
 import com.ketra.transversal.utilitarios.UtilTexto;
 import com.ketra.transversal.utilitarios.UtilUUID;
 
-import tools.jackson.databind.annotation.JsonDeserialize;
-import tools.jackson.databind.annotation.JsonPOJOBuilder;
-
-@JsonDeserialize(builder = ServicioDTO.Builder.class)
 public class ServicioDTO {
 
 	private UUID id;
@@ -20,6 +16,12 @@ public class ServicioDTO {
 	private LocalDate fechaServicio;
 
 	private String estado;
+
+	public ServicioDTO() {
+
+		this(new Builder());
+
+	}
 
 	private ServicioDTO(Builder builder) {
 
@@ -57,7 +59,30 @@ public class ServicioDTO {
 
 	}
 
-	@JsonPOJOBuilder(withPrefix = "")
+	public void setId(UUID id) {
+
+		this.id = UtilUUID.obtenerValorDefecto(id);
+
+	}
+
+	public void setNumeroServicio(String numeroServicio) {
+
+		this.numeroServicio = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroServicio);
+
+	}
+
+	public void setFechaServicio(LocalDate fechaServicio) {
+
+		this.fechaServicio = UtilFecha.obtenerFechaDefecto(fechaServicio);
+
+	}
+
+	public void setEstado(String estado) {
+
+		this.estado = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(estado);
+
+	}
+
 	public static class Builder {
 
 		private UUID id;

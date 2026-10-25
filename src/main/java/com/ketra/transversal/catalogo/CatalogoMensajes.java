@@ -8,6 +8,18 @@ public class CatalogoMensajes {
 
 	}
 
+	public static final class Seguridad {
+
+		private Seguridad() {
+
+		}
+
+
+		public static final String CUENTA_NO_AUTORIZADA = "Esta cuenta de Google no tiene permiso para acceder a KETRA.";
+
+
+	}
+
 	public static final class AbstractRestController {
 
 		private AbstractRestController() {
@@ -135,16 +147,27 @@ public class CatalogoMensajes {
 		}
 
 		public static final String ID_REQUERIDO = "Indique un identificador válido para el servicio.";
+		
 		public static final String DATOS_ESTADO_INVALIDOS = "Indique el estado del servicio con una longitud entre 1 y 15 caracteres.";
+		
 		public static final String ESTADO_INVALIDO = "El estado debe ser Registrado, En ejecución, Finalizado o Cancelado.";
+		
 		public static final String ESTADO_IGUAL = "El estado solicitado es igual al estado actual del servicio.";
+		
 		public static final String NO_CANCELABLE = "El servicio no puede cancelarse porque se encuentra en ejecución o ya ha finalizado.";
+		
 		public static final String TRANSICION_INVALIDA = "El cambio de estado no está permitido. Solo se admite Registrado a En ejecución o Cancelado, y En ejecución a Finalizado.";
+		
 		public static final String ESTADO_TERMINAL = "Un servicio Finalizado o Cancelado no puede cambiar de estado.";
+		
 		public static final String FILTRO_INVALIDO = "El número de servicio del filtro no puede superar 30 caracteres.";
+		
 		public static final String FECHA_FILTRO_INVALIDA = "La fecha del filtro debe estar entre el 1 de enero del año 1 y el 31 de diciembre del año 9999.";
+		
 		public static final String ID_NO_COINCIDE = "El identificador del cuerpo no coincide con el servicio indicado en la URL.";
+		
 		public static final String ENTREGA_EN_TRANSITO = "El servicio no puede cancelarse porque tiene una entrega en tránsito.";
+		
 		public static final String ENTREGAS_SIN_COMPLETAR = "El servicio solo puede finalizar cuando todas sus entregas estén en estado Entregada.";
 	}
 
@@ -155,6 +178,7 @@ public class CatalogoMensajes {
 		}
 
 		public static final String ERROR_CONSULTANDO = "No fue posible consultar los servicios. Inténtelo nuevamente.";
+		
 		public static final String ERROR_ACTUALIZANDO = "No fue posible actualizar el estado del servicio. No se confirmó la operación.";
 	}
 
@@ -167,5 +191,12 @@ public class CatalogoMensajes {
 
 	}
 	
+
+
+
+
+
+
+
 
 }

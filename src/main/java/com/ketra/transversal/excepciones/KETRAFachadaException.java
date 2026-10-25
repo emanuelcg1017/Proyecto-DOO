@@ -19,6 +19,6 @@ public class KETRAFachadaException extends KETRAExcepcion {
 	}
 	
 	public static KETRAExcepcion crear(String mensajeUsuario, String mensajeTecnico, Exception excepcionRaiz) {
-		return new KETRAFachadaException(mensajeUsuario, mensajeUsuario, excepcionRaiz);
+		return new KETRAFachadaException(mensajeUsuario, mensajeTecnico, excepcionRaiz);
 	}
 }
