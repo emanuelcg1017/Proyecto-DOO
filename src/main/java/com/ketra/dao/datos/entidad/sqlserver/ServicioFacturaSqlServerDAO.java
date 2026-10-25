@@ -16,6 +16,7 @@ import com.ketra.entidad.ServicioFacturaEntidad;
 import com.ketra.transversal.catalogo.CatalogoMensajes;
 import com.ketra.transversal.excepciones.KETRADatosException;
 import com.ketra.transversal.utilitarios.UtilUUID;
+import com.ketra.transversal.utilitarios.UtilTexto;
 
 public class ServicioFacturaSqlServerDAO extends SqlDAO implements ServicioFacturaDAO {
 
@@ -58,14 +59,14 @@ public class ServicioFacturaSqlServerDAO extends SqlDAO implements ServicioFactu
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 		}
 
@@ -132,14 +133,14 @@ public class ServicioFacturaSqlServerDAO extends SqlDAO implements ServicioFactu
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 		}
 

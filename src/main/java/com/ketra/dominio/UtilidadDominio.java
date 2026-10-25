@@ -20,6 +20,7 @@ public class UtilidadDominio {
 		this.valorIngresos = builder.valorIngresos;
 		this.valorCostos = builder.valorCostos;
 		this.valorUtilidad = builder.valorUtilidad;
+
 	}
 
 	public UUID getId() {
@@ -56,6 +57,7 @@ public class UtilidadDominio {
 			valorIngresos = UtilNumero.CERO_DECIMAL;
 			valorCostos = UtilNumero.CERO_DECIMAL;
 			valorUtilidad = UtilNumero.CERO_DECIMAL;
+
 		}
 
 		public Builder id(UUID id) {
@@ -69,17 +71,17 @@ public class UtilidadDominio {
 		}
 
 		public Builder valorIngresos(Double valorIngresos) {
-			this.valorIngresos = valorIngresos;
+			this.valorIngresos = UtilNumero.obtenerValorDefecto(valorIngresos, UtilNumero.CERO_DECIMAL);
 			return this;
 		}
 
 		public Builder valorCostos(Double valorCostos) {
-			this.valorCostos = valorCostos;
+			this.valorCostos = UtilNumero.obtenerValorDefecto(valorCostos, UtilNumero.CERO_DECIMAL);
 			return this;
 		}
 
 		public Builder valorUtilidad(Double valorUtilidad) {
-			this.valorUtilidad = valorUtilidad;
+			this.valorUtilidad = UtilNumero.obtenerValorDefecto(valorUtilidad, UtilNumero.CERO_DECIMAL);
 			return this;
 		}
 

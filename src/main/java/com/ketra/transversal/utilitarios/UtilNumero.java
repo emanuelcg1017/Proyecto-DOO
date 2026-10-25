@@ -2,7 +2,7 @@ package com.ketra.transversal.utilitarios;
 
 public class UtilNumero {
 	
-	public static int CERO = 0;
+	public static final int CERO = 0;
 	public static final double CERO_DECIMAL = 0.0;
 	
 	private UtilNumero() {

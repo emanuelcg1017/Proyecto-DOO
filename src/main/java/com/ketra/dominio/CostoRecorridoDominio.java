@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.ketra.transversal.utilitarios.UtilObjeto;
 import com.ketra.transversal.utilitarios.UtilTexto;
 import com.ketra.transversal.utilitarios.UtilUUID;
+import com.ketra.transversal.utilitarios.UtilNumero;
 
 public class CostoRecorridoDominio {
 
@@ -53,8 +54,8 @@ public class CostoRecorridoDominio {
 			id = UtilUUID.obtenerValorDefecto(id);
 			numeroCosto = UtilTexto.VACIO;
 			detalleEntrega = new DetalleEntregaDominio.Builder().build();
-			valorPorKM = 0;
-			valorCosto = 0.0;
+			valorPorKM = UtilNumero.CERO;
+			valorCosto = UtilNumero.CERO_DECIMAL;
 		}
 
 		public Builder id(UUID id) {
@@ -78,7 +79,7 @@ public class CostoRecorridoDominio {
 		}
 
 		public Builder valorCosto(Double valorCosto) {
-			this.valorCosto = valorCosto;
+			this.valorCosto = UtilNumero.obtenerValorDefecto(valorCosto, UtilNumero.CERO_DECIMAL);
 			return this;
 		}
 

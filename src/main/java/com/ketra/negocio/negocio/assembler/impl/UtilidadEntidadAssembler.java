@@ -10,13 +10,13 @@ import com.ketra.transversal.utilitarios.UtilObjeto;
 public class UtilidadEntidadAssembler
 		implements EntidadAssembler<UtilidadDominio, UtilidadEntidad> {
 
-	private static final EntidadAssembler<UtilidadDominio, UtilidadEntidad> instancia = new UtilidadEntidadAssembler();
+	private static final UtilidadEntidadAssembler instancia = new UtilidadEntidadAssembler();
 
 	private UtilidadEntidadAssembler() {
 
 	}
 
-	public static EntidadAssembler<UtilidadDominio, UtilidadEntidad> getInstance() {
+	public static UtilidadEntidadAssembler getInstance() {
 
 		return instancia;
 	}
@@ -62,4 +62,5 @@ public class UtilidadEntidadAssembler
 				.valorUtilidad(entidadTmp.getValorUtilidad())
 				.build();
 	}
+
 }

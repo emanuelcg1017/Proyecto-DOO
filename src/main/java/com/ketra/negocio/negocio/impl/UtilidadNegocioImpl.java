@@ -59,7 +59,6 @@ public class UtilidadNegocioImpl implements UtilidadNegocio {
 		return daoFactory.obtenerCostoRecorridoDAO().consultarTotalCostosPorServicio(idServicio);
 	}
 
-
 	private Double calcularValorIngresos(UUID idServicio) {
 
 		return daoFactory.obtenerFacturaDAO().consultarTotalIngresosPorServicio(idServicio);
@@ -104,6 +103,7 @@ public class UtilidadNegocioImpl implements UtilidadNegocio {
 		}
 
 		return UtilidadEntidadAssembler.getInstance().convertirADominio(resultados.get(0));
+
 	}
 
 }

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iniciar sesión | KETRA</title>
+  <link rel="stylesheet" href="/css/consultar-utilidad.css">
+  <link rel="stylesheet" href="/css/login.css">
+  <script defer src="/js/login.js"></script>
+</head>
+<body class="login-page">
+  <main class="login-card">
+    <div class="login-brand"><span class="brand-mark" aria-hidden="true">K</span><div>KETRA<small>Logística Puerta a Puerta</small></div></div>
+    <h1>Bienvenido a KETRA</h1>
+    <p>Ingresa con tu cuenta de Google para gestionar los servicios y consultar sus utilidades.</p>
+    <form id="ingresar-google" action="/oauth2/authorization/google" method="get">
+      <button id="continuar-google" class="login-button" type="submit">Continuar con Google</button>
+    </form>
+    <p id="mensaje-ingreso" class="login-message" role="status" aria-live="polite">Acceso exclusivo para las cuentas autorizadas.</p>
+  </main>
+</body>
+</html>

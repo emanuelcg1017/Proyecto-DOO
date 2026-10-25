@@ -35,6 +35,25 @@ public class UtilTexto {
 	public String obtenerValorDefecto(String valor) {
 		return obtenerValorDefecto(valor,VACIO);
 	}
+
+	public String concatenar(String... textos) {
+
+		final StringBuilder resultado = new StringBuilder();
+
+		if (!UtilObjeto.esNulo(textos)) {
+
+			for (String texto : textos) {
+
+				resultado.append(obtenerValorDefecto(texto));
+
+			}
+
+		}
+
+		return resultado.toString();
+
+	}
+
 	public String quitarEspacionEnBlanco(String valor) {
 		return obtenerValorDefecto(valor).trim();
 	}
@@ -47,9 +66,9 @@ public class UtilTexto {
 	}
 	
 	public boolean longitudCadenaEsValida(String cadena, int longitudInicial, int longitudFinal, boolean quitarEspaciosBlanco) {
-		var valorSanitizado = quitarEspaciosBlanco ? quitarEspacionEnBlanco(cadena) : cadena;
-		
-		return obtenerLongitudCadena(valorSanitizado) >= longitudInicial && obtenerLongitudCadena(cadena) <= longitudFinal;
+		var longitud = obtenerLongitudCadena(cadena, quitarEspaciosBlanco);
+
+		return longitud >= longitudInicial && longitud <= longitudFinal;
 	}
 	
 	public boolean formatoEsValido(String valor, String Patron) {

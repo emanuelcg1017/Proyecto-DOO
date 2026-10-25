@@ -58,6 +58,7 @@ import com.ketra.dao.factoria.DAOFactory;
 import com.ketra.transversal.catalogo.CatalogoMensajes;
 import com.ketra.transversal.excepciones.KETRADatosException;
 import com.ketra.transversal.utilitarios.UtilSQL;
+import com.ketra.transversal.utilitarios.UtilTexto;
 
 public class SqlServerDAOFactory extends DAOFactory{
 
@@ -76,11 +77,12 @@ public class SqlServerDAOFactory extends DAOFactory{
 
 		try {
 
-			String url = "jdbc:sqlserver://localhost:1433;"
-					+ "databaseName=KETRA;"
-					+ "integratedSecurity=true;"
-					+ "encrypt=true;"
-					+ "trustServerCertificate=true";
+			String url = UtilTexto.getUtilTexto().concatenar(
+					"jdbc:sqlserver://localhost:1433;",
+					"databaseName=KETRA;",
+					"integratedSecurity=true;",
+					"encrypt=true;",
+					"trustServerCertificate=true");
 
 			Connection conexion = DriverManager.getConnection(url);
 
@@ -90,7 +92,7 @@ public class SqlServerDAOFactory extends DAOFactory{
 
 
 			var mensajeUsuario =CatalogoMensajes.SqlServerDAOFactory.USUARIO_ERROR_CONEXION_SQL_SERVER;
-			var mensajeTecnico =CatalogoMensajes.SqlServerDAOFactory.TECNICO_ERROR_CONEXION_SQL_SERVER + excepcion.getMessage();
+			var mensajeTecnico =UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAOFactory.TECNICO_ERROR_CONEXION_SQL_SERVER, excepcion.getMessage());
 			throw KETRADatosException.crear(mensajeUsuario,mensajeTecnico,excepcion);
 			
 		}

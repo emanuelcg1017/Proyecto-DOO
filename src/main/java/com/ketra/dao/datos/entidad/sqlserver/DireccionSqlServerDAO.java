@@ -11,10 +11,8 @@ import java.util.UUID;
 import com.ketra.dao.datos.entidad.DireccionDAO;
 import com.ketra.dao.datos.entidad.SqlDAO;
 import com.ketra.entidad.BarrioEntidad;
-import com.ketra.entidad.DepartamentoEntidad;
 import com.ketra.entidad.DireccionEntidad;
 import com.ketra.entidad.MunicipioEntidad;
-import com.ketra.entidad.PaisEntidad;
 import com.ketra.entidad.TipoDireccionEntidad;
 import com.ketra.transversal.catalogo.CatalogoMensajes;
 import com.ketra.transversal.excepciones.KETRADatosException;
@@ -36,19 +34,11 @@ public class DireccionSqlServerDAO extends SqlDAO implements DireccionDAO {
 					dir.nombre AS nombre,
 					bar.id AS bar_id,
 					bar.nombre AS bar_nombre,
-					mun.id AS mun_id,
-					mun.nombre AS mun_nombre,
-					dep.id AS dep_id,
-					dep.nombre AS dep_nombre,
-					pai.id AS pai_id,
-					pai.nombre AS pai_nombre,
+					bar.idMunicipio AS bar_idMunicipio,
 					tdi.id AS tdi_id,
 					tdi.nombre AS tdi_nombre
 				FROM Direccion dir
 				INNER JOIN Barrio bar ON dir.idBarrio = bar.id
-				INNER JOIN Municipio mun ON bar.idMunicipio = mun.id
-				INNER JOIN Departamento dep ON mun.idDepartamento = dep.id
-				INNER JOIN Pais pai ON dep.idPais = pai.id
 				INNER JOIN TipoDireccion tdi ON dir.idTipoDireccion = tdi.id
 				WHERE dir.id = ?
 				""";
@@ -67,14 +57,14 @@ public class DireccionSqlServerDAO extends SqlDAO implements DireccionDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 		}
 
@@ -90,19 +80,11 @@ public class DireccionSqlServerDAO extends SqlDAO implements DireccionDAO {
 					dir.nombre AS nombre,
 					bar.id AS bar_id,
 					bar.nombre AS bar_nombre,
-					mun.id AS mun_id,
-					mun.nombre AS mun_nombre,
-					dep.id AS dep_id,
-					dep.nombre AS dep_nombre,
-					pai.id AS pai_id,
-					pai.nombre AS pai_nombre,
+					bar.idMunicipio AS bar_idMunicipio,
 					tdi.id AS tdi_id,
 					tdi.nombre AS tdi_nombre
 				FROM Direccion dir
 				INNER JOIN Barrio bar ON dir.idBarrio = bar.id
-				INNER JOIN Municipio mun ON bar.idMunicipio = mun.id
-				INNER JOIN Departamento dep ON mun.idDepartamento = dep.id
-				INNER JOIN Pais pai ON dep.idPais = pai.id
 				INNER JOIN TipoDireccion tdi ON dir.idTipoDireccion = tdi.id
 				""");
 		final List<String> condiciones = new ArrayList<>();
@@ -151,14 +133,14 @@ public class DireccionSqlServerDAO extends SqlDAO implements DireccionDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 		}
 
@@ -196,14 +178,14 @@ public class DireccionSqlServerDAO extends SqlDAO implements DireccionDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CREAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CREAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CREAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CREAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CREAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CREAR, excepcion.getMessage()),
 					excepcion);
 		}
 	}
@@ -233,35 +215,22 @@ public class DireccionSqlServerDAO extends SqlDAO implements DireccionDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ACTUALIZAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_ACTUALIZAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_ACTUALIZAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ACTUALIZAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_ACTUALIZAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_ACTUALIZAR, excepcion.getMessage()),
 					excepcion);
 		}
 	}
 
 	private DireccionEntidad construirDireccionEntidad(final ResultSet resultado) throws SQLException {
 
-		final PaisEntidad pai = new PaisEntidad.Builder()
-				.id(UUID.fromString(resultado.getString("pai_id")))
-				.nombre(resultado.getString("pai_nombre"))
-				.build();
-
-		final DepartamentoEntidad dep = new DepartamentoEntidad.Builder()
-				.id(UUID.fromString(resultado.getString("dep_id")))
-				.nombre(resultado.getString("dep_nombre"))
-				.pais(pai)
-				.build();
-
 		final MunicipioEntidad mun = new MunicipioEntidad.Builder()
-				.id(UUID.fromString(resultado.getString("mun_id")))
-				.nombre(resultado.getString("mun_nombre"))
-				.departamento(dep)
+				.id(UUID.fromString(resultado.getString("bar_idMunicipio")))
 				.build();
 
 		final BarrioEntidad bar = new BarrioEntidad.Builder()

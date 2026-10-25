@@ -9,6 +9,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 import com.ketra.controlador.respuesta.RespuestaError;
 import com.ketra.transversal.catalogo.CatalogoMensajes;
 import com.ketra.transversal.excepciones.KETRAExcepcion;
+import com.ketra.transversal.utilitarios.UtilTexto;
 
 @RestControllerAdvice
 public abstract class AbstractRestController {
@@ -36,10 +37,11 @@ public abstract class AbstractRestController {
 	@ExceptionHandler(NoResourceFoundException.class)
 	public ResponseEntity<RespuestaError<String>> controlarRecursoInexistente(NoResourceFoundException excepcion) {
 
-		var mensajeRespuesta = CatalogoMensajes.AbstractRestController.USUARIO_RECURSO_NO_ENCONTRADO
-				+ excepcion.getResourcePath()
-				+ CatalogoMensajes.AbstractRestController.USUARIO_METODO_RECURSO_NO_ENCONTRADO
-				+ excepcion.getHttpMethod();
+		var mensajeRespuesta = UtilTexto.getUtilTexto().concatenar(
+				CatalogoMensajes.AbstractRestController.USUARIO_RECURSO_NO_ENCONTRADO,
+				excepcion.getResourcePath(),
+				CatalogoMensajes.AbstractRestController.USUARIO_METODO_RECURSO_NO_ENCONTRADO,
+				String.valueOf(excepcion.getHttpMethod()));
 
 		var respuesta = RespuestaError.crear(mensajeRespuesta);
 

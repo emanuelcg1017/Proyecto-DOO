@@ -35,18 +35,16 @@ public class EntregaSqlServerDAO extends SqlDAO implements EntregaDAO {
 					ent.fechaEntrega AS fechaEntrega,
 					ent.estadoEntrega AS estadoEntrega,
 					per.id AS per_id,
-					tdo.id AS tdo_id,
-					tdo.nombre AS tdo_nombre,
 					per.numeroIdentificacion AS per_numeroIdentificacion,
 					per.primerNombre AS per_primerNombre,
 					per.segundoNombre AS per_segundoNombre,
 					per.primerApellido AS per_primerApellido,
 					per.segundoApellido AS per_segundoApellido,
 					per.numeroTelefonico AS per_numeroTelefonico,
-					per.correoElectronico AS per_correoElectronico
+					per.correoElectronico AS per_correoElectronico,
+					per.idTipoDocumento AS per_idTipoDocumento
 				FROM Entrega ent
 				INNER JOIN Persona per ON ent.idPersona = per.id
-				INNER JOIN TipoDocumento tdo ON per.idTipoDocumento = tdo.id
 				WHERE ent.id = ?
 				""";
 
@@ -64,14 +62,14 @@ public class EntregaSqlServerDAO extends SqlDAO implements EntregaDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 		}
 
@@ -88,18 +86,16 @@ public class EntregaSqlServerDAO extends SqlDAO implements EntregaDAO {
 					ent.fechaEntrega AS fechaEntrega,
 					ent.estadoEntrega AS estadoEntrega,
 					per.id AS per_id,
-					tdo.id AS tdo_id,
-					tdo.nombre AS tdo_nombre,
 					per.numeroIdentificacion AS per_numeroIdentificacion,
 					per.primerNombre AS per_primerNombre,
 					per.segundoNombre AS per_segundoNombre,
 					per.primerApellido AS per_primerApellido,
 					per.segundoApellido AS per_segundoApellido,
 					per.numeroTelefonico AS per_numeroTelefonico,
-					per.correoElectronico AS per_correoElectronico
+					per.correoElectronico AS per_correoElectronico,
+					per.idTipoDocumento AS per_idTipoDocumento
 				FROM Entrega ent
 				INNER JOIN Persona per ON ent.idPersona = per.id
-				INNER JOIN TipoDocumento tdo ON per.idTipoDocumento = tdo.id
 				""");
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
@@ -152,14 +148,14 @@ public class EntregaSqlServerDAO extends SqlDAO implements EntregaDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 		}
 
@@ -199,14 +195,14 @@ public class EntregaSqlServerDAO extends SqlDAO implements EntregaDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CREAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CREAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CREAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CREAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CREAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CREAR, excepcion.getMessage()),
 					excepcion);
 		}
 	}
@@ -233,23 +229,82 @@ public class EntregaSqlServerDAO extends SqlDAO implements EntregaDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ACTUALIZAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_ACTUALIZAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_ACTUALIZAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ACTUALIZAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_ACTUALIZAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_ACTUALIZAR, excepcion.getMessage()),
 					excepcion);
 		}
+	}
+
+	@Override
+	public List<EntregaEntidad> consultarPorServicio(UUID idServicio) {
+
+		final String sql = """
+				SELECT DISTINCT
+					ent.id AS id,
+					ent.codigoEntrega AS codigoEntrega,
+					ent.fechaEntrega AS fechaEntrega,
+					ent.estadoEntrega AS estadoEntrega,
+					per.id AS per_id,
+					per.numeroIdentificacion AS per_numeroIdentificacion,
+					per.primerNombre AS per_primerNombre,
+					per.segundoNombre AS per_segundoNombre,
+					per.primerApellido AS per_primerApellido,
+					per.segundoApellido AS per_segundoApellido,
+					per.numeroTelefonico AS per_numeroTelefonico,
+					per.correoElectronico AS per_correoElectronico,
+					per.idTipoDocumento AS per_idTipoDocumento
+				FROM Entrega ent
+				INNER JOIN Persona per ON ent.idPersona = per.id
+				INNER JOIN ServicioEntrega sen ON sen.idEntrega = ent.id
+				WHERE sen.idServicio = ?
+				""";
+
+		final List<EntregaEntidad> resultados = new ArrayList<>();
+
+		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
+
+			sentencia.setObject(1, idServicio);
+
+			try (ResultSet resultado = sentencia.executeQuery()) {
+
+				while (resultado.next()) {
+
+					resultados.add(construirEntregaEntidad(resultado));
+
+				}
+
+			}
+
+		} catch (SQLException excepcion) {
+
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
+					excepcion);
+
+		} catch (Exception excepcion) {
+
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
+					excepcion);
+
+		}
+
+		return resultados;
+
 	}
 
 	private EntregaEntidad construirEntregaEntidad(final ResultSet resultado) throws SQLException {
 
 		final TipoDocumentoEntidad tdo = new TipoDocumentoEntidad.Builder()
-				.id(UUID.fromString(resultado.getString("tdo_id")))
-				.nombre(resultado.getString("tdo_nombre"))
+				.id(UUID.fromString(resultado.getString("per_idTipoDocumento")))
 				.build();
 
 		final PersonaEntidad per = new PersonaEntidad.Builder()

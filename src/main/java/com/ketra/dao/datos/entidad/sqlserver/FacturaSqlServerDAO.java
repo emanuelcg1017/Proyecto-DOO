@@ -53,14 +53,14 @@ public class FacturaSqlServerDAO extends SqlDAO implements FacturaDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 		}
 
@@ -97,7 +97,7 @@ public class FacturaSqlServerDAO extends SqlDAO implements FacturaDAO {
 			parametros.add(java.sql.Date.valueOf(filtro.getFechaFactura()));
 		}
 
-		if (filtro.getIngresos().doubleValue() != UtilNumero.CERO_DECIMAL) {
+		if (UtilNumero.diferenteQue(filtro.getIngresos(), UtilNumero.CERO_DECIMAL)) {
 			condiciones.add("fac.ingresos = ?");
 			parametros.add(filtro.getIngresos());
 		}
@@ -130,14 +130,14 @@ public class FacturaSqlServerDAO extends SqlDAO implements FacturaDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 		}
 
@@ -175,14 +175,14 @@ public class FacturaSqlServerDAO extends SqlDAO implements FacturaDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 		}
 
@@ -217,14 +217,14 @@ public class FacturaSqlServerDAO extends SqlDAO implements FacturaDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CREAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CREAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CREAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CREAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CREAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CREAR, excepcion.getMessage()),
 					excepcion);
 		}
 	}
@@ -251,16 +251,67 @@ public class FacturaSqlServerDAO extends SqlDAO implements FacturaDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ACTUALIZAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_ACTUALIZAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_ACTUALIZAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ACTUALIZAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_ACTUALIZAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_ACTUALIZAR, excepcion.getMessage()),
 					excepcion);
 		}
+	}
+
+	@Override
+	public List<FacturaEntidad> consultarPorServicio(UUID idServicio) {
+
+		final String sql = """
+				SELECT DISTINCT
+					fac.id AS id,
+					fac.numeroFactura AS numeroFactura,
+					fac.fechaFactura AS fechaFactura,
+					fac.ingresos AS ingresos,
+					fac.estadoFactura AS estadoFactura
+				FROM Factura fac
+				INNER JOIN ServicioFactura sfa ON sfa.idFactura = fac.id
+				WHERE sfa.idServicio = ?
+				""";
+
+		final List<FacturaEntidad> resultados = new ArrayList<>();
+
+		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
+
+			sentencia.setObject(1, idServicio);
+
+			try (ResultSet resultado = sentencia.executeQuery()) {
+
+				while (resultado.next()) {
+
+					resultados.add(construirFacturaEntidad(resultado));
+
+				}
+
+			}
+
+		} catch (SQLException excepcion) {
+
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
+					excepcion);
+
+		} catch (Exception excepcion) {
+
+			throw KETRADatosException.crear(
+					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
+					excepcion);
+
+		}
+
+		return resultados;
+
 	}
 
 	private FacturaEntidad construirFacturaEntidad(final ResultSet resultado) throws SQLException {

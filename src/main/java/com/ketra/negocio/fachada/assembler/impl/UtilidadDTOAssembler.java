@@ -47,4 +47,5 @@ public class UtilidadDTOAssembler implements DTOAssembler<UtilidadDominio, Utili
 				.valorUtilidad(dtoTmp.getValorUtilidad())
 				.build();
 	}
+
 }

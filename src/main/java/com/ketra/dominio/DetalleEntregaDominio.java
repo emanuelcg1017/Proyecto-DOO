@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.ketra.transversal.utilitarios.UtilObjeto;
 import com.ketra.transversal.utilitarios.UtilTexto;
 import com.ketra.transversal.utilitarios.UtilUUID;
+import com.ketra.transversal.utilitarios.UtilNumero;
 
 public class DetalleEntregaDominio {
 
@@ -72,7 +73,7 @@ public class DetalleEntregaDominio {
 			entrega = UtilObjeto.obtenerValorDefectoSiNulo(entrega, new EntregaDominio.Builder().build());
 			CEDIOrigen = UtilObjeto.obtenerValorDefectoSiNulo(CEDIOrigen, new CEDIDominio.Builder().build());
 			direccionDestino = UtilObjeto.obtenerValorDefectoSiNulo(direccionDestino, new DireccionDominio.Builder().build());
-			distanciaKM = 0.0;
+			distanciaKM = UtilNumero.CERO_DECIMAL;
 		}
 
 		public Builder id(UUID id) {
@@ -106,7 +107,7 @@ public class DetalleEntregaDominio {
 		}
 
 		public Builder distanciaKM(Double distanciaKM) {
-			this.distanciaKM = distanciaKM;
+			this.distanciaKM = UtilNumero.obtenerValorDefecto(distanciaKM, UtilNumero.CERO_DECIMAL);
 			return this;
 		}
 

@@ -13,7 +13,6 @@ import com.ketra.dao.datos.entidad.SqlDAO;
 import com.ketra.entidad.BarrioEntidad;
 import com.ketra.entidad.DepartamentoEntidad;
 import com.ketra.entidad.MunicipioEntidad;
-import com.ketra.entidad.PaisEntidad;
 import com.ketra.transversal.catalogo.CatalogoMensajes;
 import com.ketra.transversal.excepciones.KETRADatosException;
 import com.ketra.transversal.utilitarios.UtilUUID;
@@ -34,14 +33,9 @@ public class BarrioSqlServerDAO extends SqlDAO implements BarrioDAO {
 					bar.nombre AS nombre,
 					mun.id AS mun_id,
 					mun.nombre AS mun_nombre,
-					dep.id AS dep_id,
-					dep.nombre AS dep_nombre,
-					pai.id AS pai_id,
-					pai.nombre AS pai_nombre
+					mun.idDepartamento AS mun_idDepartamento
 				FROM Barrio bar
 				INNER JOIN Municipio mun ON bar.idMunicipio = mun.id
-				INNER JOIN Departamento dep ON mun.idDepartamento = dep.id
-				INNER JOIN Pais pai ON dep.idPais = pai.id
 				WHERE bar.id = ?
 				""";
 
@@ -59,14 +53,14 @@ public class BarrioSqlServerDAO extends SqlDAO implements BarrioDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 		}
 
@@ -82,14 +76,9 @@ public class BarrioSqlServerDAO extends SqlDAO implements BarrioDAO {
 					bar.nombre AS nombre,
 					mun.id AS mun_id,
 					mun.nombre AS mun_nombre,
-					dep.id AS dep_id,
-					dep.nombre AS dep_nombre,
-					pai.id AS pai_id,
-					pai.nombre AS pai_nombre
+					mun.idDepartamento AS mun_idDepartamento
 				FROM Barrio bar
 				INNER JOIN Municipio mun ON bar.idMunicipio = mun.id
-				INNER JOIN Departamento dep ON mun.idDepartamento = dep.id
-				INNER JOIN Pais pai ON dep.idPais = pai.id
 				""");
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
@@ -132,14 +121,14 @@ public class BarrioSqlServerDAO extends SqlDAO implements BarrioDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 		}
 
@@ -153,15 +142,8 @@ public class BarrioSqlServerDAO extends SqlDAO implements BarrioDAO {
 
 	private BarrioEntidad construirBarrioEntidad(final ResultSet resultado) throws SQLException {
 
-		final PaisEntidad pai = new PaisEntidad.Builder()
-				.id(UUID.fromString(resultado.getString("pai_id")))
-				.nombre(resultado.getString("pai_nombre"))
-				.build();
-
 		final DepartamentoEntidad dep = new DepartamentoEntidad.Builder()
-				.id(UUID.fromString(resultado.getString("dep_id")))
-				.nombre(resultado.getString("dep_nombre"))
-				.pais(pai)
+				.id(UUID.fromString(resultado.getString("mun_idDepartamento")))
 				.build();
 
 		final MunicipioEntidad mun = new MunicipioEntidad.Builder()

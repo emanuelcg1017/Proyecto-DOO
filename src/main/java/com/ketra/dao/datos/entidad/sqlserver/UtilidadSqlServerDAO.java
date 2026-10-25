@@ -16,6 +16,7 @@ import com.ketra.transversal.catalogo.CatalogoMensajes;
 import com.ketra.transversal.excepciones.KETRADatosException;
 import com.ketra.transversal.utilitarios.UtilUUID;
 import com.ketra.transversal.utilitarios.UtilNumero;
+import com.ketra.transversal.utilitarios.UtilTexto;
 
 public class UtilidadSqlServerDAO extends SqlDAO implements UtilidadDAO {
 
@@ -55,14 +56,14 @@ public class UtilidadSqlServerDAO extends SqlDAO implements UtilidadDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 		}
 
@@ -98,17 +99,17 @@ public class UtilidadSqlServerDAO extends SqlDAO implements UtilidadDAO {
 			parametros.add(filtro.getServicio().getId());
 		}
 
-		if (filtro.getValorIngresos().doubleValue() != UtilNumero.CERO_DECIMAL) {
+		if (UtilNumero.diferenteQue(filtro.getValorIngresos(), UtilNumero.CERO_DECIMAL)) {
 			condiciones.add("uti.valorIngresos = ?");
 			parametros.add(filtro.getValorIngresos());
 		}
 
-		if (filtro.getValorCostos().doubleValue() != UtilNumero.CERO_DECIMAL) {
+		if (UtilNumero.diferenteQue(filtro.getValorCostos(), UtilNumero.CERO_DECIMAL)) {
 			condiciones.add("uti.valorCostos = ?");
 			parametros.add(filtro.getValorCostos());
 		}
 
-		if (filtro.getValorUtilidad().doubleValue() != UtilNumero.CERO_DECIMAL) {
+		if (UtilNumero.diferenteQue(filtro.getValorUtilidad(), UtilNumero.CERO_DECIMAL)) {
 			condiciones.add("uti.valorUtilidad = ?");
 			parametros.add(filtro.getValorUtilidad());
 		}
@@ -136,14 +137,14 @@ public class UtilidadSqlServerDAO extends SqlDAO implements UtilidadDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 		}
 
@@ -183,14 +184,14 @@ public class UtilidadSqlServerDAO extends SqlDAO implements UtilidadDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CREAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CREAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CREAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CREAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CREAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CREAR, excepcion.getMessage()),
 					excepcion);
 		}
 	}
