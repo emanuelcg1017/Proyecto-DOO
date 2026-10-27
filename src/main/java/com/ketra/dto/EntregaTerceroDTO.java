@@ -15,17 +15,11 @@ public class EntregaTerceroDTO {
 
 	public EntregaTerceroDTO() {
 
-		this(new Builder());
+		setId(UtilUUID.UUID_DEFECTO);
 
-	}
+		setEntrega(new EntregaDTO());
 
-	private EntregaTerceroDTO(Builder builder) {
-
-		this.id = builder.id;
-
-		this.entrega = builder.entrega;
-
-		this.tercero = builder.tercero;
+		setTercero(new TerceroDTO());
 
 	}
 
@@ -49,7 +43,7 @@ public class EntregaTerceroDTO {
 
 	public void setEntrega(EntregaDTO entrega) {
 
-		this.entrega = UtilObjeto.obtenerValorDefectoSiNulo(entrega, new EntregaDTO.Builder().build());
+		this.entrega = UtilObjeto.obtenerValorDefectoSiNulo(entrega, new EntregaDTO());
 
 	}
 
@@ -61,57 +55,7 @@ public class EntregaTerceroDTO {
 
 	public void setTercero(TerceroDTO tercero) {
 
-		this.tercero = UtilObjeto.obtenerValorDefectoSiNulo(tercero, new TerceroDTO.Builder().build());
-
-	}
-
-	public static class Builder {
-
-		private UUID id;
-
-		private EntregaDTO entrega;
-
-		private TerceroDTO tercero;
-
-		public Builder() {
-
-			id = UtilUUID.UUID_DEFECTO;
-
-			entrega = new EntregaDTO.Builder().build();
-
-			tercero = new TerceroDTO.Builder().build();
-
-		}
-
-		public Builder id(UUID id) {
-
-			this.id = UtilUUID.obtenerValorDefecto(id);
-
-			return this;
-
-		}
-
-		public Builder entrega(EntregaDTO entrega) {
-
-			this.entrega = UtilObjeto.obtenerValorDefectoSiNulo(entrega, new EntregaDTO.Builder().build());
-
-			return this;
-
-		}
-
-		public Builder tercero(TerceroDTO tercero) {
-
-			this.tercero = UtilObjeto.obtenerValorDefectoSiNulo(tercero, new TerceroDTO.Builder().build());
-
-			return this;
-
-		}
-
-		public EntregaTerceroDTO build() {
-
-			return new EntregaTerceroDTO(this);
-
-		}
+		this.tercero = UtilObjeto.obtenerValorDefectoSiNulo(tercero, new TerceroDTO());
 
 	}
 

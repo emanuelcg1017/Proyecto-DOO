@@ -20,13 +20,13 @@ import com.ketra.transversal.utilitarios.UtilTexto;
 public class SesionControlador extends AbstractRestController {
 
     @GetMapping
-    public ResponseEntity<RespuestaOk<SesionDTO>> consultarSesion(
-            @AuthenticationPrincipal OidcUser usuario) {
+    public ResponseEntity<RespuestaOk<SesionDTO>> consultarSesion(@AuthenticationPrincipal OidcUser usuario) {
 
-        var sesion = new SesionDTO.Builder()
-                .nombre(UtilTexto.getUtilTexto().obtenerValorDefecto(usuario.getFullName(), usuario.getEmail()))
-                .correo(usuario.getEmail())
-                .build();
+        var sesion = new SesionDTO();
+
+        sesion.setNombre(UtilTexto.getUtilTexto().obtenerValorDefecto(usuario.getFullName(), usuario.getEmail()));
+
+        sesion.setCorreo(usuario.getEmail());
 
         RespuestaOk<SesionDTO> respuesta = RespuestaOk.crear(sesion);
 
@@ -35,8 +35,7 @@ public class SesionControlador extends AbstractRestController {
     }
 
     @GetMapping("/csrf")
-    public ResponseEntity<RespuestaOk<Map<String, String>>> consultarTokenCsrf(
-            CsrfToken token) {
+    public ResponseEntity<RespuestaOk<Map<String, String>>> consultarTokenCsrf(CsrfToken token) {
 
         var datos = Map.of("headerName", token.getHeaderName(), "token", token.getToken());
 

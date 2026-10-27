@@ -104,7 +104,7 @@ public class ServicioFachadaImpl implements ServicioFachada {
 	@Override
 	public List<ServicioDTO> consultarTodos() {
 
-		return consultarPorFiltro(new ServicioDTO.Builder().build());
+		return consultarPorFiltro(new ServicioDTO());
 
 	}
 

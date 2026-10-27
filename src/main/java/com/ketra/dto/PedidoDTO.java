@@ -17,17 +17,11 @@ public class PedidoDTO {
 
 	public PedidoDTO() {
 
-		this(new Builder());
+		setId(UtilUUID.UUID_DEFECTO);
 
-	}
+		setNumeroPedido(UtilTexto.VACIO);
 
-	private PedidoDTO(Builder builder) {
-
-		this.id = builder.id;
-
-		this.numeroPedido = builder.numeroPedido;
-
-		this.fechaPedido = builder.fechaPedido;
+		setFechaPedido(UtilFecha.FECHA_DEFECTO);
 
 	}
 
@@ -64,56 +58,6 @@ public class PedidoDTO {
 	public void setFechaPedido(LocalDate fechaPedido) {
 
 		this.fechaPedido = UtilFecha.obtenerFechaDefecto(fechaPedido);
-
-	}
-
-	public static class Builder {
-
-		private UUID id;
-
-		private String numeroPedido;
-
-		private LocalDate fechaPedido;
-
-		public Builder() {
-
-			id = UtilUUID.UUID_DEFECTO;
-
-			numeroPedido = UtilTexto.VACIO;
-
-			fechaPedido = UtilFecha.FECHA_DEFECTO;
-
-		}
-
-		public Builder id(UUID id) {
-
-			this.id = UtilUUID.obtenerValorDefecto(id);
-
-			return this;
-
-		}
-
-		public Builder numeroPedido(String numeroPedido) {
-
-			this.numeroPedido = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroPedido);
-
-			return this;
-
-		}
-
-		public Builder fechaPedido(LocalDate fechaPedido) {
-
-			this.fechaPedido = UtilFecha.obtenerFechaDefecto(fechaPedido);
-
-			return this;
-
-		}
-
-		public PedidoDTO build() {
-
-			return new PedidoDTO(this);
-
-		}
 
 	}
 

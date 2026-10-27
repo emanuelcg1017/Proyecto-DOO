@@ -27,19 +27,24 @@ public class EntregaDTOAssembler implements DTOAssembler<EntregaDominio, Entrega
 
 		var datos = UtilObjeto.obtenerValorDefectoSiNulo(dominio, new EntregaDominio.Builder().build());
 
-		return new EntregaDTO.Builder()
-				.id(datos.getId())
-				.codigoEntrega(datos.getCodigoEntrega())
-				.fechaEntrega(datos.getFechaEntrega())
-				.estadoEntrega(datos.getEstadoEntrega())
-				.build();
+		var resultado = new EntregaDTO();
+
+		resultado.setId(datos.getId());
+
+		resultado.setCodigoEntrega(datos.getCodigoEntrega());
+
+		resultado.setFechaEntrega(datos.getFechaEntrega());
+
+		resultado.setEstadoEntrega(datos.getEstadoEntrega());
+
+		return resultado;
 
 	}
 
 	@Override
 	public EntregaDominio convertirADominio(EntregaDTO dto) {
 
-		var datos = UtilObjeto.obtenerValorDefectoSiNulo(dto, new EntregaDTO.Builder().build());
+		var datos = UtilObjeto.obtenerValorDefectoSiNulo(dto, new EntregaDTO());
 
 		return new EntregaDominio.Builder()
 				.id(datos.getId())

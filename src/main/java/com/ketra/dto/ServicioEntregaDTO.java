@@ -15,17 +15,11 @@ public class ServicioEntregaDTO {
 
 	public ServicioEntregaDTO() {
 
-		this(new Builder());
+		setId(UtilUUID.UUID_DEFECTO);
 
-	}
+		setServicio(new ServicioDTO());
 
-	private ServicioEntregaDTO(Builder builder) {
-
-		this.id = builder.id;
-
-		this.servicio = builder.servicio;
-
-		this.entrega = builder.entrega;
+		setEntrega(new EntregaDTO());
 
 	}
 
@@ -49,7 +43,7 @@ public class ServicioEntregaDTO {
 
 	public void setServicio(ServicioDTO servicio) {
 
-		this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio, new ServicioDTO.Builder().build());
+		this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio, new ServicioDTO());
 
 	}
 
@@ -61,57 +55,7 @@ public class ServicioEntregaDTO {
 
 	public void setEntrega(EntregaDTO entrega) {
 
-		this.entrega = UtilObjeto.obtenerValorDefectoSiNulo(entrega, new EntregaDTO.Builder().build());
-
-	}
-
-	public static class Builder {
-
-		private UUID id;
-
-		private ServicioDTO servicio;
-
-		private EntregaDTO entrega;
-
-		public Builder() {
-
-			id = UtilUUID.UUID_DEFECTO;
-
-			servicio = new ServicioDTO.Builder().build();
-
-			entrega = new EntregaDTO.Builder().build();
-
-		}
-
-		public Builder id(UUID id) {
-
-			this.id = UtilUUID.obtenerValorDefecto(id);
-
-			return this;
-
-		}
-
-		public Builder servicio(ServicioDTO servicio) {
-
-			this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio, new ServicioDTO.Builder().build());
-
-			return this;
-
-		}
-
-		public Builder entrega(EntregaDTO entrega) {
-
-			this.entrega = UtilObjeto.obtenerValorDefectoSiNulo(entrega, new EntregaDTO.Builder().build());
-
-			return this;
-
-		}
-
-		public ServicioEntregaDTO build() {
-
-			return new ServicioEntregaDTO(this);
-
-		}
+		this.entrega = UtilObjeto.obtenerValorDefectoSiNulo(entrega, new EntregaDTO());
 
 	}
 

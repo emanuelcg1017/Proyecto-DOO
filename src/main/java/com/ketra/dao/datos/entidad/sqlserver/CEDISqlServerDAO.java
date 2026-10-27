@@ -12,10 +12,7 @@ import com.ketra.dao.datos.entidad.CEDIDAO;
 import com.ketra.dao.datos.entidad.SqlDAO;
 import com.ketra.entidad.BarrioEntidad;
 import com.ketra.entidad.CEDIEntidad;
-import com.ketra.entidad.DepartamentoEntidad;
 import com.ketra.entidad.DireccionEntidad;
-import com.ketra.entidad.MunicipioEntidad;
-import com.ketra.entidad.PaisEntidad;
 import com.ketra.entidad.TipoDireccionEntidad;
 import com.ketra.transversal.catalogo.CatalogoMensajes;
 import com.ketra.transversal.excepciones.KETRADatosException;
@@ -37,23 +34,10 @@ public class CEDISqlServerDAO extends SqlDAO implements CEDIDAO {
 					ced.nombre AS nombre,
 					dir.id AS dir_id,
 					dir.nombre AS dir_nombre,
-					bar.id AS bar_id,
-					bar.nombre AS bar_nombre,
-					mun.id AS mun_id,
-					mun.nombre AS mun_nombre,
-					dep.id AS dep_id,
-					dep.nombre AS dep_nombre,
-					pai.id AS pai_id,
-					pai.nombre AS pai_nombre,
-					tdi.id AS tdi_id,
-					tdi.nombre AS tdi_nombre
+					dir.idBarrio AS dir_idBarrio,
+					dir.idTipoDireccion AS dir_idTipoDireccion
 				FROM CEDI ced
 				INNER JOIN Direccion dir ON ced.idDireccion = dir.id
-				INNER JOIN Barrio bar ON dir.idBarrio = bar.id
-				INNER JOIN Municipio mun ON bar.idMunicipio = mun.id
-				INNER JOIN Departamento dep ON mun.idDepartamento = dep.id
-				INNER JOIN Pais pai ON dep.idPais = pai.id
-				INNER JOIN TipoDireccion tdi ON dir.idTipoDireccion = tdi.id
 				WHERE ced.id = ?
 				""";
 
@@ -71,14 +55,14 @@ public class CEDISqlServerDAO extends SqlDAO implements CEDIDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 		}
 
@@ -94,23 +78,10 @@ public class CEDISqlServerDAO extends SqlDAO implements CEDIDAO {
 					ced.nombre AS nombre,
 					dir.id AS dir_id,
 					dir.nombre AS dir_nombre,
-					bar.id AS bar_id,
-					bar.nombre AS bar_nombre,
-					mun.id AS mun_id,
-					mun.nombre AS mun_nombre,
-					dep.id AS dep_id,
-					dep.nombre AS dep_nombre,
-					pai.id AS pai_id,
-					pai.nombre AS pai_nombre,
-					tdi.id AS tdi_id,
-					tdi.nombre AS tdi_nombre
+					dir.idBarrio AS dir_idBarrio,
+					dir.idTipoDireccion AS dir_idTipoDireccion
 				FROM CEDI ced
 				INNER JOIN Direccion dir ON ced.idDireccion = dir.id
-				INNER JOIN Barrio bar ON dir.idBarrio = bar.id
-				INNER JOIN Municipio mun ON bar.idMunicipio = mun.id
-				INNER JOIN Departamento dep ON mun.idDepartamento = dep.id
-				INNER JOIN Pais pai ON dep.idPais = pai.id
-				INNER JOIN TipoDireccion tdi ON dir.idTipoDireccion = tdi.id
 				""");
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
@@ -153,14 +124,14 @@ public class CEDISqlServerDAO extends SqlDAO implements CEDIDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
 					excepcion);
 		}
 
@@ -196,14 +167,14 @@ public class CEDISqlServerDAO extends SqlDAO implements CEDIDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CREAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CREAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CREAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CREAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CREAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CREAR, excepcion.getMessage()),
 					excepcion);
 		}
 	}
@@ -231,59 +202,39 @@ public class CEDISqlServerDAO extends SqlDAO implements CEDIDAO {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ACTUALIZAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_ACTUALIZAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_ACTUALIZAR, excepcion.getMessage()),
 					excepcion);
 
 		} catch (Exception excepcion) {
 
 			throw KETRADatosException.crear(
 					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_ACTUALIZAR,
-					CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_ACTUALIZAR + excepcion.getMessage(),
+					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_ACTUALIZAR, excepcion.getMessage()),
 					excepcion);
 		}
 	}
 
 	private CEDIEntidad construirCEDIEntidad(final ResultSet resultado) throws SQLException {
 
-		final PaisEntidad pai = new PaisEntidad.Builder()
-				.id(UUID.fromString(resultado.getString("pai_id")))
-				.nombre(resultado.getString("pai_nombre"))
+		final BarrioEntidad barrio = new BarrioEntidad.Builder()
+				.id(UUID.fromString(resultado.getString("dir_idBarrio")))
 				.build();
 
-		final DepartamentoEntidad dep = new DepartamentoEntidad.Builder()
-				.id(UUID.fromString(resultado.getString("dep_id")))
-				.nombre(resultado.getString("dep_nombre"))
-				.pais(pai)
+		final TipoDireccionEntidad tipoDireccion = new TipoDireccionEntidad.Builder()
+				.id(UUID.fromString(resultado.getString("dir_idTipoDireccion")))
 				.build();
 
-		final MunicipioEntidad mun = new MunicipioEntidad.Builder()
-				.id(UUID.fromString(resultado.getString("mun_id")))
-				.nombre(resultado.getString("mun_nombre"))
-				.departamento(dep)
-				.build();
-
-		final BarrioEntidad bar = new BarrioEntidad.Builder()
-				.id(UUID.fromString(resultado.getString("bar_id")))
-				.nombre(resultado.getString("bar_nombre"))
-				.municipio(mun)
-				.build();
-
-		final TipoDireccionEntidad tdi = new TipoDireccionEntidad.Builder()
-				.id(UUID.fromString(resultado.getString("tdi_id")))
-				.nombre(resultado.getString("tdi_nombre"))
-				.build();
-
-		final DireccionEntidad dir = new DireccionEntidad.Builder()
+		final DireccionEntidad direccion = new DireccionEntidad.Builder()
 				.id(UUID.fromString(resultado.getString("dir_id")))
 				.nombre(resultado.getString("dir_nombre"))
-				.barrio(bar)
-				.direccion(tdi)
+				.barrio(barrio)
+				.direccion(tipoDireccion)
 				.build();
 
 		return new CEDIEntidad.Builder()
 				.id(UUID.fromString(resultado.getString("id")))
 				.nombre(resultado.getString("nombre"))
-				.direccion(dir)
+				.direccion(direccion)
 				.build();
 	}
 }

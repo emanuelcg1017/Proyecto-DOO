@@ -16,17 +16,11 @@ public class MunicipioDTO {
 
 	public MunicipioDTO() {
 
-		this(new Builder());
+		setId(UtilUUID.UUID_DEFECTO);
 
-	}
+		setNombre(UtilTexto.VACIO);
 
-	private MunicipioDTO(Builder builder) {
-
-		this.id = builder.id;
-
-		this.nombre = builder.nombre;
-
-		this.departamento = builder.departamento;
+		setDepartamento(new DepartamentoDTO());
 
 	}
 
@@ -62,57 +56,7 @@ public class MunicipioDTO {
 
 	public void setDepartamento(DepartamentoDTO departamento) {
 
-		this.departamento = UtilObjeto.obtenerValorDefectoSiNulo(departamento, new DepartamentoDTO.Builder().build());
-
-	}
-
-	public static class Builder {
-
-		private UUID id;
-
-		private String nombre;
-
-		private DepartamentoDTO departamento;
-
-		public Builder() {
-
-			id = UtilUUID.UUID_DEFECTO;
-
-			nombre = UtilTexto.VACIO;
-
-			departamento = new DepartamentoDTO.Builder().build();
-
-		}
-
-		public Builder id(UUID id) {
-
-			this.id = UtilUUID.obtenerValorDefecto(id);
-
-			return this;
-
-		}
-
-		public Builder nombre(String nombre) {
-
-			this.nombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nombre);
-
-			return this;
-
-		}
-
-		public Builder departamento(DepartamentoDTO departamento) {
-
-			this.departamento = UtilObjeto.obtenerValorDefectoSiNulo(departamento, new DepartamentoDTO.Builder().build());
-
-			return this;
-
-		}
-
-		public MunicipioDTO build() {
-
-			return new MunicipioDTO(this);
-
-		}
+		this.departamento = UtilObjeto.obtenerValorDefectoSiNulo(departamento, new DepartamentoDTO());
 
 	}
 

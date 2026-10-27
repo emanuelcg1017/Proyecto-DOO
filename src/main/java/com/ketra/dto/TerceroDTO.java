@@ -19,21 +19,15 @@ public class TerceroDTO {
 
 	public TerceroDTO() {
 
-		this(new Builder());
+		setId(UtilUUID.UUID_DEFECTO);
 
-	}
+		setNombre(UtilTexto.VACIO);
 
-	private TerceroDTO(Builder builder) {
+		setNIT(UtilTexto.VACIO);
 
-		this.id = builder.id;
+		setNumeroContacto(UtilTexto.VACIO);
 
-		this.nombre = builder.nombre;
-
-		this.NIT = builder.NIT;
-
-		this.numeroContacto = builder.numeroContacto;
-
-		this.correoContacto = builder.correoContacto;
+		setCorreoContacto(UtilTexto.VACIO);
 
 	}
 
@@ -94,80 +88,6 @@ public class TerceroDTO {
 	public void setCorreoContacto(String correoContacto) {
 
 		this.correoContacto = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(correoContacto);
-
-	}
-
-	public static class Builder {
-
-		private UUID id;
-
-		private String nombre;
-
-		private String NIT;
-
-		private String numeroContacto;
-
-		private String correoContacto;
-
-		public Builder() {
-
-			id = UtilUUID.UUID_DEFECTO;
-
-			nombre = UtilTexto.VACIO;
-
-			NIT = UtilTexto.VACIO;
-
-			numeroContacto = UtilTexto.VACIO;
-
-			correoContacto = UtilTexto.VACIO;
-
-		}
-
-		public Builder id(UUID id) {
-
-			this.id = UtilUUID.obtenerValorDefecto(id);
-
-			return this;
-
-		}
-
-		public Builder nombre(String nombre) {
-
-			this.nombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nombre);
-
-			return this;
-
-		}
-
-		public Builder NIT(String NIT) {
-
-			this.NIT = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(NIT);
-
-			return this;
-
-		}
-
-		public Builder numeroContacto(String numeroContacto) {
-
-			this.numeroContacto = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroContacto);
-
-			return this;
-
-		}
-
-		public Builder correoContacto(String correoContacto) {
-
-			this.correoContacto = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(correoContacto);
-
-			return this;
-
-		}
-
-		public TerceroDTO build() {
-
-			return new TerceroDTO(this);
-
-		}
 
 	}
 

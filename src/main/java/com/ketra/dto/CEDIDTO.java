@@ -16,17 +16,11 @@ public class CEDIDTO {
 
 	public CEDIDTO() {
 
-		this(new Builder());
+		setId(UtilUUID.UUID_DEFECTO);
 
-	}
+		setNombre(UtilTexto.VACIO);
 
-	private CEDIDTO(Builder builder) {
-
-		this.id = builder.id;
-
-		this.nombre = builder.nombre;
-
-		this.direccion = builder.direccion;
+		setDireccion(new DireccionDTO());
 
 	}
 
@@ -62,57 +56,7 @@ public class CEDIDTO {
 
 	public void setDireccion(DireccionDTO direccion) {
 
-		this.direccion = UtilObjeto.obtenerValorDefectoSiNulo(direccion, new DireccionDTO.Builder().build());
-
-	}
-
-	public static class Builder {
-
-		private UUID id;
-
-		private String nombre;
-
-		private DireccionDTO direccion;
-
-		public Builder() {
-
-			id = UtilUUID.UUID_DEFECTO;
-
-			nombre = UtilTexto.VACIO;
-
-			direccion = new DireccionDTO.Builder().build();
-
-		}
-
-		public Builder id(UUID id) {
-
-			this.id = UtilUUID.obtenerValorDefecto(id);
-
-			return this;
-
-		}
-
-		public Builder nombre(String nombre) {
-
-			this.nombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nombre);
-
-			return this;
-
-		}
-
-		public Builder direccion(DireccionDTO direccion) {
-
-			this.direccion = UtilObjeto.obtenerValorDefectoSiNulo(direccion, new DireccionDTO.Builder().build());
-
-			return this;
-
-		}
-
-		public CEDIDTO build() {
-
-			return new CEDIDTO(this);
-
-		}
+		this.direccion = UtilObjeto.obtenerValorDefectoSiNulo(direccion, new DireccionDTO());
 
 	}
 

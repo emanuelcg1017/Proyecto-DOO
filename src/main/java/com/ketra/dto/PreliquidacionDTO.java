@@ -24,23 +24,17 @@ public class PreliquidacionDTO {
 
 	public PreliquidacionDTO() {
 
-		this(new Builder());
+		setId(UtilUUID.UUID_DEFECTO);
 
-	}
+		setNumeroPreliquidacion(UtilTexto.VACIO);
 
-	private PreliquidacionDTO(Builder builder) {
+		setTercero(new TerceroDTO());
 
-		this.id = builder.id;
+		setValorCosto(new CostoRecorridoDTO());
 
-		this.numeroPreliquidacion = builder.numeroPreliquidacion;
+		setFechaPreliquidacion(UtilFecha.FECHA_DEFECTO);
 
-		this.tercero = builder.tercero;
-
-		this.valorCosto = builder.valorCosto;
-
-		this.fechaPreliquidacion = builder.fechaPreliquidacion;
-
-		this.estado = builder.estado;
+		setEstado(UtilTexto.VACIO);
 
 	}
 
@@ -76,7 +70,7 @@ public class PreliquidacionDTO {
 
 	public void setTercero(TerceroDTO tercero) {
 
-		this.tercero = UtilObjeto.obtenerValorDefectoSiNulo(tercero, new TerceroDTO.Builder().build());
+		this.tercero = UtilObjeto.obtenerValorDefectoSiNulo(tercero, new TerceroDTO());
 
 	}
 
@@ -88,7 +82,7 @@ public class PreliquidacionDTO {
 
 	public void setValorCosto(CostoRecorridoDTO valorCosto) {
 
-		this.valorCosto = UtilObjeto.obtenerValorDefectoSiNulo(valorCosto, new CostoRecorridoDTO.Builder().build());
+		this.valorCosto = UtilObjeto.obtenerValorDefectoSiNulo(valorCosto, new CostoRecorridoDTO());
 
 	}
 
@@ -113,92 +107,6 @@ public class PreliquidacionDTO {
 	public void setEstado(String estado) {
 
 		this.estado = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(estado);
-
-	}
-
-	public static class Builder {
-
-		private UUID id;
-
-		private String numeroPreliquidacion;
-
-		private TerceroDTO tercero;
-
-		private CostoRecorridoDTO valorCosto;
-
-		private LocalDate fechaPreliquidacion;
-
-		private String estado;
-
-		public Builder() {
-
-			id = UtilUUID.UUID_DEFECTO;
-
-			numeroPreliquidacion = UtilTexto.VACIO;
-
-			tercero = new TerceroDTO.Builder().build();
-
-			valorCosto = new CostoRecorridoDTO.Builder().build();
-
-			fechaPreliquidacion = UtilFecha.FECHA_DEFECTO;
-
-			estado = UtilTexto.VACIO;
-
-		}
-
-		public Builder id(UUID id) {
-
-			this.id = UtilUUID.obtenerValorDefecto(id);
-
-			return this;
-
-		}
-
-		public Builder numeroPreliquidacion(String numeroPreliquidacion) {
-
-			this.numeroPreliquidacion = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroPreliquidacion);
-
-			return this;
-
-		}
-
-		public Builder tercero(TerceroDTO tercero) {
-
-			this.tercero = UtilObjeto.obtenerValorDefectoSiNulo(tercero, new TerceroDTO.Builder().build());
-
-			return this;
-
-		}
-
-		public Builder valorCosto(CostoRecorridoDTO valorCosto) {
-
-			this.valorCosto = UtilObjeto.obtenerValorDefectoSiNulo(valorCosto, new CostoRecorridoDTO.Builder().build());
-
-			return this;
-
-		}
-
-		public Builder fechaPreliquidacion(LocalDate fechaPreliquidacion) {
-
-			this.fechaPreliquidacion = UtilFecha.obtenerFechaDefecto(fechaPreliquidacion);
-
-			return this;
-
-		}
-
-		public Builder estado(String estado) {
-
-			this.estado = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(estado);
-
-			return this;
-
-		}
-
-		public PreliquidacionDTO build() {
-
-			return new PreliquidacionDTO(this);
-
-		}
 
 	}
 

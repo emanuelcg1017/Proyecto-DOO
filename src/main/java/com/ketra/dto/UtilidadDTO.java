@@ -27,25 +27,25 @@ public class UtilidadDTO {
 
 	private List<FacturaDTO> facturas;
 
-	private UtilidadDTO(Builder builder) {
+	public UtilidadDTO() {
 
-		this.id = builder.id;
+		setId(UtilUUID.UUID_DEFECTO);
 
-		this.servicio = builder.servicio;
+		setServicio(new ServicioDTO());
 
-		this.valorIngresos = builder.valorIngresos;
+		setValorIngresos(UtilNumero.CERO_DECIMAL);
 
-		this.valorCostos = builder.valorCostos;
+		setValorCostos(UtilNumero.CERO_DECIMAL);
 
-		this.valorUtilidad = builder.valorUtilidad;
+		setValorUtilidad(UtilNumero.CERO_DECIMAL);
 
-		this.costosRecorrido = builder.costosRecorrido;
+		setCostosRecorrido(List.of());
 
-		this.detallesEntrega = builder.detallesEntrega;
+		setDetallesEntrega(List.of());
 
-		this.entregas = builder.entregas;
+		setEntregas(List.of());
 
-		this.facturas = builder.facturas;
+		setFacturas(List.of());
 
 	}
 
@@ -55,9 +55,21 @@ public class UtilidadDTO {
 
 	}
 
+	public void setId(UUID id) {
+
+		this.id = UtilUUID.obtenerValorDefecto(id);
+
+	}
+
 	public ServicioDTO getServicio() {
 
 		return servicio;
+
+	}
+
+	public void setServicio(ServicioDTO servicio) {
+
+		this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio, new ServicioDTO());
 
 	}
 
@@ -67,9 +79,21 @@ public class UtilidadDTO {
 
 	}
 
+	public void setValorIngresos(Double valorIngresos) {
+
+		this.valorIngresos = UtilNumero.obtenerValorDefecto(valorIngresos, UtilNumero.CERO_DECIMAL);
+
+	}
+
 	public Double getValorCostos() {
 
 		return valorCostos;
+
+	}
+
+	public void setValorCostos(Double valorCostos) {
+
+		this.valorCostos = UtilNumero.obtenerValorDefecto(valorCostos, UtilNumero.CERO_DECIMAL);
 
 	}
 
@@ -79,21 +103,9 @@ public class UtilidadDTO {
 
 	}
 
-	public List<FacturaDTO> getFacturas() {
+	public void setValorUtilidad(Double valorUtilidad) {
 
-		return facturas;
-
-	}
-
-	public List<EntregaDTO> getEntregas() {
-
-		return entregas;
-
-	}
-
-	public List<DetalleEntregaDTO> getDetallesEntrega() {
-
-		return detallesEntrega;
+		this.valorUtilidad = UtilNumero.obtenerValorDefecto(valorUtilidad, UtilNumero.CERO_DECIMAL);
 
 	}
 
@@ -103,125 +115,45 @@ public class UtilidadDTO {
 
 	}
 
-	public static class Builder {
+	public void setCostosRecorrido(List<CostoRecorridoDTO> costosRecorrido) {
 
-		private UUID id;
+		this.costosRecorrido = List.copyOf(UtilObjeto.obtenerValorDefectoSiNulo(costosRecorrido, List.of()));
 
-		private ServicioDTO servicio;
+	}
 
-		private Double valorIngresos;
+	public List<DetalleEntregaDTO> getDetallesEntrega() {
 
-		private Double valorCostos;
+		return detallesEntrega;
 
-		private Double valorUtilidad;
+	}
 
-		private List<FacturaDTO> facturas;
+	public void setDetallesEntrega(List<DetalleEntregaDTO> detallesEntrega) {
 
-		private List<EntregaDTO> entregas;
+		this.detallesEntrega = List.copyOf(UtilObjeto.obtenerValorDefectoSiNulo(detallesEntrega, List.of()));
 
-		private List<DetalleEntregaDTO> detallesEntrega;
+	}
 
-		private List<CostoRecorridoDTO> costosRecorrido;
+	public List<EntregaDTO> getEntregas() {
 
-		public Builder() {
+		return entregas;
 
-			id = UtilUUID.UUID_DEFECTO;
+	}
 
-			servicio = new ServicioDTO.Builder().build();
+	public void setEntregas(List<EntregaDTO> entregas) {
 
-			valorIngresos = UtilNumero.CERO_DECIMAL;
+		this.entregas = List.copyOf(UtilObjeto.obtenerValorDefectoSiNulo(entregas, List.of()));
 
-			valorCostos = UtilNumero.CERO_DECIMAL;
+	}
 
-			valorUtilidad = UtilNumero.CERO_DECIMAL;
+	public List<FacturaDTO> getFacturas() {
 
-			costosRecorrido = List.of();
+		return facturas;
 
-			detallesEntrega = List.of();
+	}
 
-			entregas = List.of();
+	public void setFacturas(List<FacturaDTO> facturas) {
 
-			facturas = List.of();
-
-		}
-
-		public Builder id(UUID id) {
-
-			this.id = UtilUUID.obtenerValorDefecto(id);
-
-			return this;
-
-		}
-
-		public Builder servicio(ServicioDTO servicio) {
-
-			this.servicio = UtilObjeto.obtenerValorDefectoSiNulo(servicio, new ServicioDTO.Builder().build());
-
-			return this;
-
-		}
-
-		public Builder valorIngresos(Double valorIngresos) {
-
-			this.valorIngresos = UtilNumero.obtenerValorDefecto(valorIngresos, UtilNumero.CERO_DECIMAL);
-
-			return this;
-
-		}
-
-		public Builder valorCostos(Double valorCostos) {
-
-			this.valorCostos = UtilNumero.obtenerValorDefecto(valorCostos, UtilNumero.CERO_DECIMAL);
-
-			return this;
-
-		}
-
-		public Builder valorUtilidad(Double valorUtilidad) {
-
-			this.valorUtilidad = UtilNumero.obtenerValorDefecto(valorUtilidad, UtilNumero.CERO_DECIMAL);
-
-			return this;
-
-		}
-
-		public Builder facturas(List<FacturaDTO> facturas) {
-
-			this.facturas = List.copyOf(UtilObjeto.obtenerValorDefectoSiNulo(facturas, List.of()));
-
-			return this;
-
-		}
-
-		public Builder entregas(List<EntregaDTO> entregas) {
-
-			this.entregas = List.copyOf(UtilObjeto.obtenerValorDefectoSiNulo(entregas, List.of()));
-
-			return this;
-
-		}
-
-		public Builder detallesEntrega(List<DetalleEntregaDTO> detallesEntrega) {
-
-			this.detallesEntrega = List.copyOf(UtilObjeto.obtenerValorDefectoSiNulo(detallesEntrega, List.of()));
-
-			return this;
-
-		}
-
-		public Builder costosRecorrido(List<CostoRecorridoDTO> costosRecorrido) {
-
-			this.costosRecorrido = List.copyOf(UtilObjeto.obtenerValorDefectoSiNulo(costosRecorrido, List.of()));
-
-			return this;
-
-		}
-
-		public UtilidadDTO build() {
-
-			return new UtilidadDTO(this);
-
-		}
+		this.facturas = List.copyOf(UtilObjeto.obtenerValorDefectoSiNulo(facturas, List.of()));
 
 	}
 
