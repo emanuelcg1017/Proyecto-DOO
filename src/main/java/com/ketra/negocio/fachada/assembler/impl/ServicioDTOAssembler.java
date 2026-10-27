@@ -21,18 +21,23 @@ public class ServicioDTOAssembler implements DTOAssembler<ServicioDominio, Servi
 
 		var dominioTmp = UtilObjeto.obtenerValorDefectoSiNulo(dominio, new ServicioDominio.Builder().build());
 
-		return new ServicioDTO.Builder()
-				.id(dominioTmp.getId())
-				.numeroServicio(dominioTmp.getNumeroServicio())
-				.fechaServicio(dominioTmp.getFechaServicio())
-				.estado(dominioTmp.getEstado())
-				.build();
+		var resultado = new ServicioDTO();
+
+		resultado.setId(dominioTmp.getId());
+
+		resultado.setNumeroServicio(dominioTmp.getNumeroServicio());
+
+		resultado.setFechaServicio(dominioTmp.getFechaServicio());
+
+		resultado.setEstado(dominioTmp.getEstado());
+
+		return resultado;
 	}
 
 	@Override
 	public ServicioDominio convertirADominio(ServicioDTO dto) {
 
-		var dtoTmp = UtilObjeto.obtenerValorDefectoSiNulo(dto, new ServicioDTO.Builder().build());
+		var dtoTmp = UtilObjeto.obtenerValorDefectoSiNulo(dto, new ServicioDTO());
 
 		return new ServicioDominio.Builder()
 				.id(dtoTmp.getId())

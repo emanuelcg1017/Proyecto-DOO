@@ -27,15 +27,19 @@ public class CostoRecorridoDTOAssembler implements DTOAssembler<CostoRecorridoDo
 
 		var datos = UtilObjeto.obtenerValorDefectoSiNulo(dominio, new CostoRecorridoDominio.Builder().build());
 
-		var dto = new CostoRecorridoDTO();
+		var resultado = new CostoRecorridoDTO();
 
-		dto.setId(datos.getId());
-		dto.setNumeroCosto(datos.getNumeroCosto());
-		dto.setDetalleEntrega(DetalleEntregaDTOAssembler.getInstance().convertirADTO(datos.getDetalleEntrega()));
-		dto.setValorPorKM(datos.getValorPorKM());
-		dto.setValorCosto(datos.getValorCosto());
+		resultado.setId(datos.getId());
 
-		return dto;
+		resultado.setNumeroCosto(datos.getNumeroCosto());
+
+		resultado.setDetalleEntrega(DetalleEntregaDTOAssembler.getInstance().convertirADTO(datos.getDetalleEntrega()));
+
+		resultado.setValorPorKM(datos.getValorPorKM());
+
+		resultado.setValorCosto(datos.getValorCosto());
+
+		return resultado;
 
 	}
 

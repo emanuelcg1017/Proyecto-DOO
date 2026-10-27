@@ -4,15 +4,15 @@ import com.ketra.transversal.utilitarios.UtilTexto;
 
 public class SesionDTO {
 
-	private final String nombre;
+	private String nombre;
 
-	private final String correo;
+	private String correo;
 
-	private SesionDTO(Builder builder) {
+	public SesionDTO() {
 
-		nombre = builder.nombre;
+		setNombre(UtilTexto.VACIO);
 
-		correo = builder.correo;
+		setCorreo(UtilTexto.VACIO);
 
 	}
 
@@ -22,39 +22,21 @@ public class SesionDTO {
 
 	}
 
+	public void setNombre(String nombre) {
+
+		this.nombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nombre);
+
+	}
+
 	public String getCorreo() {
 
 		return correo;
 
 	}
 
-	public static class Builder {
+	public void setCorreo(String correo) {
 
-		private String nombre = UtilTexto.VACIO;
-
-		private String correo = UtilTexto.VACIO;
-
-		public Builder nombre(String nombre) {
-
-			this.nombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nombre);
-
-			return this;
-
-		}
-
-		public Builder correo(String correo) {
-
-			this.correo = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(correo);
-
-			return this;
-
-		}
-
-		public SesionDTO build() {
-
-			return new SesionDTO(this);
-
-		}
+		this.correo = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(correo);
 
 	}
 

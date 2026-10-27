@@ -16,17 +16,11 @@ public class DetallePedidoDTO {
 
 	public DetallePedidoDTO() {
 
-		this(new Builder());
+		setId(UtilUUID.UUID_DEFECTO);
 
-	}
+		setNumeroPedido(new PedidoDTO());
 
-	private DetallePedidoDTO(Builder builder) {
-
-		this.id = builder.id;
-
-		this.numeroPedido = builder.numeroPedido;
-
-		this.codigoBarras = builder.codigoBarras;
+		setCodigoBarras(UtilTexto.VACIO);
 
 	}
 
@@ -50,7 +44,7 @@ public class DetallePedidoDTO {
 
 	public void setNumeroPedido(PedidoDTO numeroPedido) {
 
-		this.numeroPedido = UtilObjeto.obtenerValorDefectoSiNulo(numeroPedido, new PedidoDTO.Builder().build());
+		this.numeroPedido = UtilObjeto.obtenerValorDefectoSiNulo(numeroPedido, new PedidoDTO());
 
 	}
 
@@ -63,56 +57,6 @@ public class DetallePedidoDTO {
 	public void setCodigoBarras(String codigoBarras) {
 
 		this.codigoBarras = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(codigoBarras);
-
-	}
-
-	public static class Builder {
-
-		private UUID id;
-
-		private PedidoDTO numeroPedido;
-
-		private String codigoBarras;
-
-		public Builder() {
-
-			id = UtilUUID.UUID_DEFECTO;
-
-			numeroPedido = new PedidoDTO.Builder().build();
-
-			codigoBarras = UtilTexto.VACIO;
-
-		}
-
-		public Builder id(UUID id) {
-
-			this.id = UtilUUID.obtenerValorDefecto(id);
-
-			return this;
-
-		}
-
-		public Builder numeroPedido(PedidoDTO numeroPedido) {
-
-			this.numeroPedido = UtilObjeto.obtenerValorDefectoSiNulo(numeroPedido, new PedidoDTO.Builder().build());
-
-			return this;
-
-		}
-
-		public Builder codigoBarras(String codigoBarras) {
-
-			this.codigoBarras = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(codigoBarras);
-
-			return this;
-
-		}
-
-		public DetallePedidoDTO build() {
-
-			return new DetallePedidoDTO(this);
-
-		}
 
 	}
 

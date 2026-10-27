@@ -23,19 +23,25 @@ public class UtilidadDTOAssembler implements DTOAssembler<UtilidadDominio, Utili
 
 		var servicioDTO = ServicioDTOAssembler.getInstance().convertirADTO(dominioTmp.getServicio());
 
-		return new UtilidadDTO.Builder()
-				.id(dominioTmp.getId())
-				.servicio(servicioDTO)
-				.valorIngresos(dominioTmp.getValorIngresos())
-				.valorCostos(dominioTmp.getValorCostos())
-				.valorUtilidad(dominioTmp.getValorUtilidad())
-				.build();
+		var resultado = new UtilidadDTO();
+
+		resultado.setId(dominioTmp.getId());
+
+		resultado.setServicio(servicioDTO);
+
+		resultado.setValorIngresos(dominioTmp.getValorIngresos());
+
+		resultado.setValorCostos(dominioTmp.getValorCostos());
+
+		resultado.setValorUtilidad(dominioTmp.getValorUtilidad());
+
+		return resultado;
 	}
 
 	@Override
 	public UtilidadDominio convertirADominio(UtilidadDTO dto) {
 
-		var dtoTmp = UtilObjeto.obtenerValorDefectoSiNulo(dto, new UtilidadDTO.Builder().build());
+		var dtoTmp = UtilObjeto.obtenerValorDefectoSiNulo(dto, new UtilidadDTO());
 
 		var servicioDominio = ServicioDTOAssembler.getInstance().convertirADominio(dtoTmp.getServicio());
 

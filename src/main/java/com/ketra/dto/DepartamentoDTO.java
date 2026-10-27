@@ -16,17 +16,11 @@ public class DepartamentoDTO {
 
 	public DepartamentoDTO() {
 
-		this(new Builder());
+		setId(UtilUUID.UUID_DEFECTO);
 
-	}
+		setNombre(UtilTexto.VACIO);
 
-	private DepartamentoDTO(Builder builder) {
-
-		this.id = builder.id;
-
-		this.nombre = builder.nombre;
-
-		this.pais = builder.pais;
+		setPais(new PaisDTO());
 
 	}
 
@@ -62,57 +56,7 @@ public class DepartamentoDTO {
 
 	public void setPais(PaisDTO pais) {
 
-		this.pais = UtilObjeto.obtenerValorDefectoSiNulo(pais, new PaisDTO.Builder().build());
-
-	}
-
-	public static class Builder {
-
-		private UUID id;
-
-		private String nombre;
-
-		private PaisDTO pais;
-
-		public Builder() {
-
-			id = UtilUUID.UUID_DEFECTO;
-
-			nombre = UtilTexto.VACIO;
-
-			pais = new PaisDTO.Builder().build();
-
-		}
-
-		public Builder id(UUID id) {
-
-			this.id = UtilUUID.obtenerValorDefecto(id);
-
-			return this;
-
-		}
-
-		public Builder nombre(String nombre) {
-
-			this.nombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nombre);
-
-			return this;
-
-		}
-
-		public Builder pais(PaisDTO pais) {
-
-			this.pais = UtilObjeto.obtenerValorDefectoSiNulo(pais, new PaisDTO.Builder().build());
-
-			return this;
-
-		}
-
-		public DepartamentoDTO build() {
-
-			return new DepartamentoDTO(this);
-
-		}
+		this.pais = UtilObjeto.obtenerValorDefectoSiNulo(pais, new PaisDTO());
 
 	}
 

@@ -27,20 +27,26 @@ public class FacturaDTOAssembler implements DTOAssembler<FacturaDominio, Factura
 
 		var datos = UtilObjeto.obtenerValorDefectoSiNulo(dominio, new FacturaDominio.Builder().build());
 
-		return new FacturaDTO.Builder()
-				.id(datos.getId())
-				.numeroFactura(datos.getNumeroFactura())
-				.fechaFactura(datos.getFechaFactura())
-				.ingresos(datos.getIngresos())
-				.estadoFactura(datos.getEstadoFactura())
-				.build();
+		var resultado = new FacturaDTO();
+
+		resultado.setId(datos.getId());
+
+		resultado.setNumeroFactura(datos.getNumeroFactura());
+
+		resultado.setFechaFactura(datos.getFechaFactura());
+
+		resultado.setIngresos(datos.getIngresos());
+
+		resultado.setEstadoFactura(datos.getEstadoFactura());
+
+		return resultado;
 
 	}
 
 	@Override
 	public FacturaDominio convertirADominio(FacturaDTO dto) {
 
-		var datos = UtilObjeto.obtenerValorDefectoSiNulo(dto, new FacturaDTO.Builder().build());
+		var datos = UtilObjeto.obtenerValorDefectoSiNulo(dto, new FacturaDTO());
 
 		return new FacturaDominio.Builder()
 				.id(datos.getId())

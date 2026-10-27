@@ -25,25 +25,19 @@ public class DetalleEntregaDTO {
 
 	public DetalleEntregaDTO() {
 
-		this(new Builder());
+		setId(UtilUUID.UUID_DEFECTO);
 
-	}
+		setNumeroDetalleEntrega(UtilTexto.VACIO);
 
-	private DetalleEntregaDTO(Builder builder) {
+		setPedido(new PedidoDTO());
 
-		this.id = builder.id;
+		setEntrega(new EntregaDTO());
 
-		this.numeroDetalleEntrega = builder.numeroDetalleEntrega;
+		setCEDIOrigen(new CEDIDTO());
 
-		this.pedido = builder.pedido;
+		setDireccionDestino(new DireccionDTO());
 
-		this.entrega = builder.entrega;
-
-		this.CEDIOrigen = builder.CEDIOrigen;
-
-		this.direccionDestino = builder.direccionDestino;
-
-		this.distanciaKM = builder.distanciaKM;
+		setDistanciaKM(UtilNumero.CERO_DECIMAL);
 
 	}
 
@@ -79,7 +73,7 @@ public class DetalleEntregaDTO {
 
 	public void setPedido(PedidoDTO pedido) {
 
-		this.pedido = UtilObjeto.obtenerValorDefectoSiNulo(pedido, new PedidoDTO.Builder().build());
+		this.pedido = UtilObjeto.obtenerValorDefectoSiNulo(pedido, new PedidoDTO());
 
 	}
 
@@ -91,7 +85,7 @@ public class DetalleEntregaDTO {
 
 	public void setEntrega(EntregaDTO entrega) {
 
-		this.entrega = UtilObjeto.obtenerValorDefectoSiNulo(entrega, new EntregaDTO.Builder().build());
+		this.entrega = UtilObjeto.obtenerValorDefectoSiNulo(entrega, new EntregaDTO());
 
 	}
 
@@ -103,7 +97,7 @@ public class DetalleEntregaDTO {
 
 	public void setCEDIOrigen(CEDIDTO CEDIOrigen) {
 
-		this.CEDIOrigen = UtilObjeto.obtenerValorDefectoSiNulo(CEDIOrigen, new CEDIDTO.Builder().build());
+		this.CEDIOrigen = UtilObjeto.obtenerValorDefectoSiNulo(CEDIOrigen, new CEDIDTO());
 
 	}
 
@@ -115,7 +109,7 @@ public class DetalleEntregaDTO {
 
 	public void setDireccionDestino(DireccionDTO direccionDestino) {
 
-		this.direccionDestino = UtilObjeto.obtenerValorDefectoSiNulo(direccionDestino, new DireccionDTO.Builder().build());
+		this.direccionDestino = UtilObjeto.obtenerValorDefectoSiNulo(direccionDestino, new DireccionDTO());
 
 	}
 
@@ -128,104 +122,6 @@ public class DetalleEntregaDTO {
 	public void setDistanciaKM(Double distanciaKM) {
 
 		this.distanciaKM = UtilNumero.obtenerValorDefecto(distanciaKM, UtilNumero.CERO_DECIMAL);
-
-	}
-
-	public static class Builder {
-
-		private UUID id;
-
-		private String numeroDetalleEntrega;
-
-		private PedidoDTO pedido;
-
-		private EntregaDTO entrega;
-
-		private CEDIDTO CEDIOrigen;
-
-		private DireccionDTO direccionDestino;
-
-		private Double distanciaKM;
-
-		public Builder() {
-
-			id = UtilUUID.UUID_DEFECTO;
-
-			numeroDetalleEntrega = UtilTexto.VACIO;
-
-			pedido = new PedidoDTO.Builder().build();
-
-			entrega = new EntregaDTO.Builder().build();
-
-			CEDIOrigen = new CEDIDTO.Builder().build();
-
-			direccionDestino = new DireccionDTO.Builder().build();
-
-			distanciaKM = UtilNumero.CERO_DECIMAL;
-
-		}
-
-		public Builder id(UUID id) {
-
-			this.id = UtilUUID.obtenerValorDefecto(id);
-
-			return this;
-
-		}
-
-		public Builder numeroDetalleEntrega(String numeroDetalleEntrega) {
-
-			this.numeroDetalleEntrega = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroDetalleEntrega);
-
-			return this;
-
-		}
-
-		public Builder pedido(PedidoDTO pedido) {
-
-			this.pedido = UtilObjeto.obtenerValorDefectoSiNulo(pedido, new PedidoDTO.Builder().build());
-
-			return this;
-
-		}
-
-		public Builder entrega(EntregaDTO entrega) {
-
-			this.entrega = UtilObjeto.obtenerValorDefectoSiNulo(entrega, new EntregaDTO.Builder().build());
-
-			return this;
-
-		}
-
-		public Builder CEDIOrigen(CEDIDTO CEDIOrigen) {
-
-			this.CEDIOrigen = UtilObjeto.obtenerValorDefectoSiNulo(CEDIOrigen, new CEDIDTO.Builder().build());
-
-			return this;
-
-		}
-
-		public Builder direccionDestino(DireccionDTO direccionDestino) {
-
-			this.direccionDestino = UtilObjeto.obtenerValorDefectoSiNulo(direccionDestino, new DireccionDTO.Builder().build());
-
-			return this;
-
-		}
-
-		public Builder distanciaKM(Double distanciaKM) {
-
-			this.distanciaKM = UtilNumero.obtenerValorDefecto(distanciaKM, UtilNumero.CERO_DECIMAL);
-
-			return this;
-
-		}
-
-		public DetalleEntregaDTO build() {
-
-			return new DetalleEntregaDTO(this);
-
-		}
 
 	}
 

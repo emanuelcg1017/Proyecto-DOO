@@ -18,19 +18,13 @@ public class DireccionDTO {
 
 	public DireccionDTO() {
 
-		this(new Builder());
+		setId(UtilUUID.UUID_DEFECTO);
 
-	}
+		setNombre(UtilTexto.VACIO);
 
-	private DireccionDTO(Builder builder) {
+		setBarrio(new BarrioDTO());
 
-		this.id = builder.id;
-
-		this.nombre = builder.nombre;
-
-		this.barrio = builder.barrio;
-
-		this.direccion = builder.direccion;
+		setDireccion(new TipoDireccionDTO());
 
 	}
 
@@ -66,7 +60,7 @@ public class DireccionDTO {
 
 	public void setBarrio(BarrioDTO barrio) {
 
-		this.barrio = UtilObjeto.obtenerValorDefectoSiNulo(barrio, new BarrioDTO.Builder().build());
+		this.barrio = UtilObjeto.obtenerValorDefectoSiNulo(barrio, new BarrioDTO());
 
 	}
 
@@ -78,69 +72,7 @@ public class DireccionDTO {
 
 	public void setDireccion(TipoDireccionDTO direccion) {
 
-		this.direccion = UtilObjeto.obtenerValorDefectoSiNulo(direccion, new TipoDireccionDTO.Builder().build());
-
-	}
-
-	public static class Builder {
-
-		private UUID id;
-
-		private String nombre;
-
-		private BarrioDTO barrio;
-
-		private TipoDireccionDTO direccion;
-
-		public Builder() {
-
-			id = UtilUUID.UUID_DEFECTO;
-
-			nombre = UtilTexto.VACIO;
-
-			barrio = new BarrioDTO.Builder().build();
-
-			direccion = new TipoDireccionDTO.Builder().build();
-
-		}
-
-		public Builder id(UUID id) {
-
-			this.id = UtilUUID.obtenerValorDefecto(id);
-
-			return this;
-
-		}
-
-		public Builder nombre(String nombre) {
-
-			this.nombre = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nombre);
-
-			return this;
-
-		}
-
-		public Builder barrio(BarrioDTO barrio) {
-
-			this.barrio = UtilObjeto.obtenerValorDefectoSiNulo(barrio, new BarrioDTO.Builder().build());
-
-			return this;
-
-		}
-
-		public Builder direccion(TipoDireccionDTO direccion) {
-
-			this.direccion = UtilObjeto.obtenerValorDefectoSiNulo(direccion, new TipoDireccionDTO.Builder().build());
-
-			return this;
-
-		}
-
-		public DireccionDTO build() {
-
-			return new DireccionDTO(this);
-
-		}
+		this.direccion = UtilObjeto.obtenerValorDefectoSiNulo(direccion, new TipoDireccionDTO());
 
 	}
 

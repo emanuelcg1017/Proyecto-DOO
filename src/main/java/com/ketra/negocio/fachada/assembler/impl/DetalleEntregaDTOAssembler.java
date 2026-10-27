@@ -40,7 +40,9 @@ public class DetalleEntregaDTOAssembler implements DTOAssembler<DetalleEntregaDo
 		var pedido = new PedidoDTO();
 
 		pedido.setId(datos.getPedido().getId());
+
 		pedido.setNumeroPedido(datos.getPedido().getNumeroPedido());
+
 		pedido.setFechaPedido(datos.getPedido().getFechaPedido());
 
 		var direccionCedi = new DireccionDTO();
@@ -50,7 +52,9 @@ public class DetalleEntregaDTOAssembler implements DTOAssembler<DetalleEntregaDo
 		var cediOrigen = new CEDIDTO();
 
 		cediOrigen.setId(datos.getCEDIOrigen().getId());
+
 		cediOrigen.setNombre(datos.getCEDIOrigen().getNombre());
+
 		cediOrigen.setDireccion(direccionCedi);
 
 		var barrio = new BarrioDTO();
@@ -64,21 +68,30 @@ public class DetalleEntregaDTOAssembler implements DTOAssembler<DetalleEntregaDo
 		var direccionDestino = new DireccionDTO();
 
 		direccionDestino.setId(datos.getDireccionDestino().getId());
+
 		direccionDestino.setNombre(datos.getDireccionDestino().getNombre());
+
 		direccionDestino.setBarrio(barrio);
+
 		direccionDestino.setDireccion(tipoDireccion);
 
-		var dto = new DetalleEntregaDTO();
+		var resultado = new DetalleEntregaDTO();
 
-		dto.setId(datos.getId());
-		dto.setNumeroDetalleEntrega(datos.getNumeroDetalleEntrega());
-		dto.setPedido(pedido);
-		dto.setEntrega(EntregaDTOAssembler.getInstance().convertirADTO(datos.getEntrega()));
-		dto.setCEDIOrigen(cediOrigen);
-		dto.setDireccionDestino(direccionDestino);
-		dto.setDistanciaKM(datos.getDistanciaKM());
+		resultado.setId(datos.getId());
 
-		return dto;
+		resultado.setNumeroDetalleEntrega(datos.getNumeroDetalleEntrega());
+
+		resultado.setPedido(pedido);
+
+		resultado.setEntrega(EntregaDTOAssembler.getInstance().convertirADTO(datos.getEntrega()));
+
+		resultado.setCEDIOrigen(cediOrigen);
+
+		resultado.setDireccionDestino(direccionDestino);
+
+		resultado.setDistanciaKM(datos.getDistanciaKM());
+
+		return resultado;
 
 	}
 

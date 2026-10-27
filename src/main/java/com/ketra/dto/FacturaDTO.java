@@ -22,21 +22,15 @@ public class FacturaDTO {
 
 	public FacturaDTO() {
 
-		this(new Builder());
+		setId(UtilUUID.UUID_DEFECTO);
 
-	}
+		setNumeroFactura(UtilTexto.VACIO);
 
-	private FacturaDTO(Builder builder) {
+		setFechaFactura(UtilFecha.FECHA_DEFECTO);
 
-		this.id = builder.id;
+		setIngresos(UtilNumero.CERO_DECIMAL);
 
-		this.numeroFactura = builder.numeroFactura;
-
-		this.fechaFactura = builder.fechaFactura;
-
-		this.ingresos = builder.ingresos;
-
-		this.estadoFactura = builder.estadoFactura;
+		setEstadoFactura(UtilTexto.VACIO);
 
 	}
 
@@ -46,9 +40,21 @@ public class FacturaDTO {
 
 	}
 
+	public void setId(UUID id) {
+
+		this.id = UtilUUID.obtenerValorDefecto(id);
+
+	}
+
 	public String getNumeroFactura() {
 
 		return numeroFactura;
+
+	}
+
+	public void setNumeroFactura(String numeroFactura) {
+
+		this.numeroFactura = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroFactura);
 
 	}
 
@@ -58,9 +64,21 @@ public class FacturaDTO {
 
 	}
 
+	public void setFechaFactura(LocalDate fechaFactura) {
+
+		this.fechaFactura = UtilFecha.obtenerFechaDefecto(fechaFactura);
+
+	}
+
 	public Double getIngresos() {
 
 		return ingresos;
+
+	}
+
+	public void setIngresos(Double ingresos) {
+
+		this.ingresos = UtilNumero.obtenerValorDefecto(ingresos, UtilNumero.CERO_DECIMAL);
 
 	}
 
@@ -70,77 +88,9 @@ public class FacturaDTO {
 
 	}
 
-	public static class Builder {
+	public void setEstadoFactura(String estadoFactura) {
 
-		private UUID id;
-
-		private String numeroFactura;
-
-		private LocalDate fechaFactura;
-
-		private Double ingresos;
-
-		private String estadoFactura;
-
-		public Builder() {
-
-			id = UtilUUID.UUID_DEFECTO;
-
-			numeroFactura = UtilTexto.VACIO;
-
-			fechaFactura = UtilFecha.FECHA_DEFECTO;
-
-			ingresos = UtilNumero.CERO_DECIMAL;
-
-			estadoFactura = UtilTexto.VACIO;
-
-		}
-
-		public Builder id(UUID id) {
-
-			this.id = UtilUUID.obtenerValorDefecto(id);
-
-			return this;
-
-		}
-
-		public Builder numeroFactura(String numeroFactura) {
-
-			this.numeroFactura = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroFactura);
-
-			return this;
-
-		}
-
-		public Builder fechaFactura(LocalDate fechaFactura) {
-
-			this.fechaFactura = UtilFecha.obtenerFechaDefecto(fechaFactura);
-
-			return this;
-
-		}
-
-		public Builder ingresos(Double ingresos) {
-
-			this.ingresos = UtilNumero.obtenerValorDefecto(ingresos, UtilNumero.CERO_DECIMAL);
-
-			return this;
-
-		}
-
-		public Builder estadoFactura(String estadoFactura) {
-
-			this.estadoFactura = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(estadoFactura);
-
-			return this;
-
-		}
-
-		public FacturaDTO build() {
-
-			return new FacturaDTO(this);
-
-		}
+		this.estadoFactura = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(estadoFactura);
 
 	}
 

@@ -19,19 +19,13 @@ public class ServicioDTO {
 
 	public ServicioDTO() {
 
-		this(new Builder());
+		setId(UtilUUID.UUID_DEFECTO);
 
-	}
+		setNumeroServicio(UtilTexto.VACIO);
 
-	private ServicioDTO(Builder builder) {
+		setFechaServicio(UtilFecha.FECHA_DEFECTO);
 
-		this.id = builder.id;
-
-		this.numeroServicio = builder.numeroServicio;
-
-		this.fechaServicio = builder.fechaServicio;
-
-		this.estado = builder.estado;
+		setEstado(UtilTexto.VACIO);
 
 	}
 
@@ -41,27 +35,15 @@ public class ServicioDTO {
 
 	}
 
-	public String getNumeroServicio() {
-
-		return numeroServicio;
-
-	}
-
-	public LocalDate getFechaServicio() {
-
-		return fechaServicio;
-
-	}
-
-	public String getEstado() {
-
-		return estado;
-
-	}
-
 	public void setId(UUID id) {
 
 		this.id = UtilUUID.obtenerValorDefecto(id);
+
+	}
+
+	public String getNumeroServicio() {
+
+		return numeroServicio;
 
 	}
 
@@ -71,77 +53,27 @@ public class ServicioDTO {
 
 	}
 
+	public LocalDate getFechaServicio() {
+
+		return fechaServicio;
+
+	}
+
 	public void setFechaServicio(LocalDate fechaServicio) {
 
 		this.fechaServicio = UtilFecha.obtenerFechaDefecto(fechaServicio);
 
 	}
 
-	public void setEstado(String estado) {
+	public String getEstado() {
 
-		this.estado = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(estado);
+		return estado;
 
 	}
 
-	public static class Builder {
+	public void setEstado(String estado) {
 
-		private UUID id;
-
-		private String numeroServicio;
-
-		private LocalDate fechaServicio;
-
-		private String estado;
-
-		public Builder() {
-
-			id = UtilUUID.UUID_DEFECTO;
-
-			numeroServicio = UtilTexto.VACIO;
-
-			fechaServicio = UtilFecha.FECHA_DEFECTO;
-
-			estado = UtilTexto.VACIO;
-
-		}
-
-		public Builder id(UUID id) {
-
-			this.id = UtilUUID.obtenerValorDefecto(id);
-
-			return this;
-
-		}
-
-		public Builder numeroServicio(String numeroServicio) {
-
-			this.numeroServicio = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroServicio);
-
-			return this;
-
-		}
-
-		public Builder fechaServicio(LocalDate fechaServicio) {
-
-			this.fechaServicio = UtilFecha.obtenerFechaDefecto(fechaServicio);
-
-			return this;
-
-		}
-
-		public Builder estado(String estado) {
-
-			this.estado = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(estado);
-
-			return this;
-
-		}
-
-		public ServicioDTO build() {
-
-			return new ServicioDTO(this);
-
-		}
+		this.estado = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(estado);
 
 	}
 

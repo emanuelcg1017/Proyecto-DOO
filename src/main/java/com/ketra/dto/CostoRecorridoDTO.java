@@ -21,21 +21,15 @@ public class CostoRecorridoDTO {
 
 	public CostoRecorridoDTO() {
 
-		this(new Builder());
+		setId(UtilUUID.UUID_DEFECTO);
 
-	}
+		setNumeroCosto(UtilTexto.VACIO);
 
-	private CostoRecorridoDTO(Builder builder) {
+		setDetalleEntrega(new DetalleEntregaDTO());
 
-		this.id = builder.id;
+		setValorPorKM(UtilNumero.CERO);
 
-		this.numeroCosto = builder.numeroCosto;
-
-		this.detalleEntrega = builder.detalleEntrega;
-
-		this.valorPorKM = builder.valorPorKM;
-
-		this.valorCosto = builder.valorCosto;
+		setValorCosto(UtilNumero.CERO_DECIMAL);
 
 	}
 
@@ -71,7 +65,7 @@ public class CostoRecorridoDTO {
 
 	public void setDetalleEntrega(DetalleEntregaDTO detalleEntrega) {
 
-		this.detalleEntrega = UtilObjeto.obtenerValorDefectoSiNulo(detalleEntrega, new DetalleEntregaDTO.Builder().build());
+		this.detalleEntrega = UtilObjeto.obtenerValorDefectoSiNulo(detalleEntrega, new DetalleEntregaDTO());
 
 	}
 
@@ -96,80 +90,6 @@ public class CostoRecorridoDTO {
 	public void setValorCosto(Double valorCosto) {
 
 		this.valorCosto = UtilNumero.obtenerValorDefecto(valorCosto, UtilNumero.CERO_DECIMAL);
-
-	}
-
-	public static class Builder {
-
-		private UUID id;
-
-		private String numeroCosto;
-
-		private DetalleEntregaDTO detalleEntrega;
-
-		private int valorPorKM;
-
-		private Double valorCosto;
-
-		public Builder() {
-
-			id = UtilUUID.UUID_DEFECTO;
-
-			numeroCosto = UtilTexto.VACIO;
-
-			detalleEntrega = new DetalleEntregaDTO.Builder().build();
-
-			valorPorKM = UtilNumero.CERO;
-
-			valorCosto = UtilNumero.CERO_DECIMAL;
-
-		}
-
-		public Builder id(UUID id) {
-
-			this.id = UtilUUID.obtenerValorDefecto(id);
-
-			return this;
-
-		}
-
-		public Builder numeroCosto(String numeroCosto) {
-
-			this.numeroCosto = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(numeroCosto);
-
-			return this;
-
-		}
-
-		public Builder detalleEntrega(DetalleEntregaDTO detalleEntrega) {
-
-			this.detalleEntrega = UtilObjeto.obtenerValorDefectoSiNulo(detalleEntrega, new DetalleEntregaDTO.Builder().build());
-
-			return this;
-
-		}
-
-		public Builder valorPorKM(int valorPorKM) {
-
-			this.valorPorKM = UtilNumero.obtenerValorDefecto(valorPorKM, UtilNumero.CERO);
-
-			return this;
-
-		}
-
-		public Builder valorCosto(Double valorCosto) {
-
-			this.valorCosto = UtilNumero.obtenerValorDefecto(valorCosto, UtilNumero.CERO_DECIMAL);
-
-			return this;
-
-		}
-
-		public CostoRecorridoDTO build() {
-
-			return new CostoRecorridoDTO(this);
-
-		}
 
 	}
 

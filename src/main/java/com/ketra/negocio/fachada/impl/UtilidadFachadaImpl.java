@@ -117,17 +117,15 @@ public class UtilidadFachadaImpl implements UtilidadFachada {
 
 			var costos = new CostoRecorridoNegocioImpl(daoFactory).consultarPorServicio(idServicio);
 
-			return new UtilidadDTO.Builder()
-					.id(utilidad.getId())
-					.servicio(utilidad.getServicio())
-					.valorIngresos(utilidad.getValorIngresos())
-					.valorCostos(utilidad.getValorCostos())
-					.valorUtilidad(utilidad.getValorUtilidad())
-					.facturas(FacturaDTOAssembler.getInstance().convertirADTO(facturas))
-					.entregas(EntregaDTOAssembler.getInstance().convertirADTO(entregas))
-					.detallesEntrega(DetalleEntregaDTOAssembler.getInstance().convertirADTO(detalles))
-					.costosRecorrido(CostoRecorridoDTOAssembler.getInstance().convertirADTO(costos))
-					.build();
+			utilidad.setFacturas(FacturaDTOAssembler.getInstance().convertirADTO(facturas));
+
+			utilidad.setEntregas(EntregaDTOAssembler.getInstance().convertirADTO(entregas));
+
+			utilidad.setDetallesEntrega(DetalleEntregaDTOAssembler.getInstance().convertirADTO(detalles));
+
+			utilidad.setCostosRecorrido(CostoRecorridoDTOAssembler.getInstance().convertirADTO(costos));
+
+			return utilidad;
 
 		} catch (KETRAExcepcion excepcion) {
 
