@@ -2,6 +2,7 @@ package com.ketra.controlador.impl;
 
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ketra.controlador.AbstractRestController;
+import com.ketra.controlador.respuesta.RespuestaOk;
 import com.ketra.dto.SesionDTO;
 import com.ketra.transversal.utilitarios.UtilTexto;
 
@@ -17,21 +19,31 @@ import com.ketra.transversal.utilitarios.UtilTexto;
 @RequestMapping("/api/v1/sesion")
 public class SesionControlador extends AbstractRestController {
 
-	@GetMapping
-	public SesionDTO consultarSesion(@AuthenticationPrincipal OidcUser usuario) {
+    @GetMapping
+    public ResponseEntity<RespuestaOk<SesionDTO>> consultarSesion(
+            @AuthenticationPrincipal OidcUser usuario) {
 
-		return new SesionDTO.Builder()
-				.nombre(UtilTexto.getUtilTexto().obtenerValorDefecto(usuario.getFullName(), usuario.getEmail()))
-				.correo(usuario.getEmail())
-				.build();
+        var sesion = new SesionDTO.Builder()
+                .nombre(UtilTexto.getUtilTexto().obtenerValorDefecto(usuario.getFullName(), usuario.getEmail()))
+                .correo(usuario.getEmail())
+                .build();
 
-	}
+        RespuestaOk<SesionDTO> respuesta = RespuestaOk.crear(sesion);
 
-	@GetMapping("/csrf")
-	public Map<String, String> consultarTokenCsrf(CsrfToken token) {
+        return ResponseEntity.ok(respuesta);
 
-		return Map.of("headerName", token.getHeaderName(), "token", token.getToken());
+    }
 
-	}
+    @GetMapping("/csrf")
+    public ResponseEntity<RespuestaOk<Map<String, String>>> consultarTokenCsrf(
+            CsrfToken token) {
+
+        var datos = Map.of("headerName", token.getHeaderName(), "token", token.getToken());
+
+        RespuestaOk<Map<String, String>> respuesta = RespuestaOk.crear(datos);
+
+        return ResponseEntity.ok(respuesta);
+
+    }
 
 }

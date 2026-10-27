@@ -63,7 +63,9 @@ async function cargarServiciosFinalizados() {
 
         parametros.set('estado', 'Finalizado');
 
-        const servicios = await solicitarDatos(`/api/v1/servicios/filtro?${parametros}`);
+        const respuesta = await solicitarDatos(`/api/v1/servicios?${parametros}`);
+
+        const servicios = respuesta.datos;
 
         selectorServicio.replaceChildren(new Option('Seleccione un servicio', ''));
 
@@ -293,7 +295,9 @@ formularioUtilidad.addEventListener('submit', async function (evento) {
 
         const url = `${formularioUtilidad.dataset.apiBase}${encodeURIComponent(idServicio)}`;
 
-        const utilidad = await solicitarDatos(url);
+        const respuesta = await solicitarDatos(url);
+
+        const utilidad = respuesta.datos[0];
 
         mostrarUtilidad(utilidad);
 

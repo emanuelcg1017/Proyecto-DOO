@@ -191,6 +191,16 @@ public class CatalogoMensajes {
 
 	}
 	
+	public static final class ServicioControlador {
+
+	    private ServicioControlador() {
+
+	    }
+
+	    public static final String ESTADO_ACTUALIZADO = "Se ha actualizado el estado del servicio de forma exitosa.";
+
+	}
+	
 
 
 

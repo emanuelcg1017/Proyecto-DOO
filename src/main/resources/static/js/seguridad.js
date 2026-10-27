@@ -73,7 +73,9 @@ window.SeguridadKetra = (function () {
                 headers: {Accept: 'application/json'}
             });
 
-            const token = await leerRespuesta(respuestaToken);
+            const respuestaCsrf = await leerRespuesta(respuestaToken);
+
+            const token = respuestaCsrf.datos[0];
 
             encabezados.set(token.headerName, token.token);
 
@@ -93,7 +95,9 @@ window.SeguridadKetra = (function () {
 
         try {
 
-            const sesion = await solicitar('/api/v1/sesion');
+            const respuesta = await solicitar('/api/v1/sesion');
+
+            const sesion = respuesta.datos[0];
 
             for (const nombre of document.querySelectorAll('[data-nombre-usuario]')) {
 
