@@ -213,7 +213,7 @@ consultaServicios.addEventListener('submit', async function (evento) {
 
     if (parametros.size > 0) {
 
-        url = `${base}/filtro?${parametros}`;
+        url = `${base}?${parametros}`;
 
     }
 
@@ -223,11 +223,13 @@ consultaServicios.addEventListener('submit', async function (evento) {
 
         mostrarMensajeServicios('Consultando servicios…');
 
-        const servicios = await solicitarServicios(url, {
+        const respuesta = await solicitarServicios(url, {
             headers: {
                 Accept: 'application/json'
             }
         });
+
+        const servicios = respuesta.datos;
 
         mostrarServicios(servicios);
 
@@ -283,7 +285,7 @@ formularioEstado.addEventListener('submit', async function (evento) {
 
         mostrarMensajeServicios('Actualizando el estado…');
 
-        const actualizado = await solicitarServicios(`${base}/${encodeURIComponent(id)}`, {
+        const respuesta = await solicitarServicios(`${base}/${encodeURIComponent(id)}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -291,6 +293,8 @@ formularioEstado.addEventListener('submit', async function (evento) {
             },
             body: JSON.stringify({estado: estado})
         });
+
+        const actualizado = respuesta.datos[0];
 
         const serviciosActualizados = [];
 
@@ -312,7 +316,7 @@ formularioEstado.addEventListener('submit', async function (evento) {
 
         seleccionarServicio(actualizado);
 
-        mostrarMensajeServicios('Estado actualizado correctamente.');
+        mostrarMensajeServicios(respuesta.mensajes[0]);
 
     } catch (error) {
 
