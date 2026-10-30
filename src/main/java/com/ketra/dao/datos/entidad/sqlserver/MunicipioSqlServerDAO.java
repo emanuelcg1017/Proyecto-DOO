@@ -28,16 +28,16 @@ public class MunicipioSqlServerDAO extends SqlDAO implements MunicipioDAO {
 	public MunicipioEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					mun.id AS id,
-					mun.nombre AS nombre,
-					dep.id AS dep_id,
-					dep.nombre AS dep_nombre,
-					dep.idPais AS dep_idPais
-				FROM Municipio mun
-				INNER JOIN Departamento dep ON mun.idDepartamento = dep.id
-				WHERE mun.id = ?
-				""";
+                SELECT
+                    mun.id AS id,
+                    mun.nombre AS nombre,
+                    dep.id AS dep_id,
+                    dep.nombre AS dep_nombre,
+                    dep.idPais AS dep_idPais
+                FROM Municipio mun
+                INNER JOIN Departamento dep ON mun.idDepartamento = dep.id
+                WHERE mun.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -71,15 +71,15 @@ public class MunicipioSqlServerDAO extends SqlDAO implements MunicipioDAO {
 	public List<MunicipioEntidad> consultarPorFiltro(MunicipioEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					mun.id AS id,
-					mun.nombre AS nombre,
-					dep.id AS dep_id,
-					dep.nombre AS dep_nombre,
-					dep.idPais AS dep_idPais
-				FROM Municipio mun
-				INNER JOIN Departamento dep ON mun.idDepartamento = dep.id
-				""");
+                SELECT
+                    mun.id AS id,
+                    mun.nombre AS nombre,
+                    dep.id AS dep_id,
+                    dep.nombre AS dep_nombre,
+                    dep.idPais AS dep_idPais
+                FROM Municipio mun
+                INNER JOIN Departamento dep ON mun.idDepartamento = dep.id
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 

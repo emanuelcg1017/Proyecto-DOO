@@ -13,7 +13,7 @@ public class EntregaEntidad {
 	private UUID id;
 	private String codigoEntrega;
 	private LocalDate fechaEntrega;
-	private String estadoEntrega;
+	private EstadoEntregaEntidad estadoEntrega;
 	private PersonaEntidad persona;
 
 	private EntregaEntidad(Builder builder) {
@@ -36,7 +36,7 @@ public class EntregaEntidad {
 		return fechaEntrega;
 	}
 
-	public String getEstadoEntrega() {
+	public EstadoEntregaEntidad getEstadoEntrega() {
 		return estadoEntrega;
 	}
 
@@ -49,14 +49,14 @@ public class EntregaEntidad {
 		private UUID id;
 		private String codigoEntrega;
 		private LocalDate fechaEntrega;
-		private String estadoEntrega;
+		private EstadoEntregaEntidad estadoEntrega;
 		private PersonaEntidad persona;
 
 		public Builder() {
 			id = UtilUUID.obtenerValorDefecto(id);
 			codigoEntrega = UtilTexto.VACIO;
 			fechaEntrega = UtilFecha.FECHA_DEFECTO;
-			estadoEntrega = UtilTexto.VACIO;
+			estadoEntrega = new EstadoEntregaEntidad.Builder().build();
 			persona = new PersonaEntidad.Builder().build();
 		}
 
@@ -75,8 +75,8 @@ public class EntregaEntidad {
 			return this;
 		}
 
-		public Builder estadoEntrega(String estadoEntrega) {
-			this.estadoEntrega = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(estadoEntrega);
+		public Builder estadoEntrega(EstadoEntregaEntidad estadoEntrega) {
+			this.estadoEntrega = UtilObjeto.obtenerValorDefectoSiNulo(estadoEntrega, new EstadoEntregaEntidad.Builder().build());
 			return this;
 		}
 

@@ -37,7 +37,7 @@ public class FacturaDTOAssembler implements DTOAssembler<FacturaDominio, Factura
 
 		resultado.setIngresos(datos.getIngresos());
 
-		resultado.setEstadoFactura(datos.getEstadoFactura());
+		resultado.setEstadoFactura(EstadoFacturaDTOAssembler.getInstance().convertirADTO(datos.getEstadoFactura()));
 
 		return resultado;
 
@@ -53,7 +53,7 @@ public class FacturaDTOAssembler implements DTOAssembler<FacturaDominio, Factura
 				.numeroFactura(datos.getNumeroFactura())
 				.fechaFactura(datos.getFechaFactura())
 				.ingresos(datos.getIngresos())
-				.estadoFactura(datos.getEstadoFactura())
+				.estadoFactura(EstadoFacturaDTOAssembler.getInstance().convertirADominio(datos.getEstadoFactura()))
 				.build();
 
 	}

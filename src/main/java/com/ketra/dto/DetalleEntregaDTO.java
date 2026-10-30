@@ -17,7 +17,7 @@ public class DetalleEntregaDTO {
 
 	private EntregaDTO entrega;
 
-	private CEDIDTO CEDIOrigen;
+	private CEDIDTO cediOrigen;
 
 	private DireccionDTO direccionDestino;
 
@@ -33,7 +33,7 @@ public class DetalleEntregaDTO {
 
 		setEntrega(new EntregaDTO());
 
-		setCEDIOrigen(new CEDIDTO());
+		setCediOrigen(new CEDIDTO());
 
 		setDireccionDestino(new DireccionDTO());
 
@@ -89,15 +89,15 @@ public class DetalleEntregaDTO {
 
 	}
 
-	public CEDIDTO getCEDIOrigen() {
+	public CEDIDTO getCediOrigen() {
 
-		return CEDIOrigen;
+		return cediOrigen;
 
 	}
 
-	public void setCEDIOrigen(CEDIDTO CEDIOrigen) {
+	public void setCediOrigen(CEDIDTO cediOrigen) {
 
-		this.CEDIOrigen = UtilObjeto.obtenerValorDefectoSiNulo(CEDIOrigen, new CEDIDTO());
+		this.cediOrigen = UtilObjeto.obtenerValorDefectoSiNulo(cediOrigen, new CEDIDTO());
 
 	}
 

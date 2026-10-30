@@ -15,7 +15,7 @@ public class PreliquidacionDominio {
 	private TerceroDominio tercero;
 	private CostoRecorridoDominio valorCosto;
 	private LocalDate fechaPreliquidacion;
-	private String estado;
+	private EstadoPreliquidacionDominio estado;
 
 	PreliquidacionDominio(Builder builder) {
 		this.id = builder.id;
@@ -46,7 +46,7 @@ public class PreliquidacionDominio {
 		return fechaPreliquidacion;
 	}
 
-	public String getEstado() {
+	public EstadoPreliquidacionDominio getEstado() {
 		return estado;
 	}
 
@@ -56,7 +56,7 @@ public class PreliquidacionDominio {
 		private TerceroDominio tercero;
 		private CostoRecorridoDominio valorCosto;
 		private LocalDate fechaPreliquidacion;
-		private String estado;
+		private EstadoPreliquidacionDominio estado;
 
 		public Builder() {
 			id = UtilUUID.obtenerValorDefecto(id);
@@ -64,7 +64,7 @@ public class PreliquidacionDominio {
 			tercero = new TerceroDominio.Builder().build();
 			valorCosto = new CostoRecorridoDominio.Builder().build();
 			fechaPreliquidacion = UtilFecha.FECHA_DEFECTO;
-			estado = UtilTexto.VACIO;
+			estado = new EstadoPreliquidacionDominio.Builder().build();
 		}
 
 		public Builder id(UUID id) {
@@ -92,8 +92,8 @@ public class PreliquidacionDominio {
 			return this;
 		}
 
-		public Builder estado(String estado) {
-			this.estado = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(estado);
+		public Builder estado(EstadoPreliquidacionDominio estado) {
+			this.estado = UtilObjeto.obtenerValorDefectoSiNulo(estado, new EstadoPreliquidacionDominio.Builder().build());
 			return this;
 		}
 

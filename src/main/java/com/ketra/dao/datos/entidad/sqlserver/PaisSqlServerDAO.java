@@ -26,13 +26,13 @@ public class PaisSqlServerDAO extends SqlDAO implements PaisDAO {
 	public PaisEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					pai.id AS id,
-					pai.nombre AS nombre
-				FROM Pais pai
+                SELECT
+                    pai.id AS id,
+                    pai.nombre AS nombre
+                FROM Pais pai
 
-				WHERE pai.id = ?
-				""";
+                WHERE pai.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -66,11 +66,11 @@ public class PaisSqlServerDAO extends SqlDAO implements PaisDAO {
 	public List<PaisEntidad> consultarPorFiltro(PaisEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					pai.id AS id,
-					pai.nombre AS nombre
-				FROM Pais pai
-				""");
+                SELECT
+                    pai.id AS id,
+                    pai.nombre AS nombre
+                FROM Pais pai
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 

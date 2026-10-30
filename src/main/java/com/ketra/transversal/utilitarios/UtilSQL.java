@@ -49,14 +49,16 @@ public final class UtilSQL {
 			try {
 				
 				return conexionEstaAbierta(conexion) && !conexion.getAutoCommit();
+				
 			}catch(SQLException excepcion){
 				
 				var mensajeUsuario = CatalogoMensajes.UtilSQL.USUARIO_ERROR_PROBLEMA_VALIDANDO_SI_TRANSACCION_SQL_ESTA_INICIADA;
 				throw KETRATransversalException.crear(mensajeUsuario, excepcion.getMessage() , excepcion);
+				
 			}catch(Exception excepcion) {
 				
 				var mensajeUsuario = CatalogoMensajes.UtilSQL.USUARIO_ERROR_PROBLEMA_NO_CONTROLADO_VALIDANDO_SI_TRANSACCION_SQL_ESTA_INICIADA;
-				throw KETRAControladorException.crear(mensajeUsuario);
+				throw KETRAControladorException.crear(mensajeUsuario, excepcion.getMessage(), excepcion);
 			}
 		}
 		

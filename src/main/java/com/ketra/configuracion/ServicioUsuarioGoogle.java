@@ -27,7 +27,7 @@ public class ServicioUsuarioGoogle implements OAuth2UserService<OidcUserRequest,
 
 		var usuario = servicioGoogle.loadUser(solicitud);
 
-		if (Boolean.TRUE.equals(usuario.getEmailVerified())) {
+		if (usuario != null && Boolean.TRUE.equals(usuario.getEmailVerified())) {
 
 			for (String correo : correosPermitidos) {
 

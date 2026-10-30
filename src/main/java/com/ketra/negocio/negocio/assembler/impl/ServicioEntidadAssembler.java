@@ -28,7 +28,7 @@ public class ServicioEntidadAssembler
 				.id(dominioTmp.getId())
 				.numeroServicio(dominioTmp.getNumeroServicio())
 				.fechaServicio(dominioTmp.getFechaServicio())
-				.estado(dominioTmp.getEstado())
+				.estado(EstadoServicioEntidadAssembler.getInstance().convertirAEntidad(dominioTmp.getEstado()))
 				.build();
 	}
 
@@ -41,7 +41,7 @@ public class ServicioEntidadAssembler
 				.id(entidadTmp.getId())
 				.numeroServicio(entidadTmp.getNumeroServicio())
 				.fechaServicio(entidadTmp.getFechaServicio())
-				.estado(entidadTmp.getEstado())
+				.estado(EstadoServicioEntidadAssembler.getInstance().convertirADominio(entidadTmp.getEstado()))
 				.build();
 	}
 }

@@ -26,13 +26,13 @@ public class TipoDireccionSqlServerDAO extends SqlDAO implements TipoDireccionDA
 	public TipoDireccionEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					tdi.id AS id,
-					tdi.nombre AS nombre
-				FROM TipoDireccion tdi
+                SELECT
+                    tdi.id AS id,
+                    tdi.nombre AS nombre
+                FROM TipoDireccion tdi
 
-				WHERE tdi.id = ?
-				""";
+                WHERE tdi.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -66,11 +66,11 @@ public class TipoDireccionSqlServerDAO extends SqlDAO implements TipoDireccionDA
 	public List<TipoDireccionEntidad> consultarPorFiltro(TipoDireccionEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					tdi.id AS id,
-					tdi.nombre AS nombre
-				FROM TipoDireccion tdi
-				""");
+                SELECT
+                    tdi.id AS id,
+                    tdi.nombre AS nombre
+                FROM TipoDireccion tdi
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 

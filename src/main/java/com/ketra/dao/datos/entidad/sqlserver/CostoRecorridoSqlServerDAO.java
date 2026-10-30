@@ -32,22 +32,22 @@ public class CostoRecorridoSqlServerDAO extends SqlDAO implements CostoRecorrido
 	public CostoRecorridoEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					cre.id AS id,
-					cre.numeroCosto AS numeroCosto,
-					cre.valorPorKM AS valorPorKM,
-					cre.valorCosto AS valorCosto,
-					den.id AS den_id,
-					den.numeroDetalleEntrega AS den_numeroDetalleEntrega,
-					den.distanciaKM AS den_distanciaKM,
-					den.idPedido AS den_idPedido,
-					den.idEntrega AS den_idEntrega,
-					den.idCediOrigen AS den_idCediOrigen,
-					den.idDireccionDestino AS den_idDireccionDestino
-				FROM CostoRecorrido cre
-				INNER JOIN DetalleEntrega den ON cre.idDetalleEntrega = den.id
-				WHERE cre.id = ?
-				""";
+                SELECT
+                    cre.id AS id,
+                    cre.numeroCosto AS numeroCosto,
+                    cre.valorPorKM AS valorPorKM,
+                    cre.valorCosto AS valorCosto,
+                    den.id AS den_id,
+                    den.numeroDetalleEntrega AS den_numeroDetalleEntrega,
+                    den.distanciaKM AS den_distanciaKM,
+                    den.idPedido AS den_idPedido,
+                    den.idEntrega AS den_idEntrega,
+                    den.idCediOrigen AS den_idCediOrigen,
+                    den.idDireccionDestino AS den_idDireccionDestino
+                FROM CostoRecorrido cre
+                INNER JOIN DetalleEntrega den ON cre.idDetalleEntrega = den.id
+                WHERE cre.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -81,21 +81,21 @@ public class CostoRecorridoSqlServerDAO extends SqlDAO implements CostoRecorrido
 	public List<CostoRecorridoEntidad> consultarPorFiltro(CostoRecorridoEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					cre.id AS id,
-					cre.numeroCosto AS numeroCosto,
-					cre.valorPorKM AS valorPorKM,
-					cre.valorCosto AS valorCosto,
-					den.id AS den_id,
-					den.numeroDetalleEntrega AS den_numeroDetalleEntrega,
-					den.distanciaKM AS den_distanciaKM,
-					den.idPedido AS den_idPedido,
-					den.idEntrega AS den_idEntrega,
-					den.idCediOrigen AS den_idCediOrigen,
-					den.idDireccionDestino AS den_idDireccionDestino
-				FROM CostoRecorrido cre
-				INNER JOIN DetalleEntrega den ON cre.idDetalleEntrega = den.id
-				""");
+                SELECT
+                    cre.id AS id,
+                    cre.numeroCosto AS numeroCosto,
+                    cre.valorPorKM AS valorPorKM,
+                    cre.valorCosto AS valorCosto,
+                    den.id AS den_id,
+                    den.numeroDetalleEntrega AS den_numeroDetalleEntrega,
+                    den.distanciaKM AS den_distanciaKM,
+                    den.idPedido AS den_idPedido,
+                    den.idEntrega AS den_idEntrega,
+                    den.idCediOrigen AS den_idCediOrigen,
+                    den.idDireccionDestino AS den_idDireccionDestino
+                FROM CostoRecorrido cre
+                INNER JOIN DetalleEntrega den ON cre.idDetalleEntrega = den.id
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 
@@ -167,60 +167,18 @@ public class CostoRecorridoSqlServerDAO extends SqlDAO implements CostoRecorrido
 	}
 
 	@Override
-	public Double consultarTotalCostosPorServicio(UUID idServicio) {
-
-		final String sql = """
-				SELECT COALESCE(SUM(cre.valorCosto), 0) AS totalCostos
-				FROM ServicioEntrega sen
-				INNER JOIN Entrega ent ON sen.idEntrega = ent.id
-				INNER JOIN DetalleEntrega den ON den.idEntrega = ent.id
-				INNER JOIN CostoRecorrido cre ON cre.idDetalleEntrega = den.id
-				WHERE sen.idServicio = ?
-				AND ent.estadoEntrega = 'Entregada'
-				""";
-
-		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
-
-			sentencia.setObject(1, idServicio);
-
-			try (ResultSet resultado = sentencia.executeQuery()) {
-
-				if (resultado.next()) {
-					return resultado.getDouble("totalCostos");
-				}
-			}
-
-		} catch (SQLException excepcion) {
-
-			throw KETRADatosException.crear(
-					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
-					excepcion);
-
-		} catch (Exception excepcion) {
-
-			throw KETRADatosException.crear(
-					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
-					excepcion);
-		}
-
-		return UtilNumero.CERO_DECIMAL;
-	}
-
-	@Override
 	public void crear(CostoRecorridoEntidad entidad) {
 
 		final String sql = """
-				INSERT INTO CostoRecorrido (
-					id,
-					numeroCosto,
-					idDetalleEntrega,
-					valorPorKM,
-					valorCosto
-				)
-				VALUES (?, ?, ?, ?, ?)
-				""";
+                INSERT INTO CostoRecorrido (
+                    id,
+                    numeroCosto,
+                    idDetalleEntrega,
+                    valorPorKM,
+                    valorCosto
+                )
+                VALUES (?, ?, ?, ?, ?)
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -248,64 +206,6 @@ public class CostoRecorridoSqlServerDAO extends SqlDAO implements CostoRecorrido
 		}
 	}
 
-	@Override
-	public List<CostoRecorridoEntidad> consultarPorServicio(UUID idServicio) {
-
-		final String sql = """
-				SELECT DISTINCT
-					cre.id AS id,
-					cre.numeroCosto AS numeroCosto,
-					cre.valorPorKM AS valorPorKM,
-					cre.valorCosto AS valorCosto,
-					den.id AS den_id,
-					den.numeroDetalleEntrega AS den_numeroDetalleEntrega,
-					den.distanciaKM AS den_distanciaKM,
-					den.idPedido AS den_idPedido,
-					den.idEntrega AS den_idEntrega,
-					den.idCediOrigen AS den_idCediOrigen,
-					den.idDireccionDestino AS den_idDireccionDestino
-				FROM CostoRecorrido cre
-				INNER JOIN DetalleEntrega den ON cre.idDetalleEntrega = den.id
-				INNER JOIN ServicioEntrega sen ON sen.idEntrega = den.idEntrega
-				WHERE sen.idServicio = ?
-				""";
-
-		final List<CostoRecorridoEntidad> resultados = new ArrayList<>();
-
-		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
-
-			sentencia.setObject(1, idServicio);
-
-			try (ResultSet resultado = sentencia.executeQuery()) {
-
-				while (resultado.next()) {
-
-					resultados.add(construirCostoRecorridoEntidad(resultado));
-
-				}
-
-			}
-
-		} catch (SQLException excepcion) {
-
-			throw KETRADatosException.crear(
-					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
-					excepcion);
-
-		} catch (Exception excepcion) {
-
-			throw KETRADatosException.crear(
-					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
-					excepcion);
-
-		}
-
-		return resultados;
-
-	}
-
 	private CostoRecorridoEntidad construirCostoRecorridoEntidad(final ResultSet resultado) throws SQLException {
 
 		final PedidoEntidad ped = new PedidoEntidad.Builder()
@@ -329,7 +229,7 @@ public class CostoRecorridoSqlServerDAO extends SqlDAO implements CostoRecorrido
 				.numeroDetalleEntrega(resultado.getString("den_numeroDetalleEntrega"))
 				.pedido(ped)
 				.entrega(ent)
-				.CEDIOrigen(ced)
+				.cediOrigen(ced)
 				.direccionDestino(dir2)
 				.distanciaKM(resultado.getDouble("den_distanciaKM"))
 				.build();

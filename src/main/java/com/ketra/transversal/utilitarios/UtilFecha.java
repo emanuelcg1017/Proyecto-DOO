@@ -1,16 +1,20 @@
 package com.ketra.transversal.utilitarios;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.ZoneId;
 
 public class UtilFecha {
 	
-	public static LocalDate FECHA_DEFECTO = LocalDate.of(1000, 1, 1);
+	public static final LocalDate FECHA_DEFECTO = LocalDate.of(1000, Month.JANUARY, 1);
+
+	private static final ZoneId ZONA_HORARIA = ZoneId.of("America/Bogota");
 	
 	private UtilFecha() {
 	}
     
-	public static LocalDate  obtenerFechaDefecto(LocalDate fecha, LocalDate FechaDefecto){
-		return UtilObjeto.obtenerValorDefectoSiNulo(fecha, FechaDefecto);
+	public static LocalDate  obtenerFechaDefecto(LocalDate fecha, LocalDate fechaDefecto){
+		return UtilObjeto.obtenerValorDefectoSiNulo(fecha, fechaDefecto);
 	}
 	
 	public static LocalDate  obtenerFechaDefecto(LocalDate fecha){
@@ -18,12 +22,12 @@ public class UtilFecha {
 	}
 	
 	public static LocalDate obtenerFechaActual() {
-		return LocalDate.now();
+		return LocalDate.now(ZONA_HORARIA);
 	}
 
 	public static LocalDateTime generarFechaHoraActual() {
 
-		return LocalDateTime.now();
+		return LocalDateTime.now(ZONA_HORARIA);
 
 	}
 	

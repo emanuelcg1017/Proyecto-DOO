@@ -1,5 +1,7 @@
 package com.ketra.dao.datos.entidad.sqlserver;
 
+import com.ketra.entidad.EstadoServicioEntidad;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,19 +30,22 @@ public class UtilidadSqlServerDAO extends SqlDAO implements UtilidadDAO {
 	public UtilidadEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					uti.id AS id,
-					ser.id AS ser_id,
-					ser.numeroServicio AS ser_numeroServicio,
-					ser.fechaServicio AS ser_fechaServicio,
-					ser.estado AS ser_estado,
-					uti.valorIngresos AS valorIngresos,
-					uti.valorCostos AS valorCostos,
-					uti.valorUtilidad AS valorUtilidad
-				FROM Utilidad uti
-				INNER JOIN Servicio ser ON uti.idServicio = ser.id
-				WHERE uti.id = ?
-				""";
+                SELECT
+                    uti.id AS id,
+                    ser.id AS ser_id,
+                    ser.numeroServicio AS ser_numeroServicio,
+                    ser.fechaServicio AS ser_fechaServicio,
+                    ess.id AS ser_estado_id,
+                    ess.codigo AS ser_estado_codigo,
+                    ess.nombre AS ser_estado_nombre,
+                    uti.valorIngresos AS valorIngresos,
+                    uti.valorCostos AS valorCostos,
+                    uti.valorUtilidad AS valorUtilidad
+                FROM Utilidad uti
+                INNER JOIN Servicio ser ON uti.idServicio = ser.id
+                INNER JOIN EstadoServicio ess ON ser.idEstadoServicio = ess.id
+                WHERE uti.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -74,18 +79,21 @@ public class UtilidadSqlServerDAO extends SqlDAO implements UtilidadDAO {
 	public List<UtilidadEntidad> consultarPorFiltro(UtilidadEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					uti.id AS id,
-					ser.id AS ser_id,
-					ser.numeroServicio AS ser_numeroServicio,
-					ser.fechaServicio AS ser_fechaServicio,
-					ser.estado AS ser_estado,
-					uti.valorIngresos AS valorIngresos,
-					uti.valorCostos AS valorCostos,
-					uti.valorUtilidad AS valorUtilidad
-				FROM Utilidad uti
-				INNER JOIN Servicio ser ON uti.idServicio = ser.id
-				""");
+                SELECT
+                    uti.id AS id,
+                    ser.id AS ser_id,
+                    ser.numeroServicio AS ser_numeroServicio,
+                    ser.fechaServicio AS ser_fechaServicio,
+                    ess.id AS ser_estado_id,
+                    ess.codigo AS ser_estado_codigo,
+                    ess.nombre AS ser_estado_nombre,
+                    uti.valorIngresos AS valorIngresos,
+                    uti.valorCostos AS valorCostos,
+                    uti.valorUtilidad AS valorUtilidad
+                FROM Utilidad uti
+                INNER JOIN Servicio ser ON uti.idServicio = ser.id
+                INNER JOIN EstadoServicio ess ON ser.idEstadoServicio = ess.id
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 
@@ -160,15 +168,15 @@ public class UtilidadSqlServerDAO extends SqlDAO implements UtilidadDAO {
 	public void crear(UtilidadEntidad entidad) {
 
 		final String sql = """
-				INSERT INTO Utilidad (
-					id,
-					idServicio,
-					valorIngresos,
-					valorCostos,
-					valorUtilidad
-				)
-				VALUES (?, ?, ?, ?, ?)
-				""";
+                INSERT INTO Utilidad (
+                    id,
+                    idServicio,
+                    valorIngresos,
+                    valorCostos,
+                    valorUtilidad
+                )
+                VALUES (?, ?, ?, ?, ?)
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -202,7 +210,11 @@ public class UtilidadSqlServerDAO extends SqlDAO implements UtilidadDAO {
 				.id(UUID.fromString(resultado.getString("ser_id")))
 				.numeroServicio(resultado.getString("ser_numeroServicio"))
 				.fechaServicio(resultado.getDate("ser_fechaServicio").toLocalDate())
-				.estado(resultado.getString("ser_estado"))
+				.estado(new EstadoServicioEntidad.Builder()
+						.id(UUID.fromString(resultado.getString("ser_estado_id")))
+						.codigo(resultado.getString("ser_estado_codigo"))
+						.nombre(resultado.getString("ser_estado_nombre"))
+						.build())
 				.build();
 
 		return new UtilidadEntidad.Builder()

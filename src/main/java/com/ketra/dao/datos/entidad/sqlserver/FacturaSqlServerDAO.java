@@ -1,5 +1,7 @@
 package com.ketra.dao.datos.entidad.sqlserver;
 
+import com.ketra.entidad.EstadoFacturaEntidad;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,16 +30,19 @@ public class FacturaSqlServerDAO extends SqlDAO implements FacturaDAO {
 	public FacturaEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					fac.id AS id,
-					fac.numeroFactura AS numeroFactura,
-					fac.fechaFactura AS fechaFactura,
-					fac.ingresos AS ingresos,
-					fac.estadoFactura AS estadoFactura
-				FROM Factura fac
+                SELECT
+                    fac.id AS id,
+                    fac.numeroFactura AS numeroFactura,
+                    fac.fechaFactura AS fechaFactura,
+                    fac.ingresos AS ingresos,
+                    esf.id AS estadoFactura_id,
+                    esf.codigo AS estadoFactura_codigo,
+                    esf.nombre AS estadoFactura_nombre
+                FROM Factura fac
+                INNER JOIN EstadoFactura esf ON fac.idEstadoFactura = esf.id
 
-				WHERE fac.id = ?
-				""";
+                WHERE fac.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -71,14 +76,17 @@ public class FacturaSqlServerDAO extends SqlDAO implements FacturaDAO {
 	public List<FacturaEntidad> consultarPorFiltro(FacturaEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					fac.id AS id,
-					fac.numeroFactura AS numeroFactura,
-					fac.fechaFactura AS fechaFactura,
-					fac.ingresos AS ingresos,
-					fac.estadoFactura AS estadoFactura
-				FROM Factura fac
-				""");
+                SELECT
+                    fac.id AS id,
+                    fac.numeroFactura AS numeroFactura,
+                    fac.fechaFactura AS fechaFactura,
+                    fac.ingresos AS ingresos,
+                    esf.id AS estadoFactura_id,
+                    esf.codigo AS estadoFactura_codigo,
+                    esf.nombre AS estadoFactura_nombre
+                FROM Factura fac
+                INNER JOIN EstadoFactura esf ON fac.idEstadoFactura = esf.id
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 
@@ -102,9 +110,19 @@ public class FacturaSqlServerDAO extends SqlDAO implements FacturaDAO {
 			parametros.add(filtro.getIngresos());
 		}
 
-		if (!UtilTexto.getUtilTexto().esVacia(filtro.getEstadoFactura())) {
-			condiciones.add("fac.estadoFactura = ?");
-			parametros.add(filtro.getEstadoFactura());
+		if (!UtilUUID.UUID_DEFECTO.equals(filtro.getEstadoFactura().getId())) {
+			condiciones.add("fac.idEstadoFactura = ?");
+			parametros.add(filtro.getEstadoFactura().getId());
+		}
+
+		if (!UtilTexto.getUtilTexto().esVacia(filtro.getEstadoFactura().getCodigo())) {
+			condiciones.add("esf.codigo = ?");
+			parametros.add(filtro.getEstadoFactura().getCodigo());
+		}
+
+		if (!UtilTexto.getUtilTexto().esVacia(filtro.getEstadoFactura().getNombre())) {
+			condiciones.add("esf.nombre = ?");
+			parametros.add(filtro.getEstadoFactura().getNombre());
 		}
 
 		if (!condiciones.isEmpty()) {
@@ -150,58 +168,18 @@ public class FacturaSqlServerDAO extends SqlDAO implements FacturaDAO {
 	}
 
 	@Override
-	public Double consultarTotalIngresosPorServicio(UUID idServicio) {
-
-		final String sql = """
-				SELECT COALESCE(SUM(fac.ingresos), 0) AS totalIngresos
-				FROM ServicioFactura sfa
-				INNER JOIN Factura fac ON sfa.idFactura = fac.id
-				WHERE sfa.idServicio = ?
-				AND fac.estadoFactura <> 'Anulada'
-				""";
-
-		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
-
-			sentencia.setObject(1, idServicio);
-
-			try (ResultSet resultado = sentencia.executeQuery()) {
-
-				if (resultado.next()) {
-					return resultado.getDouble("totalIngresos");
-				}
-			}
-
-		} catch (SQLException excepcion) {
-
-			throw KETRADatosException.crear(
-					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
-					excepcion);
-
-		} catch (Exception excepcion) {
-
-			throw KETRADatosException.crear(
-					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
-					excepcion);
-		}
-
-		return UtilNumero.CERO_DECIMAL;
-	}
-
-	@Override
 	public void crear(FacturaEntidad entidad) {
 
 		final String sql = """
-				INSERT INTO Factura (
-					id,
-					numeroFactura,
-					fechaFactura,
-					ingresos,
-					estadoFactura
-				)
-				VALUES (?, ?, ?, ?, ?)
-				""";
+                INSERT INTO Factura (
+                    id,
+                    numeroFactura,
+                    fechaFactura,
+                    ingresos,
+                    idEstadoFactura
+                )
+                VALUES (?, ?, ?, ?, ?)
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -209,7 +187,7 @@ public class FacturaSqlServerDAO extends SqlDAO implements FacturaDAO {
 			sentencia.setString(2, entidad.getNumeroFactura());
 			sentencia.setDate(3, java.sql.Date.valueOf(entidad.getFechaFactura()));
 			sentencia.setDouble(4, entidad.getIngresos());
-			sentencia.setString(5, entidad.getEstadoFactura());
+			sentencia.setObject(5, entidad.getEstadoFactura().getId());
 
 			sentencia.executeUpdate();
 
@@ -233,14 +211,14 @@ public class FacturaSqlServerDAO extends SqlDAO implements FacturaDAO {
 	public void actualizar(UUID id, FacturaEntidad entidad) {
 
 		final String sql = """
-				UPDATE Factura
-				SET estadoFactura = ?
-				WHERE id = ?
-				""";
+                UPDATE Factura
+                SET idEstadoFactura = ?
+                WHERE id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
-			sentencia.setString(1, entidad.getEstadoFactura());
+			sentencia.setObject(1, entidad.getEstadoFactura().getId());
 			sentencia.setObject(2, id);
 
 			if (sentencia.executeUpdate() != 1) {
@@ -263,57 +241,6 @@ public class FacturaSqlServerDAO extends SqlDAO implements FacturaDAO {
 		}
 	}
 
-	@Override
-	public List<FacturaEntidad> consultarPorServicio(UUID idServicio) {
-
-		final String sql = """
-				SELECT DISTINCT
-					fac.id AS id,
-					fac.numeroFactura AS numeroFactura,
-					fac.fechaFactura AS fechaFactura,
-					fac.ingresos AS ingresos,
-					fac.estadoFactura AS estadoFactura
-				FROM Factura fac
-				INNER JOIN ServicioFactura sfa ON sfa.idFactura = fac.id
-				WHERE sfa.idServicio = ?
-				""";
-
-		final List<FacturaEntidad> resultados = new ArrayList<>();
-
-		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
-
-			sentencia.setObject(1, idServicio);
-
-			try (ResultSet resultado = sentencia.executeQuery()) {
-
-				while (resultado.next()) {
-
-					resultados.add(construirFacturaEntidad(resultado));
-
-				}
-
-			}
-
-		} catch (SQLException excepcion) {
-
-			throw KETRADatosException.crear(
-					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
-					excepcion);
-
-		} catch (Exception excepcion) {
-
-			throw KETRADatosException.crear(
-					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
-					excepcion);
-
-		}
-
-		return resultados;
-
-	}
-
 	private FacturaEntidad construirFacturaEntidad(final ResultSet resultado) throws SQLException {
 
 		return new FacturaEntidad.Builder()
@@ -321,7 +248,11 @@ public class FacturaSqlServerDAO extends SqlDAO implements FacturaDAO {
 				.numeroFactura(resultado.getString("numeroFactura"))
 				.fechaFactura(resultado.getDate("fechaFactura").toLocalDate())
 				.ingresos(resultado.getDouble("ingresos"))
-				.EstadoFactura(resultado.getString("estadoFactura"))
+				.estadoFactura(new EstadoFacturaEntidad.Builder()
+						.id(UUID.fromString(resultado.getString("estadoFactura_id")))
+						.codigo(resultado.getString("estadoFactura_codigo"))
+						.nombre(resultado.getString("estadoFactura_nombre"))
+						.build())
 				.build();
 	}
 }

@@ -1,6 +1,7 @@
 package com.ketra.negocio.negocio.reglas.impl.servicio;
 
 import com.ketra.dominio.EntregaDominio;
+import com.ketra.transversal.catalogo.CatalogoCodigosEstado;
 import com.ketra.negocio.negocio.reglas.Rule;
 import com.ketra.transversal.catalogo.CatalogoMensajes;
 import com.ketra.transversal.excepciones.KETRANegocioException;
@@ -24,7 +25,7 @@ public class AsegurarEntregaEstaEntregadaRule implements Rule<EntregaDominio> {
 
 		for (EntregaDominio entrega : datos) {
 
-			if (!"Entregada".equals(entrega.getEstadoEntrega())) {
+			if (!CatalogoCodigosEstado.Entrega.ENTREGADA.equals(entrega.getEstadoEntrega().getCodigo())) {
 
 				throw KETRANegocioException.crear(CatalogoMensajes.ServicioNegocioImpl.ENTREGAS_SIN_COMPLETAR);
 

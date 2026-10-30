@@ -3,107 +3,135 @@ package com.ketra.negocio.negocio.impl;
 import java.util.UUID;
 
 import com.ketra.dao.factoria.DAOFactory;
-import com.ketra.dominio.ServicioDominio;
 import com.ketra.dominio.UtilidadDominio;
 import com.ketra.entidad.ServicioEntidad;
 import com.ketra.entidad.UtilidadEntidad;
-import com.ketra.negocio.negocio.ServicioNegocio;
 import com.ketra.negocio.negocio.UtilidadNegocio;
 import com.ketra.negocio.negocio.assembler.impl.UtilidadEntidadAssembler;
 import com.ketra.negocio.negocio.reglas.impl.utilidad.AsegurarServicioFinalizadoRule;
 import com.ketra.negocio.negocio.reglas.impl.utilidad.AsegurarUtilidadNoGeneradaRule;
+import com.ketra.negocio.negocio.reglas.impl.utilidad.ConsiderarCostoDeEntregaRealizadaRule;
+import com.ketra.negocio.negocio.reglas.impl.utilidad.ConsiderarFacturaEnIngresosRule;
 import com.ketra.negocio.negocio.reglas.impl.utilidad.ValidarDatosGenerarUtilidadRule;
+import com.ketra.transversal.utilitarios.UtilNumero;
 import com.ketra.transversal.utilitarios.UtilUUID;
 
 public class UtilidadNegocioImpl implements UtilidadNegocio {
 
-	private DAOFactory daoFactory;
+    private final DAOFactory daoFactory;
 
-	public UtilidadNegocioImpl(DAOFactory daoFactory) {
+    public UtilidadNegocioImpl(DAOFactory daoFactory) {
 
-		this.daoFactory = daoFactory;
-	}
-	
+        this.daoFactory = daoFactory;
 
-	@Override
-	public UtilidadDominio generarUtilidad(final UUID idServicio) {
+    }
 
-		ValidarDatosGenerarUtilidadRule.obtenerInstancia().ejecutar(idServicio);
+    @Override
+    public UtilidadDominio generarUtilidad(UUID idServicio) {
 
-		ServicioNegocio servicioNegocio = new ServicioNegocioImpl(daoFactory);
+        ValidarDatosGenerarUtilidadRule.obtenerInstancia().ejecutar(idServicio);
 
-		var servicio = servicioNegocio.consultarPorId(idServicio);
+        var servicio = new ServicioNegocioImpl(daoFactory).consultarPorId(idServicio);
 
-		AsegurarServicioFinalizadoRule.obtenerInstancia().ejecutar(servicio);
+        AsegurarServicioFinalizadoRule.obtenerInstancia().ejecutar(servicio);
 
-		AsegurarUtilidadNoGeneradaRule.obtenerInstancia().ejecutar(idServicio, daoFactory);
+        AsegurarUtilidadNoGeneradaRule.obtenerInstancia().ejecutar(idServicio, daoFactory);
 
-		var valorIngresos = calcularValorIngresos(idServicio);
+        var ingresos = calcularValorIngresos(idServicio);
 
-		var valorCostos = calcularValorCostos(idServicio);
+        var costos = calcularValorCostos(idServicio);
 
-		var valorUtilidad = valorIngresos - valorCostos;
+        var resultado = UtilNumero.restar(ingresos, costos);
 
-		var idUtilidad = UtilUUID.generar();
+        var idUtilidad = UtilUUID.generar();
 
-		var utilidad = construirUtilidad(idUtilidad, servicio, valorIngresos, valorCostos, valorUtilidad);
+        var utilidad = new UtilidadDominio.Builder()
+                .id(idUtilidad)
+                .servicio(servicio)
+                .valorIngresos(ingresos)
+                .valorCostos(costos)
+                .valorUtilidad(resultado)
+                .build();
 
-		registrarUtilidad(utilidad);
+        daoFactory.obtenerUtilidadDAO().crear(UtilidadEntidadAssembler.getInstance().convertirAEntidad(utilidad));
 
-		return utilidad;
-	}
-	
-	
-	private Double calcularValorCostos(UUID idServicio) {
+        return utilidad;
 
-		return daoFactory.obtenerCostoRecorridoDAO().consultarTotalCostosPorServicio(idServicio);
-	}
+    }
 
-	private Double calcularValorIngresos(UUID idServicio) {
+    @Override
+    public Double calcularValorIngresos(UUID idServicio) {
 
-		return daoFactory.obtenerFacturaDAO().consultarTotalIngresosPorServicio(idServicio);
-	}
-	
-	private UtilidadDominio construirUtilidad(final UUID idUtilidad, final ServicioDominio servicio, final Double valorIngresos, final Double valorCostos, final Double valorUtilidad) {
+        ValidarDatosGenerarUtilidadRule.obtenerInstancia().ejecutar(idServicio);
 
-		return new UtilidadDominio.Builder()
-				.id(idUtilidad)
-				.servicio(servicio)
-				.valorIngresos(valorIngresos)
-				.valorCostos(valorCostos)
-				.valorUtilidad(valorUtilidad)
-				.build();
-	}
-	
-	private void registrarUtilidad(final UtilidadDominio utilidad) {
+        var servicio = new ServicioNegocioImpl(daoFactory).consultarPorId(idServicio);
 
-		var utilidadEntidad = UtilidadEntidadAssembler.getInstance().convertirAEntidad(utilidad);
+        AsegurarServicioFinalizadoRule.obtenerInstancia().ejecutar(servicio);
 
-		daoFactory.obtenerUtilidadDAO().crear(utilidadEntidad);
-	}
-	
-	@Override
-	public UtilidadDominio consultarUtilidadPorServicio(UUID idServicio) {
+        var facturas = new FacturaNegocioImpl(daoFactory).consultarPorServicio(idServicio);
 
-		ValidarDatosGenerarUtilidadRule.obtenerInstancia().ejecutar(idServicio);
-		
-		var servicioEntidad = new ServicioEntidad.Builder()
-						.id(idServicio)
-						.build();
+        Double total = UtilNumero.CERO_DECIMAL;
 
-		var utilidadFiltro = new UtilidadEntidad.Builder()
-						.servicio(servicioEntidad)
-						.build();
+        for (var factura : facturas) {
 
-		var resultados = daoFactory.obtenerUtilidadDAO().consultarPorFiltro(utilidadFiltro);
+            if (ConsiderarFacturaEnIngresosRule.obtenerInstancia().cumple(factura)) {
 
-		if (resultados.isEmpty()) {
+                total = UtilNumero.sumar(total, factura.getIngresos());
 
-			return new UtilidadDominio.Builder().build();
-		}
+            }
 
-		return UtilidadEntidadAssembler.getInstance().convertirADominio(resultados.get(0));
+        }
 
-	}
+        return total;
+
+    }
+
+    @Override
+    public Double calcularValorCostos(UUID idServicio) {
+
+        ValidarDatosGenerarUtilidadRule.obtenerInstancia().ejecutar(idServicio);
+
+        var servicio = new ServicioNegocioImpl(daoFactory).consultarPorId(idServicio);
+
+        AsegurarServicioFinalizadoRule.obtenerInstancia().ejecutar(servicio);
+
+        var entregas = new EntregaNegocioImpl(daoFactory).consultarPorServicio(idServicio);
+
+        var detalles = new DetalleEntregaNegocioImpl(daoFactory).consultarDetallesEntrega(entregas);
+
+        var costos = new CostoRecorridoNegocioImpl(daoFactory).consultarCostosRecorrido(detalles);
+
+        Double total = UtilNumero.CERO_DECIMAL;
+
+        for (var costo : costos) {
+
+            if (ConsiderarCostoDeEntregaRealizadaRule.obtenerInstancia().cumple(costo)) {
+
+                total = UtilNumero.sumar(total, costo.getValorCosto());
+
+            }
+
+        }
+
+        return total;
+
+    }
+
+    @Override
+    public UtilidadDominio consultarUtilidadPorServicio(UUID idServicio) {
+
+        ValidarDatosGenerarUtilidadRule.obtenerInstancia().ejecutar(idServicio);
+
+        new ServicioNegocioImpl(daoFactory).consultarPorId(idServicio);
+
+        var servicio = new ServicioEntidad.Builder().id(idServicio).build();
+
+        var filtro = new UtilidadEntidad.Builder().servicio(servicio).build();
+
+        var resultados = daoFactory.obtenerUtilidadDAO().consultarPorFiltro(filtro);
+
+        return resultados.isEmpty() ? new UtilidadDominio.Builder().build() : UtilidadEntidadAssembler.getInstance().convertirADominio(resultados.get(0));
+
+    }
 
 }

@@ -1,16 +1,10 @@
 package com.ketra.configuracion;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
-import org.springframework.security.config.annotation.web.configurers.ExceptionHandlingConfigurer;
-import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
-import org.springframework.security.config.annotation.web.configurers.oauth2.client.OAuth2LoginConfigurer;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
@@ -21,46 +15,49 @@ import org.springframework.security.web.authentication.logout.HttpStatusReturnin
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 import org.springframework.security.web.util.matcher.AnyRequestMatcher;
 
+import com.ketra.transversal.utilitarios.UtilTexto;
+
 @Configuration
 public class ConfiguracionAcceso {
 
+	private static final String RUTA_LOGIN = "/login.html";
+
 	@Bean
-	public SecurityFilterChain configurarAcceso(HttpSecurity http, ApplicationContext contexto) throws Exception {
+	public SecurityFilterChain configurarAcceso(HttpSecurity http) {
 
-		var permisos = new AuthorizeHttpRequestsConfigurer<HttpSecurity>(contexto);
+		http.authorizeHttpRequests(permisos -> {
 
-		permisos.getRegistry()
-				.requestMatchers("/login.html", "/css/**", "/js/**", "/favicon.ico",
+			permisos.requestMatchers(RUTA_LOGIN, "/css/**", "/js/**", "/favicon.ico",
 						"/oauth2/**", "/login/**", "/error", "/api/v1/sesion/csrf").permitAll()
-				.anyRequest().authenticated();
+					.anyRequest().authenticated();
 
-		http.with(permisos, Customizer.withDefaults());
+		});
 
-		var ingreso = new OAuth2LoginConfigurer<HttpSecurity>();
+		http.oauth2Login(ingreso -> {
 
-		ingreso.loginPage("/login.html");
-		ingreso.defaultSuccessUrl("/servicios.html", true);
-		ingreso.failureUrl("/login.html?error");
+			ingreso.loginPage(RUTA_LOGIN);
+			ingreso.defaultSuccessUrl("/servicios.html", true);
+			ingreso.failureUrl(UtilTexto.getUtilTexto().concatenar(RUTA_LOGIN, "?error"));
 
-		http.with(ingreso, Customizer.withDefaults());
+		});
 
-		var errores = new ExceptionHandlingConfigurer<HttpSecurity>();
+		http.exceptionHandling(errores -> {
 
-		errores.defaultAuthenticationEntryPointFor(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
-				PathPatternRequestMatcher.withDefaults().matcher("/api/**"));
+			errores.defaultAuthenticationEntryPointFor(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
+					PathPatternRequestMatcher.withDefaults().matcher("/api/**"));
 
-		errores.defaultAuthenticationEntryPointFor(new LoginUrlAuthenticationEntryPoint("/login.html"),
-				AnyRequestMatcher.INSTANCE);
+			errores.defaultAuthenticationEntryPointFor(new LoginUrlAuthenticationEntryPoint(RUTA_LOGIN),
+					AnyRequestMatcher.INSTANCE);
 
-		http.with(errores, Customizer.withDefaults());
+		});
 
-		var salida = new LogoutConfigurer<HttpSecurity>();
+		http.logout(salida -> {
 
-		salida.logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.NO_CONTENT));
-		salida.invalidateHttpSession(true);
-		salida.deleteCookies("JSESSIONID");
+			salida.logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.NO_CONTENT));
+			salida.invalidateHttpSession(true);
+			salida.deleteCookies("JSESSIONID");
 
-		http.with(salida, Customizer.withDefaults());
+		});
 
 		return http.build();
 

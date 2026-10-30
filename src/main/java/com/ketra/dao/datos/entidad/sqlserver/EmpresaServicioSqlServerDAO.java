@@ -1,5 +1,7 @@
 package com.ketra.dao.datos.entidad.sqlserver;
 
+import com.ketra.entidad.EstadoServicioEntidad;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,22 +30,25 @@ public class EmpresaServicioSqlServerDAO extends SqlDAO implements EmpresaServic
 	public EmpresaServicioEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					ese.id AS id,
-					emp.id AS emp_id,
-					emp.nombre AS emp_nombre,
-					emp.nit AS emp_nit,
-					emp.correoContacto AS emp_correoContacto,
-					emp.telefonoContacto AS emp_telefonoContacto,
-					ser.id AS ser_id,
-					ser.numeroServicio AS ser_numeroServicio,
-					ser.fechaServicio AS ser_fechaServicio,
-					ser.estado AS ser_estado
-				FROM EmpresaServicio ese
-				INNER JOIN Empresa emp ON ese.idEmpresa = emp.id
-				INNER JOIN Servicio ser ON ese.idServicio = ser.id
-				WHERE ese.id = ?
-				""";
+                SELECT
+                    ese.id AS id,
+                    emp.id AS emp_id,
+                    emp.nombre AS emp_nombre,
+                    emp.nit AS emp_nit,
+                    emp.correoContacto AS emp_correoContacto,
+                    emp.telefonoContacto AS emp_telefonoContacto,
+                    ser.id AS ser_id,
+                    ser.numeroServicio AS ser_numeroServicio,
+                    ser.fechaServicio AS ser_fechaServicio,
+                    ess.id AS ser_estado_id,
+                    ess.codigo AS ser_estado_codigo,
+                    ess.nombre AS ser_estado_nombre
+                FROM EmpresaServicio ese
+                INNER JOIN Empresa emp ON ese.idEmpresa = emp.id
+                INNER JOIN Servicio ser ON ese.idServicio = ser.id
+                INNER JOIN EstadoServicio ess ON ser.idEstadoServicio = ess.id
+                WHERE ese.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -77,21 +82,24 @@ public class EmpresaServicioSqlServerDAO extends SqlDAO implements EmpresaServic
 	public List<EmpresaServicioEntidad> consultarPorFiltro(EmpresaServicioEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					ese.id AS id,
-					emp.id AS emp_id,
-					emp.nombre AS emp_nombre,
-					emp.nit AS emp_nit,
-					emp.correoContacto AS emp_correoContacto,
-					emp.telefonoContacto AS emp_telefonoContacto,
-					ser.id AS ser_id,
-					ser.numeroServicio AS ser_numeroServicio,
-					ser.fechaServicio AS ser_fechaServicio,
-					ser.estado AS ser_estado
-				FROM EmpresaServicio ese
-				INNER JOIN Empresa emp ON ese.idEmpresa = emp.id
-				INNER JOIN Servicio ser ON ese.idServicio = ser.id
-				""");
+                SELECT
+                    ese.id AS id,
+                    emp.id AS emp_id,
+                    emp.nombre AS emp_nombre,
+                    emp.nit AS emp_nit,
+                    emp.correoContacto AS emp_correoContacto,
+                    emp.telefonoContacto AS emp_telefonoContacto,
+                    ser.id AS ser_id,
+                    ser.numeroServicio AS ser_numeroServicio,
+                    ser.fechaServicio AS ser_fechaServicio,
+                    ess.id AS ser_estado_id,
+                    ess.codigo AS ser_estado_codigo,
+                    ess.nombre AS ser_estado_nombre
+                FROM EmpresaServicio ese
+                INNER JOIN Empresa emp ON ese.idEmpresa = emp.id
+                INNER JOIN Servicio ser ON ese.idServicio = ser.id
+                INNER JOIN EstadoServicio ess ON ser.idEstadoServicio = ess.id
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 
@@ -157,7 +165,7 @@ public class EmpresaServicioSqlServerDAO extends SqlDAO implements EmpresaServic
 		final EmpresaEntidad emp = new EmpresaEntidad.Builder()
 				.id(UUID.fromString(resultado.getString("emp_id")))
 				.nombre(resultado.getString("emp_nombre"))
-				.NIT(resultado.getString("emp_nit"))
+				.nit(resultado.getString("emp_nit"))
 				.correoContacto(resultado.getString("emp_correoContacto"))
 				.telefonoContacto(resultado.getString("emp_telefonoContacto"))
 				.build();
@@ -166,7 +174,11 @@ public class EmpresaServicioSqlServerDAO extends SqlDAO implements EmpresaServic
 				.id(UUID.fromString(resultado.getString("ser_id")))
 				.numeroServicio(resultado.getString("ser_numeroServicio"))
 				.fechaServicio(resultado.getDate("ser_fechaServicio").toLocalDate())
-				.estado(resultado.getString("ser_estado"))
+				.estado(new EstadoServicioEntidad.Builder()
+						.id(UUID.fromString(resultado.getString("ser_estado_id")))
+						.codigo(resultado.getString("ser_estado_codigo"))
+						.nombre(resultado.getString("ser_estado_nombre"))
+						.build())
 				.build();
 
 		return new EmpresaServicioEntidad.Builder()

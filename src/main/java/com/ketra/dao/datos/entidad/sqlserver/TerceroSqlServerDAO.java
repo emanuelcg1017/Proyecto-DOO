@@ -26,16 +26,16 @@ public class TerceroSqlServerDAO extends SqlDAO implements TerceroDAO {
 	public TerceroEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					ter.id AS id,
-					ter.nombre AS nombre,
-					ter.nit AS nit,
-					ter.numeroContacto AS numeroContacto,
-					ter.correoContacto AS correoContacto
-				FROM Tercero ter
+                SELECT
+                    ter.id AS id,
+                    ter.nombre AS nombre,
+                    ter.nit AS nit,
+                    ter.numeroContacto AS numeroContacto,
+                    ter.correoContacto AS correoContacto
+                FROM Tercero ter
 
-				WHERE ter.id = ?
-				""";
+                WHERE ter.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -69,14 +69,14 @@ public class TerceroSqlServerDAO extends SqlDAO implements TerceroDAO {
 	public List<TerceroEntidad> consultarPorFiltro(TerceroEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					ter.id AS id,
-					ter.nombre AS nombre,
-					ter.nit AS nit,
-					ter.numeroContacto AS numeroContacto,
-					ter.correoContacto AS correoContacto
-				FROM Tercero ter
-				""");
+                SELECT
+                    ter.id AS id,
+                    ter.nombre AS nombre,
+                    ter.nit AS nit,
+                    ter.numeroContacto AS numeroContacto,
+                    ter.correoContacto AS correoContacto
+                FROM Tercero ter
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 
@@ -90,9 +90,9 @@ public class TerceroSqlServerDAO extends SqlDAO implements TerceroDAO {
 			parametros.add(filtro.getNombre());
 		}
 
-		if (!UtilTexto.getUtilTexto().esVacia(filtro.getNIT())) {
+		if (!UtilTexto.getUtilTexto().esVacia(filtro.getNit())) {
 			condiciones.add("ter.nit = ?");
-			parametros.add(filtro.getNIT());
+			parametros.add(filtro.getNit());
 		}
 
 		if (!UtilTexto.getUtilTexto().esVacia(filtro.getNumeroContacto())) {
@@ -151,21 +151,21 @@ public class TerceroSqlServerDAO extends SqlDAO implements TerceroDAO {
 	public void crear(TerceroEntidad entidad) {
 
 		final String sql = """
-				INSERT INTO Tercero (
-					id,
-					nombre,
-					nit,
-					numeroContacto,
-					correoContacto
-				)
-				VALUES (?, ?, ?, ?, ?)
-				""";
+                INSERT INTO Tercero (
+                    id,
+                    nombre,
+                    nit,
+                    numeroContacto,
+                    correoContacto
+                )
+                VALUES (?, ?, ?, ?, ?)
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
 			sentencia.setObject(1, entidad.getId());
 			sentencia.setString(2, entidad.getNombre());
-			sentencia.setString(3, entidad.getNIT());
+			sentencia.setString(3, entidad.getNit());
 			sentencia.setString(4, entidad.getNumeroContacto());
 			sentencia.setString(5, entidad.getCorreoContacto());
 
@@ -191,19 +191,19 @@ public class TerceroSqlServerDAO extends SqlDAO implements TerceroDAO {
 	public void actualizar(UUID id, TerceroEntidad entidad) {
 
 		final String sql = """
-				UPDATE Tercero
-				SET
-					nombre = ?,
-					nit = ?,
-					numeroContacto = ?,
-					correoContacto = ?
-				WHERE id = ?
-				""";
+                UPDATE Tercero
+                SET
+                    nombre = ?,
+                    nit = ?,
+                    numeroContacto = ?,
+                    correoContacto = ?
+                WHERE id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
 			sentencia.setString(1, entidad.getNombre());
-			sentencia.setString(2, entidad.getNIT());
+			sentencia.setString(2, entidad.getNit());
 			sentencia.setString(3, entidad.getNumeroContacto());
 			sentencia.setString(4, entidad.getCorreoContacto());
 			sentencia.setObject(5, id);
@@ -230,9 +230,9 @@ public class TerceroSqlServerDAO extends SqlDAO implements TerceroDAO {
 	public void eliminar(UUID id) {
 
 		final String sql = """
-				DELETE FROM Tercero
-				WHERE id = ?
-				""";
+                DELETE FROM Tercero
+                WHERE id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -262,7 +262,7 @@ public class TerceroSqlServerDAO extends SqlDAO implements TerceroDAO {
 		return new TerceroEntidad.Builder()
 				.id(UUID.fromString(resultado.getString("id")))
 				.nombre(resultado.getString("nombre"))
-				.NIT(resultado.getString("nit"))
+				.nit(resultado.getString("nit"))
 				.numeroContacto(resultado.getString("numeroContacto"))
 				.correoContacto(resultado.getString("correoContacto"))
 				.build();

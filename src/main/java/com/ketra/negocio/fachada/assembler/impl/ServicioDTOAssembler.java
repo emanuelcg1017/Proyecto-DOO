@@ -29,7 +29,7 @@ public class ServicioDTOAssembler implements DTOAssembler<ServicioDominio, Servi
 
 		resultado.setFechaServicio(dominioTmp.getFechaServicio());
 
-		resultado.setEstado(dominioTmp.getEstado());
+		resultado.setEstado(EstadoServicioDTOAssembler.getInstance().convertirADTO(dominioTmp.getEstado()));
 
 		return resultado;
 	}
@@ -43,7 +43,7 @@ public class ServicioDTOAssembler implements DTOAssembler<ServicioDominio, Servi
 				.id(dtoTmp.getId())
 				.numeroServicio(dtoTmp.getNumeroServicio())
 				.fechaServicio(dtoTmp.getFechaServicio())
-				.estado(dtoTmp.getEstado())
+				.estado(EstadoServicioDTOAssembler.getInstance().convertirADominio(dtoTmp.getEstado()))
 				.build();
 	}
 }

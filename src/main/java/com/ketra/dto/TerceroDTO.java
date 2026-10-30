@@ -11,7 +11,7 @@ public class TerceroDTO {
 
 	private String nombre;
 
-	private String NIT;
+	private String nit;
 
 	private String numeroContacto;
 
@@ -23,7 +23,7 @@ public class TerceroDTO {
 
 		setNombre(UtilTexto.VACIO);
 
-		setNIT(UtilTexto.VACIO);
+		setNit(UtilTexto.VACIO);
 
 		setNumeroContacto(UtilTexto.VACIO);
 
@@ -55,15 +55,15 @@ public class TerceroDTO {
 
 	}
 
-	public String getNIT() {
+	public String getNit() {
 
-		return NIT;
+		return nit;
 
 	}
 
-	public void setNIT(String NIT) {
+	public void setNit(String nit) {
 
-		this.NIT = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(NIT);
+		this.nit = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nit);
 
 	}
 

@@ -15,6 +15,10 @@ import com.ketra.dao.datos.entidad.EmpresaDAO;
 import com.ketra.dao.datos.entidad.EmpresaServicioDAO;
 import com.ketra.dao.datos.entidad.EntregaDAO;
 import com.ketra.dao.datos.entidad.EntregaTerceroDAO;
+import com.ketra.dao.datos.entidad.EstadoEntregaDAO;
+import com.ketra.dao.datos.entidad.EstadoFacturaDAO;
+import com.ketra.dao.datos.entidad.EstadoPreliquidacionDAO;
+import com.ketra.dao.datos.entidad.EstadoServicioDAO;
 import com.ketra.dao.datos.entidad.FacturaDAO;
 import com.ketra.dao.datos.entidad.MunicipioDAO;
 import com.ketra.dao.datos.entidad.PaisDAO;
@@ -28,6 +32,10 @@ import com.ketra.dao.datos.entidad.ServicioFacturaDAO;
 import com.ketra.dao.datos.entidad.TerceroDAO;
 import com.ketra.dao.datos.entidad.TipoDireccionDAO;
 import com.ketra.dao.datos.entidad.TipoDocumentoDAO;
+import com.ketra.dao.datos.entidad.TransicionEstadoEntregaDAO;
+import com.ketra.dao.datos.entidad.TransicionEstadoFacturaDAO;
+import com.ketra.dao.datos.entidad.TransicionEstadoPreliquidacionDAO;
+import com.ketra.dao.datos.entidad.TransicionEstadoServicioDAO;
 import com.ketra.dao.datos.entidad.UtilidadDAO;
 import com.ketra.dao.datos.entidad.sqlserver.BarrioSqlServerDAO;
 import com.ketra.dao.datos.entidad.sqlserver.CEDISqlServerDAO;
@@ -40,6 +48,10 @@ import com.ketra.dao.datos.entidad.sqlserver.EmpresaServicioSqlServerDAO;
 import com.ketra.dao.datos.entidad.sqlserver.EmpresaSqlServerDAO;
 import com.ketra.dao.datos.entidad.sqlserver.EntregaSqlServerDAO;
 import com.ketra.dao.datos.entidad.sqlserver.EntregaTerceroSqlServerDAO;
+import com.ketra.dao.datos.entidad.sqlserver.EstadoEntregaSqlServerDAO;
+import com.ketra.dao.datos.entidad.sqlserver.EstadoFacturaSqlServerDAO;
+import com.ketra.dao.datos.entidad.sqlserver.EstadoPreliquidacionSqlServerDAO;
+import com.ketra.dao.datos.entidad.sqlserver.EstadoServicioSqlServerDAO;
 import com.ketra.dao.datos.entidad.sqlserver.FacturaSqlServerDAO;
 import com.ketra.dao.datos.entidad.sqlserver.MunicipioSqlServerDAO;
 import com.ketra.dao.datos.entidad.sqlserver.PaisSqlServerDAO;
@@ -53,6 +65,10 @@ import com.ketra.dao.datos.entidad.sqlserver.ServicioSqlServerDAO;
 import com.ketra.dao.datos.entidad.sqlserver.TerceroSqlServerDAO;
 import com.ketra.dao.datos.entidad.sqlserver.TipoDireccionSqlServerDAO;
 import com.ketra.dao.datos.entidad.sqlserver.TipoDocumentoSqlServerDAO;
+import com.ketra.dao.datos.entidad.sqlserver.TransicionEstadoEntregaSqlServerDAO;
+import com.ketra.dao.datos.entidad.sqlserver.TransicionEstadoFacturaSqlServerDAO;
+import com.ketra.dao.datos.entidad.sqlserver.TransicionEstadoPreliquidacionSqlServerDAO;
+import com.ketra.dao.datos.entidad.sqlserver.TransicionEstadoServicioSqlServerDAO;
 import com.ketra.dao.datos.entidad.sqlserver.UtilidadSqlServerDAO;
 import com.ketra.dao.factoria.DAOFactory;
 import com.ketra.transversal.catalogo.CatalogoMensajes;
@@ -70,9 +86,9 @@ public class SqlServerDAOFactory extends DAOFactory{
 	protected void abrirConexion() {
 
 		if (UtilSQL.conexionEstaAbierta(getConexion())) {
-			
+
 			return;
-			
+
 		}
 
 		try {
@@ -90,19 +106,18 @@ public class SqlServerDAOFactory extends DAOFactory{
 
 		} catch (SQLException excepcion) {
 
-
 			var mensajeUsuario =CatalogoMensajes.SqlServerDAOFactory.USUARIO_ERROR_CONEXION_SQL_SERVER;
 			var mensajeTecnico =UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAOFactory.TECNICO_ERROR_CONEXION_SQL_SERVER, excepcion.getMessage());
 			throw KETRADatosException.crear(mensajeUsuario,mensajeTecnico,excepcion);
-			
+
 		}
 	}
 
 	@Override
 	public PaisDAO obtenerPaisDAO() {
-		
+
 		return new PaisSqlServerDAO(getConexion());
-		
+
 	}
 
 	@Override
@@ -129,9 +144,6 @@ public class SqlServerDAOFactory extends DAOFactory{
 	public CostoRecorridoDAO obtenerCostoRecorridoDAO() {
 		return new CostoRecorridoSqlServerDAO(getConexion());
 	}
-	
-	
-
 
 	@Override
 	public BarrioDAO obtenerBarrioDAO() {
@@ -227,4 +239,61 @@ public class SqlServerDAOFactory extends DAOFactory{
 	public TipoDocumentoDAO obtenerTipoDocumentoDAO() {
 		return new TipoDocumentoSqlServerDAO(getConexion());
 	}
+
+	@Override
+	public EstadoServicioDAO obtenerEstadoServicioDAO() {
+
+		return new EstadoServicioSqlServerDAO(getConexion());
+
+	}
+
+	@Override
+	public EstadoEntregaDAO obtenerEstadoEntregaDAO() {
+
+		return new EstadoEntregaSqlServerDAO(getConexion());
+
+	}
+
+	@Override
+	public EstadoFacturaDAO obtenerEstadoFacturaDAO() {
+
+		return new EstadoFacturaSqlServerDAO(getConexion());
+
+	}
+
+	@Override
+	public EstadoPreliquidacionDAO obtenerEstadoPreliquidacionDAO() {
+
+		return new EstadoPreliquidacionSqlServerDAO(getConexion());
+
+	}
+
+	@Override
+	public TransicionEstadoServicioDAO obtenerTransicionEstadoServicioDAO() {
+
+		return new TransicionEstadoServicioSqlServerDAO(getConexion());
+
+	}
+
+	@Override
+	public TransicionEstadoEntregaDAO obtenerTransicionEstadoEntregaDAO() {
+
+		return new TransicionEstadoEntregaSqlServerDAO(getConexion());
+
+	}
+
+	@Override
+	public TransicionEstadoFacturaDAO obtenerTransicionEstadoFacturaDAO() {
+
+		return new TransicionEstadoFacturaSqlServerDAO(getConexion());
+
+	}
+
+	@Override
+	public TransicionEstadoPreliquidacionDAO obtenerTransicionEstadoPreliquidacionDAO() {
+
+		return new TransicionEstadoPreliquidacionSqlServerDAO(getConexion());
+
+	}
+
 }

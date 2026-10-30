@@ -1,4 +1,4 @@
-﻿USE KETRA;
+USE KETRA;
 GO
 
 SET NOCOUNT ON;
@@ -185,34 +185,36 @@ BEGIN TRY
         WHERE existente.id = dat.id
     );
 
-    INSERT INTO dbo.Servicio (id, numeroServicio, fechaServicio, estado)
-    SELECT dat.id, dat.numeroServicio, dat.fechaServicio, dat.estado
+    INSERT INTO dbo.Servicio (id, numeroServicio, fechaServicio, idEstadoServicio)
+    SELECT dat.id, dat.numeroServicio, dat.fechaServicio, est.id
     FROM (VALUES
-        (N'00000013-0000-4000-8000-000000000001', N'SRV-001', N'2026-08-01', N'En ejecución'),
-        (N'00000013-0000-4000-8000-000000000002', N'SRV-002', N'2026-08-02', N'Finalizado'),
-        (N'00000013-0000-4000-8000-000000000003', N'SRV-003', N'2026-08-03', N'En ejecución'),
-        (N'00000013-0000-4000-8000-000000000004', N'SRV-004', N'2026-08-04', N'Finalizado'),
-        (N'00000013-0000-4000-8000-000000000005', N'SRV-005', N'2026-08-05', N'Registrado'),
-        (N'00000013-0000-4000-8000-000000000006', N'SRV-006', N'2026-08-06', N'Cancelado')
-    ) AS dat (id, numeroServicio, fechaServicio, estado)
+        (N'00000013-0000-4000-8000-000000000001', N'SRV-001', N'2026-08-01', 'SER-02'),
+        (N'00000013-0000-4000-8000-000000000002', N'SRV-002', N'2026-08-02', 'SER-03'),
+        (N'00000013-0000-4000-8000-000000000003', N'SRV-003', N'2026-08-03', 'SER-02'),
+        (N'00000013-0000-4000-8000-000000000004', N'SRV-004', N'2026-08-04', 'SER-03'),
+        (N'00000013-0000-4000-8000-000000000005', N'SRV-005', N'2026-08-05', 'SER-01'),
+        (N'00000013-0000-4000-8000-000000000006', N'SRV-006', N'2026-08-06', 'SER-04')
+    ) AS dat (id, numeroServicio, fechaServicio, codigoEstado)
+    INNER JOIN dbo.EstadoServicio est ON est.codigo = dat.codigoEstado
     WHERE NOT EXISTS (
         SELECT 1
         FROM dbo.Servicio existente
         WHERE existente.id = dat.id
     );
 
-    INSERT INTO dbo.Entrega (id, codigoEntrega, fechaEntrega, estadoEntrega, idPersona)
-    SELECT dat.id, dat.codigoEntrega, dat.fechaEntrega, dat.estadoEntrega, dat.idPersona
+    INSERT INTO dbo.Entrega (id, codigoEntrega, fechaEntrega, idEstadoEntrega, idPersona)
+    SELECT dat.id, dat.codigoEntrega, dat.fechaEntrega, est.id, dat.idPersona
     FROM (VALUES
-        (N'00000014-0000-4000-8000-000000000001', N'ENT-001', N'2026-08-10', N'Entregada', N'00000008-0000-4000-8000-000000000001'),
-        (N'00000014-0000-4000-8000-000000000002', N'ENT-002', N'2026-08-11', N'Entregada', N'00000008-0000-4000-8000-000000000002'),
-        (N'00000014-0000-4000-8000-000000000003', N'ENT-003', N'2026-08-12', N'Entregada', N'00000008-0000-4000-8000-000000000003'),
-        (N'00000014-0000-4000-8000-000000000004', N'ENT-004', N'2026-08-13', N'Pendiente', N'00000008-0000-4000-8000-000000000001'),
-        (N'00000014-0000-4000-8000-000000000005', N'ENT-005', N'2026-08-14', N'Entregada', N'00000008-0000-4000-8000-000000000002'),
-        (N'00000014-0000-4000-8000-000000000006', N'ENT-006', N'2026-08-15', N'Pendiente', N'00000008-0000-4000-8000-000000000003'),
-        (N'00000014-0000-4000-8000-000000000007', N'ENT-007', N'2026-08-16', N'Cancelada', N'00000008-0000-4000-8000-000000000001'),
-        (N'00000014-0000-4000-8000-000000000008', N'ENT-008', N'2026-08-17', N'Entregada', N'00000008-0000-4000-8000-000000000002')
-    ) AS dat (id, codigoEntrega, fechaEntrega, estadoEntrega, idPersona)
+        (N'00000014-0000-4000-8000-000000000001', N'ENT-001', N'2026-08-10', 'ENT-03', N'00000008-0000-4000-8000-000000000001'),
+        (N'00000014-0000-4000-8000-000000000002', N'ENT-002', N'2026-08-11', 'ENT-03', N'00000008-0000-4000-8000-000000000002'),
+        (N'00000014-0000-4000-8000-000000000003', N'ENT-003', N'2026-08-12', 'ENT-03', N'00000008-0000-4000-8000-000000000003'),
+        (N'00000014-0000-4000-8000-000000000004', N'ENT-004', N'2026-08-13', 'ENT-01', N'00000008-0000-4000-8000-000000000001'),
+        (N'00000014-0000-4000-8000-000000000005', N'ENT-005', N'2026-08-14', 'ENT-03', N'00000008-0000-4000-8000-000000000002'),
+        (N'00000014-0000-4000-8000-000000000006', N'ENT-006', N'2026-08-15', 'ENT-01', N'00000008-0000-4000-8000-000000000003'),
+        (N'00000014-0000-4000-8000-000000000007', N'ENT-007', N'2026-08-16', 'ENT-04', N'00000008-0000-4000-8000-000000000001'),
+        (N'00000014-0000-4000-8000-000000000008', N'ENT-008', N'2026-08-17', 'ENT-03', N'00000008-0000-4000-8000-000000000002')
+    ) AS dat (id, codigoEntrega, fechaEntrega, codigoEstadoEntrega, idPersona)
+    INNER JOIN dbo.EstadoEntrega est ON est.codigo = dat.codigoEstadoEntrega
     WHERE NOT EXISTS (
         SELECT 1
         FROM dbo.Entrega existente
@@ -260,17 +262,18 @@ BEGIN TRY
         WHERE existente.id = dat.id
     );
 
-    INSERT INTO dbo.Factura (id, numeroFactura, fechaFactura, ingresos, estadoFactura)
-    SELECT dat.id, dat.numeroFactura, dat.fechaFactura, dat.ingresos, dat.estadoFactura
+    INSERT INTO dbo.Factura (id, numeroFactura, fechaFactura, ingresos, idEstadoFactura)
+    SELECT dat.id, dat.numeroFactura, dat.fechaFactura, dat.ingresos, est.id
     FROM (VALUES
-        (N'00000017-0000-4000-8000-000000000001', N'FAC-001', N'2026-08-15', 950000, N'Pagada'),
-        (N'00000017-0000-4000-8000-000000000002', N'FAC-002', N'2026-08-15', 475000, N'Pagada'),
-        (N'00000017-0000-4000-8000-000000000003', N'FAC-003', N'2026-08-16', 820000, N'Pendiente'),
-        (N'00000017-0000-4000-8000-000000000004', N'FAC-004', N'2026-08-17', 610000, N'Pagada'),
-        (N'00000017-0000-4000-8000-000000000005', N'FAC-005', N'2026-08-18', 720000, N'Pendiente'),
-        (N'00000017-0000-4000-8000-000000000006', N'FAC-006', N'2026-08-19', 560000, N'Anulada'),
-        (N'00000017-0000-4000-8000-000000000007', N'FAC-007', N'2026-08-20', 880000, N'Anulada')
-    ) AS dat (id, numeroFactura, fechaFactura, ingresos, estadoFactura)
+        (N'00000017-0000-4000-8000-000000000001', N'FAC-001', N'2026-08-15', 950000, 'FAC-02'),
+        (N'00000017-0000-4000-8000-000000000002', N'FAC-002', N'2026-08-15', 475000, 'FAC-02'),
+        (N'00000017-0000-4000-8000-000000000003', N'FAC-003', N'2026-08-16', 820000, 'FAC-01'),
+        (N'00000017-0000-4000-8000-000000000004', N'FAC-004', N'2026-08-17', 610000, 'FAC-02'),
+        (N'00000017-0000-4000-8000-000000000005', N'FAC-005', N'2026-08-18', 720000, 'FAC-01'),
+        (N'00000017-0000-4000-8000-000000000006', N'FAC-006', N'2026-08-19', 560000, 'FAC-03'),
+        (N'00000017-0000-4000-8000-000000000007', N'FAC-007', N'2026-08-20', 880000, 'FAC-03')
+    ) AS dat (id, numeroFactura, fechaFactura, ingresos, codigoEstadoFactura)
+    INNER JOIN dbo.EstadoFactura est ON est.codigo = dat.codigoEstadoFactura
     WHERE NOT EXISTS (
         SELECT 1
         FROM dbo.Factura existente
@@ -385,17 +388,18 @@ BEGIN TRY
         WHERE existente.id = dat.id
     );
 
-    INSERT INTO dbo.Preliquidacion (id, numeroPreliquidacion, idTercero, idCostoRecorrido, fechaPreliquidacion, estado)
-    SELECT dat.id, dat.numeroPreliquidacion, dat.idTercero, dat.idCostoRecorrido, dat.fechaPreliquidacion, dat.estado
+    INSERT INTO dbo.Preliquidacion (id, numeroPreliquidacion, idTercero, idCostoRecorrido, fechaPreliquidacion, idEstadoPreliquidacion)
+    SELECT dat.id, dat.numeroPreliquidacion, dat.idTercero, dat.idCostoRecorrido, dat.fechaPreliquidacion, est.id
     FROM (VALUES
-        (N'00000025-0000-4000-8000-000000000001', N'PRE-0001', N'00000006-0000-4000-8000-000000000001', N'00000023-0000-4000-8000-000000000001', N'2026-08-21', N'Pagada'),
-        (N'00000025-0000-4000-8000-000000000002', N'PRE-0002', N'00000006-0000-4000-8000-000000000002', N'00000023-0000-4000-8000-000000000002', N'2026-08-22', N'Pagada'),
-        (N'00000025-0000-4000-8000-000000000003', N'PRE-0003', N'00000006-0000-4000-8000-000000000002', N'00000023-0000-4000-8000-000000000003', N'2026-08-23', N'Pendiente'),
-        (N'00000025-0000-4000-8000-000000000004', N'PRE-0004', N'00000006-0000-4000-8000-000000000001', N'00000023-0000-4000-8000-000000000004', N'2026-08-24', N'Pendiente'),
-        (N'00000025-0000-4000-8000-000000000005', N'PRE-0005', N'00000006-0000-4000-8000-000000000002', N'00000023-0000-4000-8000-000000000005', N'2026-08-26', N'Pagada'),
-        (N'00000025-0000-4000-8000-000000000006', N'PRE-0006', N'00000006-0000-4000-8000-000000000002', N'00000023-0000-4000-8000-000000000006', N'2026-08-29', N'Pendiente'),
-        (N'00000025-0000-4000-8000-000000000007', N'PRE-0007', N'00000006-0000-4000-8000-000000000002', N'00000023-0000-4000-8000-000000000007', N'2026-08-30', N'Pendiente')
-    ) AS dat (id, numeroPreliquidacion, idTercero, idCostoRecorrido, fechaPreliquidacion, estado)
+        (N'00000025-0000-4000-8000-000000000001', N'PRE-0001', N'00000006-0000-4000-8000-000000000001', N'00000023-0000-4000-8000-000000000001', N'2026-08-21', 'PRE-02'),
+        (N'00000025-0000-4000-8000-000000000002', N'PRE-0002', N'00000006-0000-4000-8000-000000000002', N'00000023-0000-4000-8000-000000000002', N'2026-08-22', 'PRE-02'),
+        (N'00000025-0000-4000-8000-000000000003', N'PRE-0003', N'00000006-0000-4000-8000-000000000002', N'00000023-0000-4000-8000-000000000003', N'2026-08-23', 'PRE-01'),
+        (N'00000025-0000-4000-8000-000000000004', N'PRE-0004', N'00000006-0000-4000-8000-000000000001', N'00000023-0000-4000-8000-000000000004', N'2026-08-24', 'PRE-01'),
+        (N'00000025-0000-4000-8000-000000000005', N'PRE-0005', N'00000006-0000-4000-8000-000000000002', N'00000023-0000-4000-8000-000000000005', N'2026-08-26', 'PRE-02'),
+        (N'00000025-0000-4000-8000-000000000006', N'PRE-0006', N'00000006-0000-4000-8000-000000000002', N'00000023-0000-4000-8000-000000000006', N'2026-08-29', 'PRE-01'),
+        (N'00000025-0000-4000-8000-000000000007', N'PRE-0007', N'00000006-0000-4000-8000-000000000002', N'00000023-0000-4000-8000-000000000007', N'2026-08-30', 'PRE-01')
+    ) AS dat (id, numeroPreliquidacion, idTercero, idCostoRecorrido, fechaPreliquidacion, codigoEstado)
+    INNER JOIN dbo.EstadoPreliquidacion est ON est.codigo = dat.codigoEstado
     WHERE NOT EXISTS (
         SELECT 1
         FROM dbo.Preliquidacion existente
@@ -431,8 +435,9 @@ BEGIN CATCH
 END CATCH;
 GO
 
-SELECT id, numeroServicio, fechaServicio, estado
-FROM dbo.Servicio
+SELECT ser.id, ser.numeroServicio, ser.fechaServicio, est.nombre AS estado
+FROM dbo.Servicio ser
+INNER JOIN dbo.EstadoServicio est ON ser.idEstadoServicio = est.id
 WHERE numeroServicio IN (N'SRV-001', N'SRV-002', N'SRV-003', N'SRV-004', N'SRV-005', N'SRV-006')
 ORDER BY numeroServicio;
 GO

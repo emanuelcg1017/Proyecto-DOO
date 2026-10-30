@@ -1,5 +1,7 @@
 package com.ketra.dominio;
 
+import com.ketra.transversal.utilitarios.UtilObjeto;
+
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -14,7 +16,7 @@ public class FacturaDominio {
 	private String numeroFactura;
 	private LocalDate fechaFactura;
 	private Double ingresos;
-	private String estadoFactura;
+	private EstadoFacturaDominio estadoFactura;
 
 	FacturaDominio(Builder builder) {
 		this.id = builder.id;
@@ -40,7 +42,7 @@ public class FacturaDominio {
 		return ingresos;
 	}
 
-	public String getEstadoFactura() {
+	public EstadoFacturaDominio getEstadoFactura() {
 		return estadoFactura;
 	}
 
@@ -49,14 +51,14 @@ public class FacturaDominio {
 		private String numeroFactura;
 		private LocalDate fechaFactura;
 		private Double ingresos;
-		private String estadoFactura;
+		private EstadoFacturaDominio estadoFactura;
 
 		public Builder() {
 			id = UtilUUID.obtenerValorDefecto(id);
 			numeroFactura = UtilTexto.VACIO;
 			fechaFactura = UtilFecha.FECHA_DEFECTO;
 			ingresos = UtilNumero.CERO_DECIMAL;
-			estadoFactura = UtilTexto.VACIO;
+			estadoFactura = new EstadoFacturaDominio.Builder().build();
 		}
 
 		public Builder id(UUID id) {
@@ -79,8 +81,8 @@ public class FacturaDominio {
 			return this;
 		}
 
-		public Builder estadoFactura(String estadoFactura) {
-			this.estadoFactura = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(estadoFactura);
+		public Builder estadoFactura(EstadoFacturaDominio estadoFactura) {
+			this.estadoFactura = UtilObjeto.obtenerValorDefectoSiNulo(estadoFactura, new EstadoFacturaDominio.Builder().build());
 			return this;
 		}
 

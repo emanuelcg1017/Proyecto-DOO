@@ -28,16 +28,16 @@ public class BarrioSqlServerDAO extends SqlDAO implements BarrioDAO {
 	public BarrioEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					bar.id AS id,
-					bar.nombre AS nombre,
-					mun.id AS mun_id,
-					mun.nombre AS mun_nombre,
-					mun.idDepartamento AS mun_idDepartamento
-				FROM Barrio bar
-				INNER JOIN Municipio mun ON bar.idMunicipio = mun.id
-				WHERE bar.id = ?
-				""";
+                SELECT
+                    bar.id AS id,
+                    bar.nombre AS nombre,
+                    mun.id AS mun_id,
+                    mun.nombre AS mun_nombre,
+                    mun.idDepartamento AS mun_idDepartamento
+                FROM Barrio bar
+                INNER JOIN Municipio mun ON bar.idMunicipio = mun.id
+                WHERE bar.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -71,15 +71,15 @@ public class BarrioSqlServerDAO extends SqlDAO implements BarrioDAO {
 	public List<BarrioEntidad> consultarPorFiltro(BarrioEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					bar.id AS id,
-					bar.nombre AS nombre,
-					mun.id AS mun_id,
-					mun.nombre AS mun_nombre,
-					mun.idDepartamento AS mun_idDepartamento
-				FROM Barrio bar
-				INNER JOIN Municipio mun ON bar.idMunicipio = mun.id
-				""");
+                SELECT
+                    bar.id AS id,
+                    bar.nombre AS nombre,
+                    mun.id AS mun_id,
+                    mun.nombre AS mun_nombre,
+                    mun.idDepartamento AS mun_idDepartamento
+                FROM Barrio bar
+                INNER JOIN Municipio mun ON bar.idMunicipio = mun.id
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 

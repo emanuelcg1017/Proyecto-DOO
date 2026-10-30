@@ -27,15 +27,15 @@ public class DepartamentoSqlServerDAO extends SqlDAO implements DepartamentoDAO 
 	public DepartamentoEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					dep.id AS id,
-					dep.nombre AS nombre,
-					pai.id AS pai_id,
-					pai.nombre AS pai_nombre
-				FROM Departamento dep
-				INNER JOIN Pais pai ON dep.idPais = pai.id
-				WHERE dep.id = ?
-				""";
+                SELECT
+                    dep.id AS id,
+                    dep.nombre AS nombre,
+                    pai.id AS pai_id,
+                    pai.nombre AS pai_nombre
+                FROM Departamento dep
+                INNER JOIN Pais pai ON dep.idPais = pai.id
+                WHERE dep.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -69,14 +69,14 @@ public class DepartamentoSqlServerDAO extends SqlDAO implements DepartamentoDAO 
 	public List<DepartamentoEntidad> consultarPorFiltro(DepartamentoEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					dep.id AS id,
-					dep.nombre AS nombre,
-					pai.id AS pai_id,
-					pai.nombre AS pai_nombre
-				FROM Departamento dep
-				INNER JOIN Pais pai ON dep.idPais = pai.id
-				""");
+                SELECT
+                    dep.id AS id,
+                    dep.nombre AS nombre,
+                    pai.id AS pai_id,
+                    pai.nombre AS pai_nombre
+                FROM Departamento dep
+                INNER JOIN Pais pai ON dep.idPais = pai.id
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 

@@ -11,7 +11,7 @@ public class ServicioCEDIDTO {
 
 	private ServicioDTO servicio;
 
-	private CEDIDTO CEDI;
+	private CEDIDTO cedi;
 
 	private PedidoDTO pedido;
 
@@ -21,7 +21,7 @@ public class ServicioCEDIDTO {
 
 		setServicio(new ServicioDTO());
 
-		setCEDI(new CEDIDTO());
+		setCedi(new CEDIDTO());
 
 		setPedido(new PedidoDTO());
 
@@ -51,15 +51,15 @@ public class ServicioCEDIDTO {
 
 	}
 
-	public CEDIDTO getCEDI() {
+	public CEDIDTO getCedi() {
 
-		return CEDI;
+		return cedi;
 
 	}
 
-	public void setCEDI(CEDIDTO CEDI) {
+	public void setCedi(CEDIDTO cedi) {
 
-		this.CEDI = UtilObjeto.obtenerValorDefectoSiNulo(CEDI, new CEDIDTO());
+		this.cedi = UtilObjeto.obtenerValorDefectoSiNulo(cedi, new CEDIDTO());
 
 	}
 

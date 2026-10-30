@@ -1,12 +1,15 @@
 package com.ketra.negocio.negocio.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import com.ketra.dao.factoria.DAOFactory;
 import com.ketra.dominio.EntregaDominio;
-import com.ketra.entidad.EntregaEntidad;
+import com.ketra.entidad.ServicioEntidad;
+import com.ketra.entidad.ServicioEntregaEntidad;
 import com.ketra.negocio.negocio.EntregaNegocio;
 import com.ketra.negocio.negocio.assembler.impl.EntregaEntidadAssembler;
 
@@ -25,13 +28,25 @@ public class EntregaNegocioImpl implements EntregaNegocio {
 
 		new ServicioNegocioImpl(daoFactory).consultarPorId(idServicio);
 
-		var entidades = daoFactory.obtenerEntregaDAO().consultarPorServicio(idServicio);
+		var servicio = new ServicioEntidad.Builder().id(idServicio).build();
+
+		var filtro = new ServicioEntregaEntidad.Builder().servicio(servicio).build();
+
+		var asociaciones = daoFactory.obtenerServicioEntregaDAO().consultarPorFiltro(filtro);
 
 		final List<EntregaDominio> resultados = new ArrayList<>();
 
-		for (EntregaEntidad entidad : entidades) {
+		final Set<UUID> identificadores = new HashSet<>();
 
-			resultados.add(EntregaEntidadAssembler.getInstance().convertirADominio(entidad));
+		for (ServicioEntregaEntidad relacion : asociaciones) {
+
+			var entidad = relacion.getEntrega();
+
+			if (identificadores.add(entidad.getId())) {
+
+				resultados.add(EntregaEntidadAssembler.getInstance().convertirADominio(entidad));
+
+			}
 
 		}
 

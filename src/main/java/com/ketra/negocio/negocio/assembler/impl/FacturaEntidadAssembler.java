@@ -29,7 +29,7 @@ public class FacturaEntidadAssembler implements EntidadAssembler<FacturaDominio,
 				.numeroFactura(datos.getNumeroFactura())
 				.fechaFactura(datos.getFechaFactura())
 				.ingresos(datos.getIngresos())
-				.EstadoFactura(datos.getEstadoFactura())
+				.estadoFactura(EstadoFacturaEntidadAssembler.getInstance().convertirAEntidad(datos.getEstadoFactura()))
 				.build();
 
 	}
@@ -44,7 +44,7 @@ public class FacturaEntidadAssembler implements EntidadAssembler<FacturaDominio,
 				.numeroFactura(datos.getNumeroFactura())
 				.fechaFactura(datos.getFechaFactura())
 				.ingresos(datos.getIngresos())
-				.estadoFactura(datos.getEstadoFactura())
+				.estadoFactura(EstadoFacturaEntidadAssembler.getInstance().convertirADominio(datos.getEstadoFactura()))
 				.build();
 
 	}

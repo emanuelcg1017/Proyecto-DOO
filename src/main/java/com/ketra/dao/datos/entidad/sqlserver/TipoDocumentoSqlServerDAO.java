@@ -26,13 +26,13 @@ public class TipoDocumentoSqlServerDAO extends SqlDAO implements TipoDocumentoDA
 	public TipoDocumentoEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					tdo.id AS id,
-					tdo.nombre AS nombre
-				FROM TipoDocumento tdo
+                SELECT
+                    tdo.id AS id,
+                    tdo.nombre AS nombre
+                FROM TipoDocumento tdo
 
-				WHERE tdo.id = ?
-				""";
+                WHERE tdo.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -66,11 +66,11 @@ public class TipoDocumentoSqlServerDAO extends SqlDAO implements TipoDocumentoDA
 	public List<TipoDocumentoEntidad> consultarPorFiltro(TipoDocumentoEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					tdo.id AS id,
-					tdo.nombre AS nombre
-				FROM TipoDocumento tdo
-				""");
+                SELECT
+                    tdo.id AS id,
+                    tdo.nombre AS nombre
+                FROM TipoDocumento tdo
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 

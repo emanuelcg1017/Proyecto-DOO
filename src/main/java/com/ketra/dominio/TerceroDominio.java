@@ -8,14 +8,14 @@ import com.ketra.transversal.utilitarios.UtilUUID;
 public class TerceroDominio {
 	private UUID id;
 	private String nombre;
-	private String NIT;
+	private String nit;
 	private String numeroContacto;
 	private String correoContacto;
 
 	TerceroDominio(Builder builder) {
 		this.id = builder.id;
 		this.nombre = builder.nombre;
-		this.NIT = builder.NIT;
+		this.nit = builder.nit;
 		this.numeroContacto = builder.numeroContacto;
 		this.correoContacto = builder.correoContacto;
 	}
@@ -28,8 +28,8 @@ public class TerceroDominio {
 		return nombre;
 	}
 
-	public String getNIT() {
-		return NIT;
+	public String getNit() {
+		return nit;
 	}
 
 	public String getNumeroContacto() {
@@ -43,14 +43,14 @@ public class TerceroDominio {
 	public static class Builder {
 		private UUID id;
 		private String nombre;
-		private String NIT;
+		private String nit;
 		private String numeroContacto;
 		private String correoContacto;
 
 		public Builder() {
 			id = UtilUUID.obtenerValorDefecto(id);
 			nombre = UtilTexto.VACIO;
-			NIT = UtilTexto.VACIO;
+			nit = UtilTexto.VACIO;
 			numeroContacto = UtilTexto.VACIO;
 			correoContacto = UtilTexto.VACIO;
 		}
@@ -65,8 +65,8 @@ public class TerceroDominio {
 			return this;
 		}
 
-		public Builder NIT(String NIT) {
-			this.NIT = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(NIT);
+		public Builder nit(String nit) {
+			this.nit = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nit);
 			return this;
 		}
 

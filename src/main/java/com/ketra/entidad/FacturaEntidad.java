@@ -1,5 +1,7 @@
 package com.ketra.entidad;
 
+import com.ketra.transversal.utilitarios.UtilObjeto;
+
 import java.util.UUID;
 import java.time.LocalDate;
 
@@ -14,14 +16,14 @@ public class FacturaEntidad {
 	private String numeroFactura;
 	private LocalDate fechaFactura;
 	private Double ingresos;
-	private String EstadoFactura;
+	private EstadoFacturaEntidad estadoFactura;
 
 	private FacturaEntidad(Builder builder) {
 		this.id = builder.id;
 		this.numeroFactura = builder.numeroFactura;
 		this.fechaFactura = builder.fechaFactura;
 		this.ingresos = builder.ingresos;
-		this.EstadoFactura = builder.EstadoFactura;
+		this.estadoFactura = builder.estadoFactura;
 	}
 
 	public UUID getId() {
@@ -40,8 +42,8 @@ public class FacturaEntidad {
 		return ingresos;
 	}
 
-	public String getEstadoFactura() {
-		return EstadoFactura;
+	public EstadoFacturaEntidad getEstadoFactura() {
+		return estadoFactura;
 	}
 
 	public static class Builder {
@@ -50,14 +52,14 @@ public class FacturaEntidad {
 		private String numeroFactura;
 		private LocalDate fechaFactura;
 		private Double ingresos;
-		private String EstadoFactura;
+		private EstadoFacturaEntidad estadoFactura;
 
 		public Builder() {
 			id = UtilUUID.obtenerValorDefecto(id);
 			numeroFactura = UtilTexto.VACIO;
 			fechaFactura = UtilFecha.FECHA_DEFECTO;
 			ingresos = UtilNumero.CERO_DECIMAL;
-			EstadoFactura = UtilTexto.VACIO;
+			estadoFactura = new EstadoFacturaEntidad.Builder().build();
 		}
 
 		public Builder id(UUID id) {
@@ -80,8 +82,8 @@ public class FacturaEntidad {
 			return this;
 		}
 
-		public Builder EstadoFactura(String EstadoFactura) {
-			this.EstadoFactura = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(EstadoFactura);
+		public Builder estadoFactura(EstadoFacturaEntidad estadoFactura) {
+			this.estadoFactura = UtilObjeto.obtenerValorDefectoSiNulo(estadoFactura, new EstadoFacturaEntidad.Builder().build());
 			return this;
 		}
 

@@ -8,19 +8,19 @@ public class KETRAExcepcion extends RuntimeException {
 
 	private static final long serialVersionUID = 8082942784000168578L;
 	
-	private Capa capa;
-	private String mensajeUsuario;
-	private String mensajeTecnico;
-	private Exception excepcionRaiz;
+	private final Capa capa;
+	private final String mensajeUsuario;
+	private final String mensajeTecnico;
+	private final Exception excepcionRaiz;
 	
 	
 
-	protected KETRAExcepcion(Capa capa, String mensajeUsuario, String mensajeTecnico, Exception excepcionRaiz) {
+	protected  KETRAExcepcion(Capa capa, String mensajeUsuario, String mensajeTecnico, Exception excepcionRaiz) {
 		super();
-		setCapa(capa);
-		setMensajeUsuario(mensajeUsuario);
-		setMensajeTecnico(mensajeTecnico);
-		setExcepcionRaiz(excepcionRaiz);
+		this.capa = UtilObjeto.obtenerValorDefectoSiNulo(capa, Capa.GENERAL);
+		this.mensajeUsuario = UtilTexto.getUtilTexto().obtenerValorDefecto(mensajeUsuario);
+		this.mensajeTecnico = UtilTexto.getUtilTexto().obtenerValorDefecto(mensajeTecnico, this.mensajeUsuario);
+		this.excepcionRaiz = UtilObjeto.obtenerValorDefectoSiNulo(excepcionRaiz, new Exception(this.mensajeTecnico));
 	}
 
 	public static long getSerialversionuid() {
@@ -31,32 +31,16 @@ public class KETRAExcepcion extends RuntimeException {
 		return capa;
 	}
 
-	private void setCapa(Capa capa) {
-		this.capa = UtilObjeto.obtenerValorDefectoSiNulo(capa, Capa.GENERAL);
-	}
-
 	public String getMensajeUsuario() {
 		return mensajeUsuario;
-	}
-
-	private void setMensajeUsuario(String mensajeUsuario) {
-		this.mensajeUsuario = UtilTexto.getUtilTexto().obtenerValorDefecto(mensajeUsuario);
 	}
 
 	public String getMensajeTecnico() {
 		return mensajeTecnico;
 	}
 
-	private void setMensajeTecnico(String mensajeTecnico) {
-		this.mensajeTecnico = UtilTexto.getUtilTexto().obtenerValorDefecto(mensajeTecnico, getMensajeUsuario());
-	}
-
 	public Exception getExcepcionRaiz() {
 		return excepcionRaiz;
-	}
-
-	private void setExcepcionRaiz(Exception excepcionRaiz) {
-		this.excepcionRaiz = UtilObjeto.obtenerValorDefectoSiNulo(excepcionRaiz, new Exception(getMensajeTecnico()));
 	}
 
 }

@@ -47,13 +47,13 @@ public class DetalleEntregaDTOAssembler implements DTOAssembler<DetalleEntregaDo
 
 		var direccionCedi = new DireccionDTO();
 
-		direccionCedi.setId(datos.getCEDIOrigen().getDireccion().getId());
+		direccionCedi.setId(datos.getCediOrigen().getDireccion().getId());
 
 		var cediOrigen = new CEDIDTO();
 
-		cediOrigen.setId(datos.getCEDIOrigen().getId());
+		cediOrigen.setId(datos.getCediOrigen().getId());
 
-		cediOrigen.setNombre(datos.getCEDIOrigen().getNombre());
+		cediOrigen.setNombre(datos.getCediOrigen().getNombre());
 
 		cediOrigen.setDireccion(direccionCedi);
 
@@ -85,7 +85,7 @@ public class DetalleEntregaDTOAssembler implements DTOAssembler<DetalleEntregaDo
 
 		resultado.setEntrega(EntregaDTOAssembler.getInstance().convertirADTO(datos.getEntrega()));
 
-		resultado.setCEDIOrigen(cediOrigen);
+		resultado.setCediOrigen(cediOrigen);
 
 		resultado.setDireccionDestino(direccionDestino);
 
@@ -107,9 +107,9 @@ public class DetalleEntregaDTOAssembler implements DTOAssembler<DetalleEntregaDo
 				.build();
 
 		var cediOrigen = new CEDIDominio.Builder()
-				.id(datos.getCEDIOrigen().getId())
-				.nombre(datos.getCEDIOrigen().getNombre())
-				.direccion(new DireccionDominio.Builder().id(datos.getCEDIOrigen().getDireccion().getId()).build())
+				.id(datos.getCediOrigen().getId())
+				.nombre(datos.getCediOrigen().getNombre())
+				.direccion(new DireccionDominio.Builder().id(datos.getCediOrigen().getDireccion().getId()).build())
 				.build();
 
 		var barrio = new BarrioDominio.Builder()
@@ -132,7 +132,7 @@ public class DetalleEntregaDTOAssembler implements DTOAssembler<DetalleEntregaDo
 				.numeroDetalleEntrega(datos.getNumeroDetalleEntrega())
 				.pedido(pedido)
 				.entrega(EntregaDTOAssembler.getInstance().convertirADominio(datos.getEntrega()))
-				.CEDIOrigen(cediOrigen)
+				.cediOrigen(cediOrigen)
 				.direccionDestino(direccionDestino)
 				.distanciaKM(datos.getDistanciaKM())
 				.build();

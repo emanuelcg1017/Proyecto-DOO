@@ -4,28 +4,47 @@ const consultaServicios = document.getElementById('consulta-servicios');
 
 const mensajeServicios = document.getElementById('mensaje-servicios');
 
-const formularioEstado = document.getElementById('actualizar-estado');
+const listaServicios = document.getElementById('lista-servicios');
 
-const selectorEstado = document.getElementById('nuevo-estado');
+const enlaceUtilidad = document.getElementById('utilidad-generada');
 
-const botonActualizar = document.getElementById('guardar-estado');
-
-const transicionesServicio = {
-    'Registrado': ['En ejecución', 'Cancelado'],
-    'En ejecución': ['Finalizado'],
-    'Finalizado': [],
-    'Cancelado': []
-};
+const baseServicios = consultaServicios.dataset.apiBase;
 
 let serviciosConsultados = [];
 
+let estadosServicio = [];
+
+let transicionesFinalizacion = [];
+
+let idEstadoFinalizado = '';
+
+let cargandoCatalogos = true;
+
 let consultaEnCurso = false;
 
-let actualizacionEnCurso = false;
+let finalizacionEnCurso = false;
+
+function esIdentificadorValido(id) {
+
+    return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)
+        && id !== '00000000-0000-0000-0000-000000000000';
+
+}
+
+function tieneTransicionFinalizacion(servicio) {
+
+    return transicionesFinalizacion.some(function (transicion) {
+
+        return transicion.estadoOrigen.id === servicio.estado.id
+            && transicion.estadoDestino.id === idEstadoFinalizado;
+
+    });
+
+}
 
 function actualizarDisponibilidadServicios() {
 
-    const ocupado = consultaEnCurso || actualizacionEnCurso;
+    const ocupado = cargandoCatalogos || consultaEnCurso || finalizacionEnCurso;
 
     consultaServicios.querySelector('button').disabled = ocupado;
 
@@ -35,21 +54,19 @@ function actualizarDisponibilidadServicios() {
 
     }
 
-    for (const boton of document.querySelectorAll('.select-service')) {
+    for (const boton of document.querySelectorAll('.finalizar-servicio')) {
 
-        boton.disabled = ocupado;
+        const servicio = serviciosConsultados.find(function (dato) {
+
+            return dato.id === boton.dataset.id;
+
+        });
+
+        boton.disabled = ocupado || !servicio || !tieneTransicionFinalizacion(servicio);
 
     }
 
-    const id = document.getElementById('id-servicio').value;
-
-    const estadoActual = document.getElementById('estado-actual').value;
-
-    const opciones = transicionesServicio[estadoActual] || [];
-
-    selectorEstado.disabled = ocupado || !id || opciones.length === 0;
-
-    botonActualizar.disabled = ocupado || !id || !selectorEstado.value;
+    listaServicios.setAttribute('aria-busy', String(ocupado));
 
 }
 
@@ -61,95 +78,69 @@ function mostrarMensajeServicios(mensaje, esError = false) {
 
 }
 
-function seleccionarServicio(servicio) {
-
-    document.getElementById('id-servicio').value = servicio.id;
-
-    document.getElementById('numero-seleccionado').value = servicio.numeroServicio;
-
-    document.getElementById('fecha-seleccionada').value = servicio.fechaServicio;
-
-    document.getElementById('estado-actual').value = servicio.estado;
-
-    const opciones = transicionesServicio[servicio.estado] || [];
-
-    selectorEstado.replaceChildren(
-        new Option(opciones.length ? 'Selecciona el nuevo estado' : 'No admite cambios', '')
-    );
-
-    for (const estado of opciones) {
-
-        selectorEstado.add(new Option(estado, estado));
-
-    }
-
-    selectorEstado.disabled = opciones.length === 0;
-
-    botonActualizar.disabled = true;
-
-    let nota = 'Este servicio se encuentra en un estado definitivo.';
-
-    if (opciones.includes('Finalizado')) {
-
-        nota = 'Al finalizar se registra automáticamente la utilidad. Este cambio es definitivo.';
-
-    } else if (opciones.length > 0) {
-
-        nota = 'Solo se modificará el estado. El número y la fecha se conservan.';
-
-    }
-
-    document.getElementById('nota-estado').textContent = nota;
-
-}
-
 function mostrarServicios(servicios) {
 
     serviciosConsultados = servicios;
 
     document.getElementById('cantidad').textContent = `${servicios.length} ${servicios.length === 1 ? 'servicio' : 'servicios'}`;
 
-    const lista = document.getElementById('lista-servicios');
-
-    lista.replaceChildren();
+    listaServicios.replaceChildren();
 
     for (const servicio of servicios) {
 
-        const fila = lista.insertRow();
+        const fila = listaServicios.insertRow();
 
-        const valores = [servicio.numeroServicio, servicio.fechaServicio, servicio.estado];
-
-        for (const valor of valores) {
+        for (const valor of [servicio.numeroServicio, servicio.fechaServicio, servicio.estado.nombre]) {
 
             fila.insertCell().textContent = valor;
 
         }
 
-        const boton = document.createElement('button');
+        const acciones = fila.insertCell();
 
-        boton.type = 'button';
+        if (servicio.estado.id === idEstadoFinalizado) {
 
-        boton.className = 'select-service';
+            const enlace = document.createElement('a');
 
-        boton.textContent = 'Seleccionar';
+            enlace.className = 'ver-utilidad';
 
-        boton.addEventListener('click', function () {
+            enlace.href = `/consultar-utilidad.html?servicio=${encodeURIComponent(servicio.id)}`;
 
-            if (!consultaEnCurso && !actualizacionEnCurso) {
+            enlace.textContent = 'Ver utilidad';
 
-                seleccionarServicio(servicio);
+            acciones.append(enlace);
 
-            }
+        } else {
 
-        });
+            const boton = document.createElement('button');
 
-        fila.insertCell().append(boton);
+            boton.type = 'button';
+
+            boton.className = 'finalizar-servicio';
+
+            boton.dataset.id = servicio.id;
+
+            boton.textContent = 'Finalizar servicio';
+
+            boton.title = tieneTransicionFinalizacion(servicio)
+                ? 'El backend comprobará las entregas y generará la utilidad.'
+                : 'No hay una transición de finalización configurada desde este estado.';
+
+            boton.addEventListener('click', function () {
+
+                finalizarServicio(servicio.id);
+
+            });
+
+            acciones.append(boton);
+
+        }
 
     }
 
     if (servicios.length === 0) {
 
-        const celda = lista.insertRow().insertCell();
+        const celda = listaServicios.insertRow().insertCell();
 
         celda.colSpan = 4;
 
@@ -159,11 +150,7 @@ function mostrarServicios(servicios) {
 
     }
 
-}
-
-async function solicitarServicios(url, opciones) {
-
-    return SeguridadKetra.solicitar(url, opciones);
+    actualizarDisponibilidadServicios();
 
 }
 
@@ -171,31 +158,33 @@ consultaServicios.addEventListener('submit', async function (evento) {
 
     evento.preventDefault();
 
-    if (consultaEnCurso || actualizacionEnCurso) {
+    if (cargandoCatalogos || consultaEnCurso || finalizacionEnCurso) {
 
         return;
 
     }
 
-    consultaEnCurso = true;
-
-    const base = consultaServicios.dataset.apiBase;
-
-    formularioEstado.reset();
-
-    document.getElementById('id-servicio').value = '';
-
-    selectorEstado.disabled = true;
-
-    botonActualizar.disabled = true;
-
-    document.getElementById('nota-estado').textContent = 'Selecciona un servicio de los resultados.';
-
-    const parametros = new URLSearchParams();
-
     const numero = document.getElementById('numero').value.trim();
 
     const estado = document.getElementById('filtro-estado').value;
+
+    if (numero.length > 30) {
+
+        mostrarMensajeServicios('El número del servicio no puede superar los 30 caracteres.', true);
+
+        return;
+
+    }
+
+    if (estado && !estadosServicio.some(function (dato) { return dato.id === estado; })) {
+
+        mostrarMensajeServicios('Selecciona un estado del catálogo.', true);
+
+        return;
+
+    }
+
+    const parametros = new URLSearchParams();
 
     if (numero) {
 
@@ -205,17 +194,11 @@ consultaServicios.addEventListener('submit', async function (evento) {
 
     if (estado) {
 
-        parametros.set('estado', estado);
+        parametros.set('estado.id', estado);
 
     }
 
-    let url = base;
-
-    if (parametros.size > 0) {
-
-        url = `${base}?${parametros}`;
-
-    }
+    consultaEnCurso = true;
 
     actualizarDisponibilidadServicios();
 
@@ -223,15 +206,14 @@ consultaServicios.addEventListener('submit', async function (evento) {
 
         mostrarMensajeServicios('Consultando servicios…');
 
-        const respuesta = await solicitarServicios(url, {
-            headers: {
-                Accept: 'application/json'
-            }
-        });
+        const respuestas = await Promise.all([
+            SeguridadKetra.solicitar(`${baseServicios}?${parametros}`),
+            SeguridadKetra.solicitar(`${baseServicios}/transiciones-finalizacion`)
+        ]);
 
-        const servicios = respuesta.datos;
+        transicionesFinalizacion = respuestas[1].datos;
 
-        mostrarServicios(servicios);
+        mostrarServicios(respuestas[0].datos);
 
         mostrarMensajeServicios('Consulta realizada.');
 
@@ -249,72 +231,61 @@ consultaServicios.addEventListener('submit', async function (evento) {
 
 });
 
-selectorEstado.addEventListener('change', function () {
+async function finalizarServicio(idServicio) {
 
-    actualizarDisponibilidadServicios();
-
-});
-
-formularioEstado.addEventListener('submit', async function (evento) {
-
-    evento.preventDefault();
-
-    if (consultaEnCurso || actualizacionEnCurso) {
+    if (cargandoCatalogos || consultaEnCurso || finalizacionEnCurso) {
 
         return;
 
     }
 
-    const base = consultaServicios.dataset.apiBase;
+    const servicio = serviciosConsultados.find(function (dato) { return dato.id === idServicio; });
 
-    const id = document.getElementById('id-servicio').value;
+    if (!esIdentificadorValido(idServicio) || !servicio || !tieneTransicionFinalizacion(servicio)) {
 
-    const estado = selectorEstado.value;
-
-    if (!id || !estado || botonActualizar.disabled) {
+        mostrarMensajeServicios('Selecciona un servicio con una transición de finalización permitida.', true);
 
         return;
 
     }
 
-    actualizacionEnCurso = true;
+    finalizacionEnCurso = true;
+
+    enlaceUtilidad.hidden = true;
 
     actualizarDisponibilidadServicios();
 
     try {
 
-        mostrarMensajeServicios('Actualizando el estado…');
+        mostrarMensajeServicios('Finalizando el servicio y generando su utilidad…');
 
-        const respuesta = await solicitarServicios(`${base}/${encodeURIComponent(id)}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json'
-            },
-            body: JSON.stringify({estado: estado})
+        const respuesta = await SeguridadKetra.solicitar(`${baseServicios}/${encodeURIComponent(idServicio)}/finalizacion`, {
+            method: 'PUT'
         });
 
         const actualizado = respuesta.datos[0];
 
-        const serviciosActualizados = [];
+        const filtroEstado = document.getElementById('filtro-estado').value;
 
-        for (const servicio of serviciosConsultados) {
+        const resultados = [];
 
-            const resultado = servicio.id === id ? actualizado : servicio;
+        for (const anterior of serviciosConsultados) {
 
-            const filtroEstado = document.getElementById('filtro-estado').value;
+            const dato = anterior.id === idServicio ? actualizado : anterior;
 
-            if (!filtroEstado || resultado.estado === filtroEstado) {
+            if (!filtroEstado || dato.estado.id === filtroEstado) {
 
-                serviciosActualizados.push(resultado);
+                resultados.push(dato);
 
             }
 
         }
 
-        mostrarServicios(serviciosActualizados);
+        mostrarServicios(resultados);
 
-        seleccionarServicio(actualizado);
+        enlaceUtilidad.href = `/consultar-utilidad.html?servicio=${encodeURIComponent(idServicio)}`;
+
+        enlaceUtilidad.hidden = false;
 
         mostrarMensajeServicios(respuesta.mensajes[0]);
 
@@ -324,10 +295,54 @@ formularioEstado.addEventListener('submit', async function (evento) {
 
     } finally {
 
-        actualizacionEnCurso = false;
+        finalizacionEnCurso = false;
 
         actualizarDisponibilidadServicios();
 
     }
 
-});
+}
+
+async function cargarCatalogosServicio() {
+
+    actualizarDisponibilidadServicios();
+
+    try {
+
+        const respuestas = await Promise.all([
+            SeguridadKetra.solicitar(`${baseServicios}/estados`),
+            SeguridadKetra.solicitar(`${baseServicios}/estado-finalizado`),
+            SeguridadKetra.solicitar(`${baseServicios}/transiciones-finalizacion`)
+        ]);
+
+        estadosServicio = respuestas[0].datos;
+
+        idEstadoFinalizado = respuestas[1].datos[0].id;
+
+        transicionesFinalizacion = respuestas[2].datos;
+
+        const selector = document.getElementById('filtro-estado');
+
+        selector.replaceChildren(new Option('Todos los estados', ''));
+
+        for (const estado of estadosServicio) {
+
+            selector.add(new Option(estado.nombre, estado.id));
+
+        }
+
+        cargandoCatalogos = false;
+
+    } catch (error) {
+
+        mostrarMensajeServicios(error.message, true);
+
+    } finally {
+
+        actualizarDisponibilidadServicios();
+
+    }
+
+}
+
+cargarCatalogosServicio();

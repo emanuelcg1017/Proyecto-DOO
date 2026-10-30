@@ -29,17 +29,17 @@ public class CEDISqlServerDAO extends SqlDAO implements CEDIDAO {
 	public CEDIEntidad consultarPorId(UUID id) {
 		
 		final String sql = """
-				SELECT
-					ced.id AS id,
-					ced.nombre AS nombre,
-					dir.id AS dir_id,
-					dir.nombre AS dir_nombre,
-					dir.idBarrio AS dir_idBarrio,
-					dir.idTipoDireccion AS dir_idTipoDireccion
-				FROM CEDI ced
-				INNER JOIN Direccion dir ON ced.idDireccion = dir.id
-				WHERE ced.id = ?
-				""";
+                SELECT
+                    ced.id AS id,
+                    ced.nombre AS nombre,
+                    dir.id AS dir_id,
+                    dir.nombre AS dir_nombre,
+                    dir.idBarrio AS dir_idBarrio,
+                    dir.idTipoDireccion AS dir_idTipoDireccion
+                FROM CEDI ced
+                INNER JOIN Direccion dir ON ced.idDireccion = dir.id
+                WHERE ced.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -73,16 +73,16 @@ public class CEDISqlServerDAO extends SqlDAO implements CEDIDAO {
 	public List<CEDIEntidad> consultarPorFiltro(CEDIEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					ced.id AS id,
-					ced.nombre AS nombre,
-					dir.id AS dir_id,
-					dir.nombre AS dir_nombre,
-					dir.idBarrio AS dir_idBarrio,
-					dir.idTipoDireccion AS dir_idTipoDireccion
-				FROM CEDI ced
-				INNER JOIN Direccion dir ON ced.idDireccion = dir.id
-				""");
+                SELECT
+                    ced.id AS id,
+                    ced.nombre AS nombre,
+                    dir.id AS dir_id,
+                    dir.nombre AS dir_nombre,
+                    dir.idBarrio AS dir_idBarrio,
+                    dir.idTipoDireccion AS dir_idTipoDireccion
+                FROM CEDI ced
+                INNER JOIN Direccion dir ON ced.idDireccion = dir.id
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 
@@ -147,13 +147,13 @@ public class CEDISqlServerDAO extends SqlDAO implements CEDIDAO {
 	public void crear(CEDIEntidad entidad) {
 
 		final String sql = """
-				INSERT INTO CEDI (
-					id,
-					nombre,
-					idDireccion
-				)
-				VALUES (?, ?, ?)
-				""";
+                INSERT INTO CEDI (
+                    id,
+                    nombre,
+                    idDireccion
+                )
+                VALUES (?, ?, ?)
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -183,12 +183,12 @@ public class CEDISqlServerDAO extends SqlDAO implements CEDIDAO {
 	public void actualizar(UUID id, CEDIEntidad entidad) {
 
 		final String sql = """
-				UPDATE CEDI
-				SET
-					nombre = ?,
-					idDireccion = ?
-				WHERE id = ?
-				""";
+                UPDATE CEDI
+                SET
+                    nombre = ?,
+                    idDireccion = ?
+                WHERE id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 

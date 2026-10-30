@@ -27,16 +27,17 @@
   <div class="workspace">
     <header class="topbar"><span>Operación / Servicios</span><span class="user"><span class="avatar" aria-hidden="true">U</span><span data-nombre-usuario>Cuenta Google</span><button type="button" class="session-exit" data-cerrar-sesion>Cerrar sesión</button></span></header>
     <main class="container-fluid">
-      <div class="page-heading"><span class="eyebrow">SERVICIOS</span><h1>Consultar y actualizar estado</h1><p>Busca un servicio, revisa su información y selecciona el siguiente estado permitido.</p></div>
+      <div class="page-heading"><span class="eyebrow">SERVICIOS</span><h1>Consultar y finalizar servicios</h1><p>Busca un servicio y finalízalo para generar automáticamente su utilidad.</p></div>
       <form id="consulta-servicios" class="filter-card" data-api-base="/api/v1/servicios">
         <div class="service-input"><label class="form-label" for="numero">Número de servicio</label><input class="form-control" id="numero" maxlength="30" placeholder="Todos los servicios"></div>
-        <div class="service-input"><label class="form-label" for="filtro-estado">Estado</label><select class="form-select" id="filtro-estado"><option value="">Todos los estados</option><option>Registrado</option><option>En ejecución</option><option>Finalizado</option><option>Cancelado</option></select></div>
+        <div class="service-input"><label class="form-label" for="filtro-estado">Estado</label><select class="form-select" id="filtro-estado"><option value="">Todos los estados</option></select></div>
         <button class="btn btn-primary" type="submit">Consultar servicios</button>
       </form>
       <div class="feedback" id="mensaje-servicios" role="status" aria-live="polite">Consulta todos los servicios o utiliza los filtros.</div>
+      <p><a id="utilidad-generada" class="ver-utilidad" hidden>Consultar utilidad generada</a></p>
       <div class="service-layout">
         <section class="panel"><div class="panel-heading"><h2>Servicios encontrados</h2><span id="cantidad" class="section-total">0 servicios</span></div><div class="table-responsive"><table class="table"><thead><tr><th scope="col">Número</th><th scope="col">Fecha</th><th scope="col">Estado</th><th scope="col">Acción</th></tr></thead><tbody id="lista-servicios"><tr><td colspan="4" class="empty-services">Consulta los servicios para ver los resultados.</td></tr></tbody></table></div></section>
-        <section class="panel"><div class="panel-heading"><h2>Actualizar estado</h2></div><form id="actualizar-estado" class="state-form"><input id="id-servicio" type="hidden"><label for="numero-seleccionado" class="form-label">Número de servicio</label><input id="numero-seleccionado" class="form-control" readonly placeholder="Selecciona un servicio"><label for="fecha-seleccionada" class="form-label">Fecha del servicio</label><input id="fecha-seleccionada" class="form-control" readonly><label for="estado-actual" class="form-label">Estado actual</label><input id="estado-actual" class="form-control" readonly><label for="nuevo-estado" class="form-label">Nuevo estado</label><select id="nuevo-estado" class="form-select" disabled><option value="">Selecciona un servicio</option></select><p class="state-note" id="nota-estado">El número y la fecha del servicio se conservan.</p><button id="guardar-estado" class="btn btn-primary" type="submit" disabled>Actualizar estado</button></form></section>
+
       </div>
     </main>
   </div>

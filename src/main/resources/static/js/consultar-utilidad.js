@@ -12,6 +12,8 @@ const mensajeUtilidad = document.getElementById('mensaje');
 
 let consultaUtilidadEnCurso = false;
 
+const serviciosDisponibles = new Set();
+
 const formatoMoneda = new Intl.NumberFormat('es-CO', {
     style: 'currency',
     currency: 'COP',
@@ -61,7 +63,9 @@ async function cargarServiciosFinalizados() {
 
         const parametros = new URLSearchParams();
 
-        parametros.set('estado', 'Finalizado');
+        const respuestaEstado = await solicitarDatos('/api/v1/servicios/estado-finalizado');
+
+        parametros.set('estado.id', respuestaEstado.datos[0].id);
 
         const respuesta = await solicitarDatos(`/api/v1/servicios?${parametros}`);
 
@@ -69,7 +73,11 @@ async function cargarServiciosFinalizados() {
 
         selectorServicio.replaceChildren(new Option('Seleccione un servicio', ''));
 
+        serviciosDisponibles.clear();
+
         for (const servicio of servicios) {
+
+            serviciosDisponibles.add(servicio.id);
 
             selectorServicio.add(new Option(servicio.numeroServicio, servicio.id));
 
@@ -84,6 +92,18 @@ async function cargarServiciosFinalizados() {
         } else {
 
             mostrarMensajeUtilidad('Selecciona un servicio y consulta su utilidad.');
+
+            const seleccionado = new URLSearchParams(window.location.search).get('servicio');
+
+            if (seleccionado && serviciosDisponibles.has(seleccionado)) {
+
+                selectorServicio.value = seleccionado;
+
+                botonConsultar.disabled = false;
+
+                formularioUtilidad.requestSubmit();
+
+            }
 
         }
 
@@ -163,16 +183,6 @@ function mostrarTabla(id, filas, columnas) {
 
                 etiqueta.textContent = valor;
 
-                if (valor === 'Anulada' || valor === 'Cancelado') {
-
-                    etiqueta.classList.add('status-cancelado');
-
-                } else if (valor !== 'Pagada' && valor !== 'Entregada' && valor !== 'Finalizado') {
-
-                    etiqueta.classList.add('status-pendiente');
-
-                }
-
                 celda.append(etiqueta);
 
             } else if (columna.importe) {
@@ -213,7 +223,7 @@ function mostrarUtilidad(utilidad) {
 
     mostrarTexto('fecha-servicio', formatearFecha(servicio.fechaServicio));
 
-    mostrarTexto('estado-servicio', servicio.estado);
+    mostrarTexto('estado-servicio', servicio.estado.nombre);
 
     mostrarTexto('total-ingresos', formatoMoneda.format(utilidad.valorIngresos));
 
@@ -229,20 +239,20 @@ function mostrarUtilidad(utilidad) {
         {clave: 'numeroFactura'},
         {clave: 'fechaFactura', fecha: true},
         {clave: 'ingresos', importe: true},
-        {clave: 'estadoFactura', estado: true}
+        {clave: 'estadoFactura.nombre', estado: true}
     ]);
 
     mostrarTabla('entregas', utilidad.entregas, [
         {clave: 'codigoEntrega'},
         {clave: 'fechaEntrega', fecha: true},
-        {clave: 'estadoEntrega', estado: true}
+        {clave: 'estadoEntrega.nombre', estado: true}
     ]);
 
     mostrarTabla('detalles', utilidad.detallesEntrega, [
         {clave: 'numeroDetalleEntrega'},
         {clave: 'entrega.codigoEntrega'},
         {clave: 'pedido.numeroPedido'},
-        {clave: 'CEDIOrigen.nombre'},
+        {clave: 'cediOrigen.nombre'},
         {clave: 'direccionDestino.nombre'},
         {clave: 'distanciaKM', distancia: true}
     ]);
@@ -261,7 +271,7 @@ selectorServicio.addEventListener('change', function () {
 
     resultadoUtilidad.hidden = true;
 
-    botonConsultar.disabled = !selectorServicio.value;
+    botonConsultar.disabled = !serviciosDisponibles.has(selectorServicio.value);
 
     mostrarMensajeUtilidad('Selecciona un servicio y consulta su utilidad.');
 
@@ -273,7 +283,7 @@ formularioUtilidad.addEventListener('submit', async function (evento) {
 
     const idServicio = selectorServicio.value;
 
-    if (!idServicio || botonConsultar.disabled || consultaUtilidadEnCurso) {
+    if (!serviciosDisponibles.has(idServicio) || botonConsultar.disabled || consultaUtilidadEnCurso) {
 
         return;
 
@@ -317,7 +327,7 @@ formularioUtilidad.addEventListener('submit', async function (evento) {
 
         selectorServicio.disabled = false;
 
-        botonConsultar.disabled = !selectorServicio.value;
+        botonConsultar.disabled = !serviciosDisponibles.has(selectorServicio.value);
 
         resultadoUtilidad.setAttribute('aria-busy', 'false');
 

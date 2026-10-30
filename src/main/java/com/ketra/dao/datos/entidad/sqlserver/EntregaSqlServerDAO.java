@@ -1,5 +1,7 @@
 package com.ketra.dao.datos.entidad.sqlserver;
 
+import com.ketra.entidad.EstadoEntregaEntidad;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,24 +31,27 @@ public class EntregaSqlServerDAO extends SqlDAO implements EntregaDAO {
 	public EntregaEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					ent.id AS id,
-					ent.codigoEntrega AS codigoEntrega,
-					ent.fechaEntrega AS fechaEntrega,
-					ent.estadoEntrega AS estadoEntrega,
-					per.id AS per_id,
-					per.numeroIdentificacion AS per_numeroIdentificacion,
-					per.primerNombre AS per_primerNombre,
-					per.segundoNombre AS per_segundoNombre,
-					per.primerApellido AS per_primerApellido,
-					per.segundoApellido AS per_segundoApellido,
-					per.numeroTelefonico AS per_numeroTelefonico,
-					per.correoElectronico AS per_correoElectronico,
-					per.idTipoDocumento AS per_idTipoDocumento
-				FROM Entrega ent
-				INNER JOIN Persona per ON ent.idPersona = per.id
-				WHERE ent.id = ?
-				""";
+                SELECT
+                    ent.id AS id,
+                    ent.codigoEntrega AS codigoEntrega,
+                    ent.fechaEntrega AS fechaEntrega,
+                    ese.id AS estadoEntrega_id,
+                    ese.codigo AS estadoEntrega_codigo,
+                    ese.nombre AS estadoEntrega_nombre,
+                    per.id AS per_id,
+                    per.numeroIdentificacion AS per_numeroIdentificacion,
+                    per.primerNombre AS per_primerNombre,
+                    per.segundoNombre AS per_segundoNombre,
+                    per.primerApellido AS per_primerApellido,
+                    per.segundoApellido AS per_segundoApellido,
+                    per.numeroTelefonico AS per_numeroTelefonico,
+                    per.correoElectronico AS per_correoElectronico,
+                    per.idTipoDocumento AS per_idTipoDocumento
+                FROM Entrega ent
+                INNER JOIN EstadoEntrega ese ON ent.idEstadoEntrega = ese.id
+                INNER JOIN Persona per ON ent.idPersona = per.id
+                WHERE ent.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -80,23 +85,26 @@ public class EntregaSqlServerDAO extends SqlDAO implements EntregaDAO {
 	public List<EntregaEntidad> consultarPorFiltro(EntregaEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					ent.id AS id,
-					ent.codigoEntrega AS codigoEntrega,
-					ent.fechaEntrega AS fechaEntrega,
-					ent.estadoEntrega AS estadoEntrega,
-					per.id AS per_id,
-					per.numeroIdentificacion AS per_numeroIdentificacion,
-					per.primerNombre AS per_primerNombre,
-					per.segundoNombre AS per_segundoNombre,
-					per.primerApellido AS per_primerApellido,
-					per.segundoApellido AS per_segundoApellido,
-					per.numeroTelefonico AS per_numeroTelefonico,
-					per.correoElectronico AS per_correoElectronico,
-					per.idTipoDocumento AS per_idTipoDocumento
-				FROM Entrega ent
-				INNER JOIN Persona per ON ent.idPersona = per.id
-				""");
+                SELECT
+                    ent.id AS id,
+                    ent.codigoEntrega AS codigoEntrega,
+                    ent.fechaEntrega AS fechaEntrega,
+                    ese.id AS estadoEntrega_id,
+                    ese.codigo AS estadoEntrega_codigo,
+                    ese.nombre AS estadoEntrega_nombre,
+                    per.id AS per_id,
+                    per.numeroIdentificacion AS per_numeroIdentificacion,
+                    per.primerNombre AS per_primerNombre,
+                    per.segundoNombre AS per_segundoNombre,
+                    per.primerApellido AS per_primerApellido,
+                    per.segundoApellido AS per_segundoApellido,
+                    per.numeroTelefonico AS per_numeroTelefonico,
+                    per.correoElectronico AS per_correoElectronico,
+                    per.idTipoDocumento AS per_idTipoDocumento
+                FROM Entrega ent
+                INNER JOIN EstadoEntrega ese ON ent.idEstadoEntrega = ese.id
+                INNER JOIN Persona per ON ent.idPersona = per.id
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 
@@ -115,9 +123,19 @@ public class EntregaSqlServerDAO extends SqlDAO implements EntregaDAO {
 			parametros.add(java.sql.Date.valueOf(filtro.getFechaEntrega()));
 		}
 
-		if (!UtilTexto.getUtilTexto().esVacia(filtro.getEstadoEntrega())) {
-			condiciones.add("ent.estadoEntrega = ?");
-			parametros.add(filtro.getEstadoEntrega());
+		if (!UtilUUID.UUID_DEFECTO.equals(filtro.getEstadoEntrega().getId())) {
+			condiciones.add("ent.idEstadoEntrega = ?");
+			parametros.add(filtro.getEstadoEntrega().getId());
+		}
+
+		if (!UtilTexto.getUtilTexto().esVacia(filtro.getEstadoEntrega().getCodigo())) {
+			condiciones.add("ese.codigo = ?");
+			parametros.add(filtro.getEstadoEntrega().getCodigo());
+		}
+
+		if (!UtilTexto.getUtilTexto().esVacia(filtro.getEstadoEntrega().getNombre())) {
+			condiciones.add("ese.nombre = ?");
+			parametros.add(filtro.getEstadoEntrega().getNombre());
 		}
 
 		if (!UtilUUID.UUID_DEFECTO.equals(filtro.getPersona().getId())) {
@@ -171,22 +189,22 @@ public class EntregaSqlServerDAO extends SqlDAO implements EntregaDAO {
 	public void crear(EntregaEntidad entidad) {
 
 		final String sql = """
-				INSERT INTO Entrega (
-					id,
-					codigoEntrega,
-					fechaEntrega,
-					estadoEntrega,
-					idPersona
-				)
-				VALUES (?, ?, ?, ?, ?)
-				""";
+                INSERT INTO Entrega (
+                    id,
+                    codigoEntrega,
+                    fechaEntrega,
+                    idEstadoEntrega,
+                    idPersona
+                )
+                VALUES (?, ?, ?, ?, ?)
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
 			sentencia.setObject(1, entidad.getId());
 			sentencia.setString(2, entidad.getCodigoEntrega());
 			sentencia.setDate(3, java.sql.Date.valueOf(entidad.getFechaEntrega()));
-			sentencia.setString(4, entidad.getEstadoEntrega());
+			sentencia.setObject(4, entidad.getEstadoEntrega().getId());
 			sentencia.setObject(5, entidad.getPersona().getId());
 
 			sentencia.executeUpdate();
@@ -211,14 +229,14 @@ public class EntregaSqlServerDAO extends SqlDAO implements EntregaDAO {
 	public void actualizar(UUID id, EntregaEntidad entidad) {
 
 		final String sql = """
-				UPDATE Entrega
-				SET estadoEntrega = ?
-				WHERE id = ?
-				""";
+                UPDATE Entrega
+                SET idEstadoEntrega = ?
+                WHERE id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
-			sentencia.setString(1, entidad.getEstadoEntrega());
+			sentencia.setObject(1, entidad.getEstadoEntrega().getId());
 			sentencia.setObject(2, id);
 
 			if (sentencia.executeUpdate() != 1) {
@@ -239,66 +257,6 @@ public class EntregaSqlServerDAO extends SqlDAO implements EntregaDAO {
 					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_ACTUALIZAR, excepcion.getMessage()),
 					excepcion);
 		}
-	}
-
-	@Override
-	public List<EntregaEntidad> consultarPorServicio(UUID idServicio) {
-
-		final String sql = """
-				SELECT DISTINCT
-					ent.id AS id,
-					ent.codigoEntrega AS codigoEntrega,
-					ent.fechaEntrega AS fechaEntrega,
-					ent.estadoEntrega AS estadoEntrega,
-					per.id AS per_id,
-					per.numeroIdentificacion AS per_numeroIdentificacion,
-					per.primerNombre AS per_primerNombre,
-					per.segundoNombre AS per_segundoNombre,
-					per.primerApellido AS per_primerApellido,
-					per.segundoApellido AS per_segundoApellido,
-					per.numeroTelefonico AS per_numeroTelefonico,
-					per.correoElectronico AS per_correoElectronico,
-					per.idTipoDocumento AS per_idTipoDocumento
-				FROM Entrega ent
-				INNER JOIN Persona per ON ent.idPersona = per.id
-				INNER JOIN ServicioEntrega sen ON sen.idEntrega = ent.id
-				WHERE sen.idServicio = ?
-				""";
-
-		final List<EntregaEntidad> resultados = new ArrayList<>();
-
-		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
-
-			sentencia.setObject(1, idServicio);
-
-			try (ResultSet resultado = sentencia.executeQuery()) {
-
-				while (resultado.next()) {
-
-					resultados.add(construirEntregaEntidad(resultado));
-
-				}
-
-			}
-
-		} catch (SQLException excepcion) {
-
-			throw KETRADatosException.crear(
-					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
-					excepcion);
-
-		} catch (Exception excepcion) {
-
-			throw KETRADatosException.crear(
-					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
-					excepcion);
-
-		}
-
-		return resultados;
-
 	}
 
 	private EntregaEntidad construirEntregaEntidad(final ResultSet resultado) throws SQLException {
@@ -323,7 +281,11 @@ public class EntregaSqlServerDAO extends SqlDAO implements EntregaDAO {
 				.id(UUID.fromString(resultado.getString("id")))
 				.codigoEntrega(resultado.getString("codigoEntrega"))
 				.fechaEntrega(resultado.getDate("fechaEntrega").toLocalDate())
-				.estadoEntrega(resultado.getString("estadoEntrega"))
+				.estadoEntrega(new EstadoEntregaEntidad.Builder()
+						.id(UUID.fromString(resultado.getString("estadoEntrega_id")))
+						.codigo(resultado.getString("estadoEntrega_codigo"))
+						.nombre(resultado.getString("estadoEntrega_nombre"))
+						.build())
 				.persona(per)
 				.build();
 	}

@@ -10,14 +10,14 @@ public class EmpresaDominio {
 
 	private UUID id;
 	private String nombre;
-	private String NIT;
+	private String nit;
 	private String correoContacto;
 	private String telefonoContacto;
 
 	EmpresaDominio(Builder builder) {
 		this.id = builder.id;
 		this.nombre = builder.nombre;
-		this.NIT = builder.NIT;
+		this.nit = builder.nit;
 		this.correoContacto = builder.correoContacto;
 		this.telefonoContacto = builder.telefonoContacto;
 	}
@@ -30,8 +30,8 @@ public class EmpresaDominio {
 		return nombre;
 	}
 
-	public String getNIT() {
-		return NIT;
+	public String getNit() {
+		return nit;
 	}
 
 	public String getCorreoContacto() {
@@ -46,14 +46,14 @@ public class EmpresaDominio {
 
 		private UUID id;
 		private String nombre;
-		private String NIT;
+		private String nit;
 		private String correoContacto;
 		private String telefonoContacto;
 
 		public Builder() {
 			id = UtilUUID.obtenerValorDefecto(id);
 			nombre = UtilTexto.VACIO;
-			NIT = UtilTexto.VACIO;
+			nit = UtilTexto.VACIO;
 			correoContacto = UtilTexto.VACIO;
 			telefonoContacto = UtilTexto.VACIO;
 		}
@@ -68,8 +68,8 @@ public class EmpresaDominio {
 			return this;
 		}
 
-		public Builder NIT(String NIT) {
-			this.NIT = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(NIT);
+		public Builder nit(String nit) {
+			this.nit = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nit);
 			return this;
 		}
 

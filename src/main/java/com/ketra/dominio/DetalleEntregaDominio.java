@@ -14,7 +14,7 @@ public class DetalleEntregaDominio {
 	private String numeroDetalleEntrega;
 	private PedidoDominio pedido;
 	private EntregaDominio entrega;
-	private CEDIDominio CEDIOrigen;
+	private CEDIDominio cediOrigen;
 	private DireccionDominio direccionDestino;
 	private Double distanciaKM;
 
@@ -23,7 +23,7 @@ public class DetalleEntregaDominio {
 		this.numeroDetalleEntrega = builder.numeroDetalleEntrega;
 		this.pedido = builder.pedido;
 		this.entrega = builder.entrega;
-		this.CEDIOrigen = builder.CEDIOrigen;
+		this.cediOrigen = builder.cediOrigen;
 		this.direccionDestino = builder.direccionDestino;
 		this.distanciaKM = builder.distanciaKM;
 	}
@@ -44,8 +44,8 @@ public class DetalleEntregaDominio {
 		return entrega;
 	}
 
-	public CEDIDominio getCEDIOrigen() {
-		return CEDIOrigen;
+	public CEDIDominio getCediOrigen() {
+		return cediOrigen;
 	}
 
 	public DireccionDominio getDireccionDestino() {
@@ -62,7 +62,7 @@ public class DetalleEntregaDominio {
 		private String numeroDetalleEntrega;
 		private PedidoDominio pedido;
 		private EntregaDominio entrega;
-		private CEDIDominio CEDIOrigen;
+		private CEDIDominio cediOrigen;
 		private DireccionDominio direccionDestino;
 		private Double distanciaKM;
 
@@ -71,7 +71,7 @@ public class DetalleEntregaDominio {
 			numeroDetalleEntrega = UtilTexto.VACIO;
 			pedido = UtilObjeto.obtenerValorDefectoSiNulo(pedido, new PedidoDominio.Builder().build());
 			entrega = UtilObjeto.obtenerValorDefectoSiNulo(entrega, new EntregaDominio.Builder().build());
-			CEDIOrigen = UtilObjeto.obtenerValorDefectoSiNulo(CEDIOrigen, new CEDIDominio.Builder().build());
+			cediOrigen = UtilObjeto.obtenerValorDefectoSiNulo(cediOrigen, new CEDIDominio.Builder().build());
 			direccionDestino = UtilObjeto.obtenerValorDefectoSiNulo(direccionDestino, new DireccionDominio.Builder().build());
 			distanciaKM = UtilNumero.CERO_DECIMAL;
 		}
@@ -96,8 +96,8 @@ public class DetalleEntregaDominio {
 			return this;
 		}
 
-		public Builder CEDIOrigen(CEDIDominio CEDIOrigen) {
-			this.CEDIOrigen = UtilObjeto.obtenerValorDefectoSiNulo(CEDIOrigen, new CEDIDominio.Builder().build());
+		public Builder cediOrigen(CEDIDominio cediOrigen) {
+			this.cediOrigen = UtilObjeto.obtenerValorDefectoSiNulo(cediOrigen, new CEDIDominio.Builder().build());
 			return this;
 		}
 
