@@ -7,12 +7,10 @@ import com.ketra.dto.ServicioDTO;
 
 public interface ServicioFachada {
 
-	ServicioDTO consultarPorId(UUID id);
+    ServicioDTO consultarPorId(UUID id);
 
-	List<ServicioDTO> consultarPorFiltro(ServicioDTO filtro);
+    List<ServicioDTO> consultarPorFiltro(ServicioDTO filtro);
 
-	List<ServicioDTO> consultarTodos();
-
-	ServicioDTO actualizarEstado(UUID id, ServicioDTO servicio);
+    ServicioDTO finalizarServicio(UUID idServicio);
 
 }

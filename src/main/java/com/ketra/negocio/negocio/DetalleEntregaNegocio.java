@@ -1,12 +1,12 @@
 package com.ketra.negocio.negocio;
 
+import com.ketra.dominio.EntregaDominio;
 import java.util.List;
-import java.util.UUID;
 
 import com.ketra.dominio.DetalleEntregaDominio;
 
 public interface DetalleEntregaNegocio {
 
-	List<DetalleEntregaDominio> consultarPorServicio(UUID idServicio);
+	List<DetalleEntregaDominio> consultarDetallesEntrega(List<EntregaDominio> entregas);
 
 }

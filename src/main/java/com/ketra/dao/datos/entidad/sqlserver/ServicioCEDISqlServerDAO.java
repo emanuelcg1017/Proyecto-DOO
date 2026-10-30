@@ -1,5 +1,7 @@
 package com.ketra.dao.datos.entidad.sqlserver;
 
+import com.ketra.entidad.EstadoServicioEntidad;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,24 +32,27 @@ public class ServicioCEDISqlServerDAO extends SqlDAO implements ServicioCEDIDAO 
 	public ServicioCEDIEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					sce.id AS id,
-					ser.id AS ser_id,
-					ser.numeroServicio AS ser_numeroServicio,
-					ser.fechaServicio AS ser_fechaServicio,
-					ser.estado AS ser_estado,
-					ced.id AS ced_id,
-					ced.nombre AS ced_nombre,
-					ced.idDireccion AS ced_idDireccion,
-					ped.id AS ped_id,
-					ped.numeroPedido AS ped_numeroPedido,
-					ped.fechaPedido AS ped_fechaPedido
-				FROM ServicioCEDI sce
-				INNER JOIN Servicio ser ON sce.idServicio = ser.id
-				INNER JOIN CEDI ced ON sce.idCedi = ced.id
-				INNER JOIN Pedido ped ON sce.idPedido = ped.id
-				WHERE sce.id = ?
-				""";
+                SELECT
+                    sce.id AS id,
+                    ser.id AS ser_id,
+                    ser.numeroServicio AS ser_numeroServicio,
+                    ser.fechaServicio AS ser_fechaServicio,
+                    ess.id AS ser_estado_id,
+                    ess.codigo AS ser_estado_codigo,
+                    ess.nombre AS ser_estado_nombre,
+                    ced.id AS ced_id,
+                    ced.nombre AS ced_nombre,
+                    ced.idDireccion AS ced_idDireccion,
+                    ped.id AS ped_id,
+                    ped.numeroPedido AS ped_numeroPedido,
+                    ped.fechaPedido AS ped_fechaPedido
+                FROM ServicioCEDI sce
+                INNER JOIN Servicio ser ON sce.idServicio = ser.id
+                INNER JOIN EstadoServicio ess ON ser.idEstadoServicio = ess.id
+                INNER JOIN CEDI ced ON sce.idCedi = ced.id
+                INNER JOIN Pedido ped ON sce.idPedido = ped.id
+                WHERE sce.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -81,23 +86,26 @@ public class ServicioCEDISqlServerDAO extends SqlDAO implements ServicioCEDIDAO 
 	public List<ServicioCEDIEntidad> consultarPorFiltro(ServicioCEDIEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					sce.id AS id,
-					ser.id AS ser_id,
-					ser.numeroServicio AS ser_numeroServicio,
-					ser.fechaServicio AS ser_fechaServicio,
-					ser.estado AS ser_estado,
-					ced.id AS ced_id,
-					ced.nombre AS ced_nombre,
-					ced.idDireccion AS ced_idDireccion,
-					ped.id AS ped_id,
-					ped.numeroPedido AS ped_numeroPedido,
-					ped.fechaPedido AS ped_fechaPedido
-				FROM ServicioCEDI sce
-				INNER JOIN Servicio ser ON sce.idServicio = ser.id
-				INNER JOIN CEDI ced ON sce.idCedi = ced.id
-				INNER JOIN Pedido ped ON sce.idPedido = ped.id
-				""");
+                SELECT
+                    sce.id AS id,
+                    ser.id AS ser_id,
+                    ser.numeroServicio AS ser_numeroServicio,
+                    ser.fechaServicio AS ser_fechaServicio,
+                    ess.id AS ser_estado_id,
+                    ess.codigo AS ser_estado_codigo,
+                    ess.nombre AS ser_estado_nombre,
+                    ced.id AS ced_id,
+                    ced.nombre AS ced_nombre,
+                    ced.idDireccion AS ced_idDireccion,
+                    ped.id AS ped_id,
+                    ped.numeroPedido AS ped_numeroPedido,
+                    ped.fechaPedido AS ped_fechaPedido
+                FROM ServicioCEDI sce
+                INNER JOIN Servicio ser ON sce.idServicio = ser.id
+                INNER JOIN EstadoServicio ess ON ser.idEstadoServicio = ess.id
+                INNER JOIN CEDI ced ON sce.idCedi = ced.id
+                INNER JOIN Pedido ped ON sce.idPedido = ped.id
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 
@@ -111,9 +119,9 @@ public class ServicioCEDISqlServerDAO extends SqlDAO implements ServicioCEDIDAO 
 			parametros.add(filtro.getServicio().getId());
 		}
 
-		if (!UtilUUID.UUID_DEFECTO.equals(filtro.getCEDI().getId())) {
+		if (!UtilUUID.UUID_DEFECTO.equals(filtro.getCedi().getId())) {
 			condiciones.add("sce.idCedi = ?");
-			parametros.add(filtro.getCEDI().getId());
+			parametros.add(filtro.getCedi().getId());
 		}
 
 		if (!UtilUUID.UUID_DEFECTO.equals(filtro.getPedido().getId())) {
@@ -169,7 +177,11 @@ public class ServicioCEDISqlServerDAO extends SqlDAO implements ServicioCEDIDAO 
 				.id(UUID.fromString(resultado.getString("ser_id")))
 				.numeroServicio(resultado.getString("ser_numeroServicio"))
 				.fechaServicio(resultado.getDate("ser_fechaServicio").toLocalDate())
-				.estado(resultado.getString("ser_estado"))
+				.estado(new EstadoServicioEntidad.Builder()
+						.id(UUID.fromString(resultado.getString("ser_estado_id")))
+						.codigo(resultado.getString("ser_estado_codigo"))
+						.nombre(resultado.getString("ser_estado_nombre"))
+						.build())
 				.build();
 
 		final DireccionEntidad dir = new DireccionEntidad.Builder()
@@ -191,7 +203,7 @@ public class ServicioCEDISqlServerDAO extends SqlDAO implements ServicioCEDIDAO 
 		return new ServicioCEDIEntidad.Builder()
 				.id(UUID.fromString(resultado.getString("id")))
 				.servicio(ser)
-				.CEDI(ced)
+				.cedi(ced)
 				.pedido(ped)
 				.build();
 	}

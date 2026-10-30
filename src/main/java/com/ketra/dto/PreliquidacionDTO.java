@@ -20,7 +20,7 @@ public class PreliquidacionDTO {
 
 	private LocalDate fechaPreliquidacion;
 
-	private String estado;
+	private EstadoPreliquidacionDTO estado;
 
 	public PreliquidacionDTO() {
 
@@ -34,7 +34,7 @@ public class PreliquidacionDTO {
 
 		setFechaPreliquidacion(UtilFecha.FECHA_DEFECTO);
 
-		setEstado(UtilTexto.VACIO);
+		setEstado(new EstadoPreliquidacionDTO());
 
 	}
 
@@ -98,15 +98,15 @@ public class PreliquidacionDTO {
 
 	}
 
-	public String getEstado() {
+	public EstadoPreliquidacionDTO getEstado() {
 
 		return estado;
 
 	}
 
-	public void setEstado(String estado) {
+	public void setEstado(EstadoPreliquidacionDTO estado) {
 
-		this.estado = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(estado);
+		this.estado = UtilObjeto.obtenerValorDefectoSiNulo(estado, new EstadoPreliquidacionDTO());
 
 	}
 

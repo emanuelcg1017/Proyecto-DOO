@@ -41,9 +41,9 @@ public class DetalleEntregaEntidadAssembler implements EntidadAssembler<DetalleE
 				.build();
 
 		var cediOrigen = new CEDIEntidad.Builder()
-				.id(datos.getCEDIOrigen().getId())
-				.nombre(datos.getCEDIOrigen().getNombre())
-				.direccion(new DireccionEntidad.Builder().id(datos.getCEDIOrigen().getDireccion().getId()).build())
+				.id(datos.getCediOrigen().getId())
+				.nombre(datos.getCediOrigen().getNombre())
+				.direccion(new DireccionEntidad.Builder().id(datos.getCediOrigen().getDireccion().getId()).build())
 				.build();
 
 		var barrio = new BarrioEntidad.Builder()
@@ -66,7 +66,7 @@ public class DetalleEntregaEntidadAssembler implements EntidadAssembler<DetalleE
 				.numeroDetalleEntrega(datos.getNumeroDetalleEntrega())
 				.pedido(pedido)
 				.entrega(EntregaEntidadAssembler.getInstance().convertirAEntidad(datos.getEntrega()))
-				.CEDIOrigen(cediOrigen)
+				.cediOrigen(cediOrigen)
 				.direccionDestino(direccionDestino)
 				.distanciaKM(datos.getDistanciaKM())
 				.build();
@@ -85,9 +85,9 @@ public class DetalleEntregaEntidadAssembler implements EntidadAssembler<DetalleE
 				.build();
 
 		var cediOrigen = new CEDIDominio.Builder()
-				.id(datos.getCEDIOrigen().getId())
-				.nombre(datos.getCEDIOrigen().getNombre())
-				.direccion(new DireccionDominio.Builder().id(datos.getCEDIOrigen().getDireccion().getId()).build())
+				.id(datos.getCediOrigen().getId())
+				.nombre(datos.getCediOrigen().getNombre())
+				.direccion(new DireccionDominio.Builder().id(datos.getCediOrigen().getDireccion().getId()).build())
 				.build();
 
 		var barrio = new BarrioDominio.Builder()
@@ -110,7 +110,7 @@ public class DetalleEntregaEntidadAssembler implements EntidadAssembler<DetalleE
 				.numeroDetalleEntrega(datos.getNumeroDetalleEntrega())
 				.pedido(pedido)
 				.entrega(EntregaEntidadAssembler.getInstance().convertirADominio(datos.getEntrega()))
-				.CEDIOrigen(cediOrigen)
+				.cediOrigen(cediOrigen)
 				.direccionDestino(direccionDestino)
 				.distanciaKM(datos.getDistanciaKM())
 				.build();

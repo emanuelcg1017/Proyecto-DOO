@@ -27,22 +27,22 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 	public PersonaEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					per.id,
-					per.idTipoDocumento,
-					tdo.nombre AS nombreTipoDocumento,
-					per.numeroIdentificacion,
-					per.primerNombre,
-					per.segundoNombre,
-					per.primerApellido,
-					per.segundoApellido,
-					per.numeroTelefonico,
-					per.correoElectronico
-				FROM Persona per
-				INNER JOIN TipoDocumento tdo
-					ON per.idTipoDocumento = tdo.id
-				WHERE per.id = ?
-				""";
+                SELECT
+                    per.id,
+                    per.idTipoDocumento,
+                    tdo.nombre AS nombreTipoDocumento,
+                    per.numeroIdentificacion,
+                    per.primerNombre,
+                    per.segundoNombre,
+                    per.primerApellido,
+                    per.segundoApellido,
+                    per.numeroTelefonico,
+                    per.correoElectronico
+                FROM Persona per
+                INNER JOIN TipoDocumento tdo
+                    ON per.idTipoDocumento = tdo.id
+                WHERE per.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -78,21 +78,21 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 	public List<PersonaEntidad> consultarPorFiltro(PersonaEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					per.id,
-					per.idTipoDocumento,
-					tdo.nombre AS nombreTipoDocumento,
-					per.numeroIdentificacion,
-					per.primerNombre,
-					per.segundoNombre,
-					per.primerApellido,
-					per.segundoApellido,
-					per.numeroTelefonico,
-					per.correoElectronico
-				FROM Persona per
-				INNER JOIN TipoDocumento tdo
-					ON per.idTipoDocumento = tdo.id
-				""");
+                SELECT
+                    per.id,
+                    per.idTipoDocumento,
+                    tdo.nombre AS nombreTipoDocumento,
+                    per.numeroIdentificacion,
+                    per.primerNombre,
+                    per.segundoNombre,
+                    per.primerApellido,
+                    per.segundoApellido,
+                    per.numeroTelefonico,
+                    per.correoElectronico
+                FROM Persona per
+                INNER JOIN TipoDocumento tdo
+                    ON per.idTipoDocumento = tdo.id
+                """);
 
 		final List<String> condiciones = new ArrayList<>();
 
@@ -214,19 +214,19 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 	public void crear(PersonaEntidad entidad) {
 
 		final String sql = """
-				INSERT INTO Persona (
-					id,
-					idTipoDocumento,
-					numeroIdentificacion,
-					primerNombre,
-					segundoNombre,
-					primerApellido,
-					segundoApellido,
-					numeroTelefonico,
-					correoElectronico
-				)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-				""";
+                INSERT INTO Persona (
+                    id,
+                    idTipoDocumento,
+                    numeroIdentificacion,
+                    primerNombre,
+                    segundoNombre,
+                    primerApellido,
+                    segundoApellido,
+                    numeroTelefonico,
+                    correoElectronico
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -262,18 +262,18 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 	public void actualizar(UUID id, PersonaEntidad entidad) {
 
 		final String sql = """
-				UPDATE Persona
-				SET
-					idTipoDocumento = ?,
-					numeroIdentificacion = ?,
-					primerNombre = ?,
-					segundoNombre = ?,
-					primerApellido = ?,
-					segundoApellido = ?,
-					numeroTelefonico = ?,
-					correoElectronico = ?
-				WHERE id = ?
-				""";
+                UPDATE Persona
+                SET
+                    idTipoDocumento = ?,
+                    numeroIdentificacion = ?,
+                    primerNombre = ?,
+                    segundoNombre = ?,
+                    primerApellido = ?,
+                    segundoApellido = ?,
+                    numeroTelefonico = ?,
+                    correoElectronico = ?
+                WHERE id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -309,9 +309,9 @@ public class PersonaSqlServerDAO extends SqlDAO implements PersonaDAO {
 	public void eliminar(UUID id) {
 
 		final String sql = """
-				DELETE FROM Persona
-				WHERE id = ?
-				""";
+                DELETE FROM Persona
+                WHERE id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 

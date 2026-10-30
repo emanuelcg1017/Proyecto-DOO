@@ -6,6 +6,7 @@ import com.ketra.negocio.negocio.reglas.Rule;
 import com.ketra.transversal.catalogo.CatalogoMensajes;
 import com.ketra.transversal.excepciones.KETRANegocioException;
 import com.ketra.transversal.utilitarios.UtilUUID;
+import com.ketra.transversal.utilitarios.UtilObjeto;
 
 public class ValidarDatosGenerarUtilidadRule implements Rule<UUID> {
 
@@ -21,7 +22,8 @@ public class ValidarDatosGenerarUtilidadRule implements Rule<UUID> {
 	@Override
 	public void ejecutar(UUID... datos) {
 
-		final UUID idServicio = datos.length == 0 ? UtilUUID.UUID_DEFECTO : UtilUUID.obtenerValorDefecto(datos[0]);
+		final UUID idServicio = UtilObjeto.esNulo(datos) || datos.length == 0
+				? UtilUUID.UUID_DEFECTO : UtilUUID.obtenerValorDefecto(datos[0]);
 
 		if (UtilUUID.UUID_DEFECTO.equals(idServicio)) {
 

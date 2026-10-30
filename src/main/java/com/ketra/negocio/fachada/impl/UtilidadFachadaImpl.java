@@ -4,98 +4,30 @@ import java.util.UUID;
 
 import com.ketra.dao.factoria.DAOFactory;
 import com.ketra.dto.UtilidadDTO;
-import com.ketra.transversal.utilitarios.UtilUUID;
 import com.ketra.negocio.fachada.UtilidadFachada;
 import com.ketra.negocio.fachada.assembler.impl.CostoRecorridoDTOAssembler;
-import com.ketra.negocio.negocio.impl.CostoRecorridoNegocioImpl;
 import com.ketra.negocio.fachada.assembler.impl.DetalleEntregaDTOAssembler;
-import com.ketra.negocio.negocio.impl.DetalleEntregaNegocioImpl;
 import com.ketra.negocio.fachada.assembler.impl.EntregaDTOAssembler;
-import com.ketra.negocio.negocio.impl.EntregaNegocioImpl;
 import com.ketra.negocio.fachada.assembler.impl.FacturaDTOAssembler;
-import com.ketra.negocio.negocio.impl.FacturaNegocioImpl;
 import com.ketra.negocio.fachada.assembler.impl.UtilidadDTOAssembler;
-import com.ketra.negocio.negocio.UtilidadNegocio;
+import com.ketra.negocio.negocio.impl.CostoRecorridoNegocioImpl;
+import com.ketra.negocio.negocio.impl.DetalleEntregaNegocioImpl;
+import com.ketra.negocio.negocio.impl.EntregaNegocioImpl;
+import com.ketra.negocio.negocio.impl.FacturaNegocioImpl;
 import com.ketra.negocio.negocio.impl.UtilidadNegocioImpl;
 import com.ketra.transversal.catalogo.CatalogoMensajes;
 import com.ketra.transversal.excepciones.KETRAExcepcion;
 import com.ketra.transversal.excepciones.KETRAFachadaException;
+import com.ketra.transversal.utilitarios.UtilUUID;
 
 public class UtilidadFachadaImpl implements UtilidadFachada {
 
-	private final DAOFactory daoFactory;
-
-	private final UtilidadNegocio utilidadNegocio;
-
-	public UtilidadFachadaImpl() {
-
-		daoFactory = DAOFactory.obtenerFactoria();
-
-		utilidadNegocio = new UtilidadNegocioImpl(daoFactory);
-
-	}
-
-	public UtilidadFachadaImpl(DAOFactory daoFactory) {
-
-		this.daoFactory = daoFactory;
-
-		utilidadNegocio = new UtilidadNegocioImpl(daoFactory);
-
-	}
-
-	@Override
-	public UtilidadDTO generarUtilidad(UUID idServicio) {
-
-		boolean transaccionIniciada = false;
-
-		try {
-
-			daoFactory.iniciarTransaccion();
-
-			transaccionIniciada = true;
-
-			var utilidadDominio = utilidadNegocio.generarUtilidad(idServicio);
-
-			var utilidadDTO = UtilidadDTOAssembler.getInstance().convertirADTO(utilidadDominio);
-
-			daoFactory.confirmarTransaccion();
-
-			transaccionIniciada = false;
-
-			return utilidadDTO;
-
-		} catch (KETRAExcepcion excepcion) {
-
-			if (transaccionIniciada) {
-
-				daoFactory.cancelarTransaccion();
-
-			}
-
-			throw excepcion;
-
-		} catch (Exception excepcion) {
-
-			if (transaccionIniciada) {
-
-				daoFactory.cancelarTransaccion();
-
-			}
-
-			var mensajeUsuario = CatalogoMensajes.UtilidadFachadaImpl.ERROR_GENERANDO_UTILIDAD;
-
-			throw KETRAFachadaException.crear(mensajeUsuario, excepcion.getMessage(), excepcion);
-
-		} finally {
-
-			daoFactory.cerrarConexion();
-
-		}
-
-	}
-
 	@Override
 	public UtilidadDTO consultarUtilidadPorServicio(UUID idServicio) {
+
+		var daoFactory = DAOFactory.obtenerFactoria();
+
+		var utilidadNegocio = new UtilidadNegocioImpl(daoFactory);
 
 		try {
 
@@ -113,9 +45,9 @@ public class UtilidadFachadaImpl implements UtilidadFachada {
 
 			var entregas = new EntregaNegocioImpl(daoFactory).consultarPorServicio(idServicio);
 
-			var detalles = new DetalleEntregaNegocioImpl(daoFactory).consultarPorServicio(idServicio);
+			var detalles = new DetalleEntregaNegocioImpl(daoFactory).consultarDetallesEntrega(entregas);
 
-			var costos = new CostoRecorridoNegocioImpl(daoFactory).consultarPorServicio(idServicio);
+			var costos = new CostoRecorridoNegocioImpl(daoFactory).consultarCostosRecorrido(detalles);
 
 			utilidad.setFacturas(FacturaDTOAssembler.getInstance().convertirADTO(facturas));
 

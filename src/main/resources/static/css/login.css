@@ -1,1 +1,84 @@
-.login-page{min-height:100vh;display:grid;place-items:center;margin:0;padding:24px;background:#eef3f8;color:#17324d}.login-card{width:min(100%,440px);padding:36px;background:#fff;border:1px solid #dbe5ef;border-radius:12px;box-shadow:0 12px 36px #17324d0d}.login-brand{display:flex;align-items:center;gap:12px;margin-bottom:30px;font-size:28px;font-weight:800;letter-spacing:1px}.login-brand small{display:block;margin-top:3px;font-size:11px;font-weight:400;letter-spacing:0;color:#63758a}.login-brand .brand-mark{background:#17324d;color:white}.login-card h1{font-size:25px;margin:0 0 12px}.login-card p{font-size:14px;line-height:1.65;color:#63758a}.login-button{width:100%;margin-top:15px;padding:13px 18px;border:0;border-radius:6px;background:#0867e8;color:#fff;font:inherit;font-weight:600;cursor:pointer}.login-button:hover{background:#0056cd}.login-button:disabled{opacity:.65;cursor:wait}.login-message{min-height:44px;margin-bottom:0}.login-message.error{color:#a12b32}
+.login-page {
+    min-height:100vh;
+    display:grid;
+    place-items:center;
+    margin:0;
+    padding:24px;
+    background:#eef3f8;
+    color:#17324d;
+}
+
+.login-card {
+    width:min(100%,440px);
+    padding:36px;
+    background:#fff;
+    border:1px solid #dbe5ef;
+    border-radius:12px;
+    box-shadow:0 12px 36px #17324d0d;
+}
+
+.login-brand {
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:30px;
+    font-size:28px;
+    font-weight:800;
+    letter-spacing:1px;
+}
+
+.login-brand small {
+    display:block;
+    margin-top:3px;
+    font-size:11px;
+    font-weight:400;
+    letter-spacing:0;
+    color:#63758a;
+}
+
+.login-brand .brand-mark {
+    background:#17324d;
+    color:white;
+}
+
+.login-card h1 {
+    font-size:25px;
+    margin:0 0 12px;
+}
+
+.login-card p {
+    font-size:14px;
+    line-height:1.65;
+    color:#63758a;
+}
+
+.login-button {
+    width:100%;
+    margin-top:15px;
+    padding:13px 18px;
+    border:0;
+    border-radius:6px;
+    background:#0867e8;
+    color:#fff;
+    font:inherit;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.login-button:hover {
+    background:#0056cd;
+}
+
+.login-button:disabled {
+    opacity:.65;
+    cursor:wait;
+}
+
+.login-message {
+    min-height:44px;
+    margin-bottom:0;
+}
+
+.login-message.error {
+    color:#a12b32;
+}

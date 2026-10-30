@@ -1,5 +1,7 @@
 package com.ketra.dominio;
 
+import com.ketra.transversal.utilitarios.UtilObjeto;
+
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -12,7 +14,7 @@ public class ServicioDominio {
 	private UUID id;
 	private String numeroServicio;
 	private LocalDate fechaServicio;
-	private String estado;
+	private EstadoServicioDominio estado;
 
 	ServicioDominio(Builder builder) {
 		this.id = builder.id;
@@ -33,7 +35,7 @@ public class ServicioDominio {
 		return fechaServicio;
 	}
 
-	public String getEstado() {
+	public EstadoServicioDominio getEstado() {
 		return estado;
 	}
 
@@ -41,13 +43,13 @@ public class ServicioDominio {
 		private UUID id;
 		private String numeroServicio;
 		private LocalDate fechaServicio;
-		private String estado;
+		private EstadoServicioDominio estado;
 
 		public Builder() {
 			id = UtilUUID.obtenerValorDefecto(id);
 			numeroServicio = UtilTexto.VACIO;
 			fechaServicio = UtilFecha.FECHA_DEFECTO;
-			estado = UtilTexto.VACIO;
+			estado = new EstadoServicioDominio.Builder().build();
 		}
 
 		public Builder id(UUID id) {
@@ -65,8 +67,8 @@ public class ServicioDominio {
 			return this;
 		}
 
-		public Builder estado(String estado) {
-			this.estado = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(estado);
+		public Builder estado(EstadoServicioDominio estado) {
+			this.estado = UtilObjeto.obtenerValorDefectoSiNulo(estado, new EstadoServicioDominio.Builder().build());
 			return this;
 		}
 

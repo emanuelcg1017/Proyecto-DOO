@@ -4,97 +4,133 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.ketra.transversal.catalogo.CatalogoCodigosEstado;
 import com.ketra.dao.factoria.DAOFactory;
+import com.ketra.dominio.EstadoServicioDominio;
 import com.ketra.dominio.ServicioDominio;
+import com.ketra.dominio.TransicionEstadoServicioDominio;
 import com.ketra.entidad.ServicioEntidad;
+import com.ketra.negocio.negocio.EstadoServicioNegocio;
 import com.ketra.negocio.negocio.ServicioNegocio;
 import com.ketra.negocio.negocio.assembler.impl.ServicioEntidadAssembler;
-import com.ketra.negocio.negocio.reglas.impl.servicio.AsegurarActualizacionEstadoServicioPermitidaRule;
+import com.ketra.negocio.negocio.reglas.impl.servicio.AsegurarEntregaEstaEntregadaRule;
+import com.ketra.negocio.negocio.reglas.impl.servicio.AsegurarEstadoServicioDiferenteRule;
+import com.ketra.negocio.negocio.reglas.impl.servicio.AsegurarEstadoServicioExisteRule;
+import com.ketra.negocio.negocio.reglas.impl.servicio.AsegurarTransicionEstadoServicioPermitidaRule;
 import com.ketra.negocio.negocio.reglas.impl.servicio.ValidarDatosServicioRule;
 import com.ketra.negocio.negocio.reglas.impl.utilidad.AsegurarServicioExisteRule;
 import com.ketra.transversal.utilitarios.UtilObjeto;
+import com.ketra.transversal.utilitarios.UtilTexto;
+import com.ketra.transversal.utilitarios.UtilUUID;
 
 public class ServicioNegocioImpl implements ServicioNegocio {
 
-	private DAOFactory daoFactory;
+    private final DAOFactory daoFactory;
 
-	public ServicioNegocioImpl(DAOFactory daoFactory) {
+    private final EstadoServicioNegocio estadoServicioNegocio;
 
-		this.daoFactory = daoFactory;
+    public ServicioNegocioImpl(DAOFactory daoFactory) {
 
-	}
+        this.daoFactory = daoFactory;
 
-	@Override
-	public ServicioDominio consultarPorId(UUID id) {
+        estadoServicioNegocio = new EstadoServicioNegocioImpl(daoFactory);
 
-		ValidarDatosServicioRule.obtenerInstancia().ejecutar(id);
+    }
 
-		var servicioEntidad = daoFactory.obtenerServicioDAO().consultarPorId(id);
+    @Override
+    public ServicioDominio consultarPorId(UUID id) {
 
-		var servicioDominio = ServicioEntidadAssembler.getInstance().convertirADominio(servicioEntidad);
+        ValidarDatosServicioRule.obtenerInstancia().ejecutar(id);
 
-		AsegurarServicioExisteRule.obtenerInstancia().ejecutar(servicioDominio);
+        var entidad = daoFactory.obtenerServicioDAO().consultarPorId(id);
 
-		return servicioDominio;
+        var dominio = ServicioEntidadAssembler.getInstance().convertirADominio(entidad);
 
-	}
+        AsegurarServicioExisteRule.obtenerInstancia().ejecutar(dominio);
 
-	@Override
-	public List<ServicioDominio> consultarPorFiltro(ServicioDominio filtro) {
+        return dominio;
 
-		var datos = UtilObjeto.obtenerValorDefectoSiNulo(filtro, new ServicioDominio.Builder().build());
+    }
 
-		ValidarDatosServicioRule.obtenerInstancia().ejecutar(datos);
+    @Override
+    public List<ServicioDominio> consultarPorFiltro(ServicioDominio filtro) {
 
-		var entidad = ServicioEntidadAssembler.getInstance().convertirAEntidad(datos);
+        var datos = UtilObjeto.obtenerValorDefectoSiNulo(filtro, new ServicioDominio.Builder().build());
 
-		var entidades = daoFactory.obtenerServicioDAO().consultarPorFiltro(entidad);
+        ValidarDatosServicioRule.obtenerInstancia().ejecutar(datos);
 
-		final List<ServicioDominio> resultados = new ArrayList<>();
+        if (!UtilUUID.UUID_DEFECTO.equals(datos.getEstado().getId()) || !UtilTexto.getUtilTexto().esVacia(datos.getEstado().getNombre())
+                || !UtilTexto.getUtilTexto().esVacia(datos.getEstado().getCodigo())) {
 
-		for (ServicioEntidad servicio : entidades) {
+            var estados = estadoServicioNegocio.consultarPorFiltro(datos.getEstado());
 
-			resultados.add(ServicioEntidadAssembler.getInstance().convertirADominio(servicio));
+            var encontrado = estados.isEmpty() ? new EstadoServicioDominio.Builder().build() : estados.get(0);
 
-		}
+            AsegurarEstadoServicioExisteRule.obtenerInstancia().ejecutar(encontrado);
 
-		return resultados;
+        }
 
-	}
+        var entidad = ServicioEntidadAssembler.getInstance().convertirAEntidad(datos);
 
-	@Override
-	public List<ServicioDominio> consultarTodos() {
+        var entidades = daoFactory.obtenerServicioDAO().consultarPorFiltro(entidad);
 
-		return consultarPorFiltro(new ServicioDominio.Builder().build());
+        final List<ServicioDominio> resultados = new ArrayList<>();
 
-	}
+        for (ServicioEntidad servicio : entidades) {
 
-	@Override
-	public ServicioDominio actualizarEstado(UUID id, ServicioDominio servicio) {
+            resultados.add(ServicioEntidadAssembler.getInstance().convertirADominio(servicio));
 
-		ValidarDatosServicioRule.obtenerInstancia().ejecutar(id, servicio);
+        }
 
-		var actual = consultarPorId(id);
+        return resultados;
 
-		AsegurarActualizacionEstadoServicioPermitidaRule.obtenerInstancia().ejecutar(actual, servicio, daoFactory);
+    }
 
-		var actualizado = new ServicioDominio.Builder()
-			.id(id)
-			.numeroServicio(actual.getNumeroServicio())
-			.fechaServicio(actual.getFechaServicio())
-			.estado(servicio.getEstado())
-			.build();
+    @Override
+    public ServicioDominio finalizarServicio(UUID idServicio) {
 
-		daoFactory.obtenerServicioDAO().actualizar(id, ServicioEntidadAssembler.getInstance().convertirAEntidad(actualizado));
+        var actual = consultarPorId(idServicio);
 
-		if ("Finalizado".equals(actualizado.getEstado())) {
+        var filtroEstado = new EstadoServicioDominio.Builder()
+                .codigo(CatalogoCodigosEstado.Servicio.FINALIZADO)
+                .build();
 
-			new UtilidadNegocioImpl(daoFactory).generarUtilidad(id);
+        var estados = estadoServicioNegocio.consultarPorFiltro(filtroEstado);
 
-		}
+        var finalizado = estados.isEmpty() ? new EstadoServicioDominio.Builder().build() : estados.get(0);
 
-		return actualizado;
+        AsegurarEstadoServicioExisteRule.obtenerInstancia().ejecutar(actual.getEstado(), finalizado);
 
-	}
+        AsegurarEstadoServicioDiferenteRule.obtenerInstancia().ejecutar(actual.getEstado(), finalizado);
+
+        var filtroTransicion = new TransicionEstadoServicioDominio.Builder()
+                .estadoOrigen(actual.getEstado())
+                .estadoDestino(finalizado)
+                .build();
+
+        var transiciones = new TransicionEstadoServicioNegocioImpl(daoFactory).consultarPorFiltro(filtroTransicion);
+
+        AsegurarTransicionEstadoServicioPermitidaRule.obtenerInstancia().ejecutar(transiciones);
+
+        var entregas = new EntregaNegocioImpl(daoFactory).consultarPorServicio(idServicio);
+
+        for (var entrega : entregas) {
+
+            AsegurarEntregaEstaEntregadaRule.obtenerInstancia().ejecutar(entrega);
+
+        }
+
+        var actualizado = new ServicioDominio.Builder()
+                .id(actual.getId())
+                .numeroServicio(actual.getNumeroServicio())
+                .fechaServicio(actual.getFechaServicio())
+                .estado(finalizado)
+                .build();
+
+        daoFactory.obtenerServicioDAO().actualizar(idServicio, ServicioEntidadAssembler.getInstance().convertirAEntidad(actualizado));
+
+        return actualizado;
+
+    }
 
 }

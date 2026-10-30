@@ -1,12 +1,12 @@
 package com.ketra.negocio.negocio;
 
+import com.ketra.dominio.DetalleEntregaDominio;
 import java.util.List;
-import java.util.UUID;
 
 import com.ketra.dominio.CostoRecorridoDominio;
 
 public interface CostoRecorridoNegocio {
 
-	List<CostoRecorridoDominio> consultarPorServicio(UUID idServicio);
+	List<CostoRecorridoDominio> consultarCostosRecorrido(List<DetalleEntregaDominio> detallesEntrega);
 
 }

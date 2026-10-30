@@ -1,8 +1,6 @@
 package com.ketra.negocio.negocio.assembler.impl;
 
-import com.ketra.dominio.ServicioDominio;
 import com.ketra.dominio.UtilidadDominio;
-import com.ketra.entidad.ServicioEntidad;
 import com.ketra.entidad.UtilidadEntidad;
 import com.ketra.negocio.negocio.assembler.EntidadAssembler;
 import com.ketra.transversal.utilitarios.UtilObjeto;
@@ -26,12 +24,7 @@ public class UtilidadEntidadAssembler
 
 		var dominioTmp = UtilObjeto.obtenerValorDefectoSiNulo(dominio, new UtilidadDominio.Builder().build());
 
-		var servicioEntidad = new ServicioEntidad.Builder()
-						.id(dominioTmp.getServicio().getId())
-						.numeroServicio(dominioTmp.getServicio().getNumeroServicio())
-						.fechaServicio(dominioTmp.getServicio().getFechaServicio())
-						.estado(dominioTmp.getServicio().getEstado())
-						.build();
+		var servicioEntidad = ServicioEntidadAssembler.getInstance().convertirAEntidad(dominioTmp.getServicio());
 
 		return new UtilidadEntidad.Builder()
 				.id(dominioTmp.getId())
@@ -47,12 +40,7 @@ public class UtilidadEntidadAssembler
 
 		var entidadTmp = UtilObjeto.obtenerValorDefectoSiNulo(entidad, new UtilidadEntidad.Builder().build());
 
-		var servicioDominio = new ServicioDominio.Builder()
-						.id(entidadTmp.getServicio().getId())
-						.numeroServicio(entidadTmp.getServicio().getNumeroServicio())
-						.fechaServicio(entidadTmp.getServicio().getFechaServicio())
-						.estado(entidadTmp.getServicio().getEstado())
-						.build();
+		var servicioDominio = ServicioEntidadAssembler.getInstance().convertirADominio(entidadTmp.getServicio());
 
 		return new UtilidadDominio.Builder()
 				.id(entidadTmp.getId())

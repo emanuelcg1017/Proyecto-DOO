@@ -13,7 +13,7 @@ public class DetalleEntregaEntidad {
 	private String numeroDetalleEntrega;
 	private PedidoEntidad pedido;
 	private EntregaEntidad entrega;
-	private CEDIEntidad CEDIOrigen;
+	private CEDIEntidad cediOrigen;
 	private DireccionEntidad direccionDestino;
 	private Double distanciaKM;
 
@@ -22,7 +22,7 @@ public class DetalleEntregaEntidad {
 		this.numeroDetalleEntrega = builder.numeroDetalleEntrega;
 		this.pedido = builder.pedido;
 		this.entrega = builder.entrega;
-		this.CEDIOrigen = builder.CEDIOrigen;
+		this.cediOrigen = builder.cediOrigen;
 		this.direccionDestino = builder.direccionDestino;
 		this.distanciaKM = builder.distanciaKM;
 	}
@@ -43,8 +43,8 @@ public class DetalleEntregaEntidad {
 		return entrega;
 	}
 
-	public CEDIEntidad getCEDIOrigen() {
-		return CEDIOrigen;
+	public CEDIEntidad getCediOrigen() {
+		return cediOrigen;
 	}
 
 	public DireccionEntidad getDireccionDestino() {
@@ -61,7 +61,7 @@ public class DetalleEntregaEntidad {
 		private String numeroDetalleEntrega;
 		private PedidoEntidad pedido;
 		private EntregaEntidad entrega;
-		private CEDIEntidad CEDIOrigen;
+		private CEDIEntidad cediOrigen;
 		private DireccionEntidad direccionDestino;
 		private Double distanciaKM;
 
@@ -70,7 +70,7 @@ public class DetalleEntregaEntidad {
 			numeroDetalleEntrega = UtilTexto.VACIO;
 			pedido = new PedidoEntidad.Builder().build();
 			entrega = new EntregaEntidad.Builder().build();
-			CEDIOrigen = new CEDIEntidad.Builder().build();
+			cediOrigen = new CEDIEntidad.Builder().build();
 			direccionDestino = new DireccionEntidad.Builder().build();
 			distanciaKM = UtilNumero.CERO_DECIMAL;
 		}
@@ -95,8 +95,8 @@ public class DetalleEntregaEntidad {
 			return this;
 		}
 
-		public Builder CEDIOrigen(CEDIEntidad CEDIOrigen) {
-			this.CEDIOrigen = UtilObjeto.obtenerValorDefectoSiNulo(CEDIOrigen, new CEDIEntidad.Builder().build());
+		public Builder cediOrigen(CEDIEntidad cediOrigen) {
+			this.cediOrigen = UtilObjeto.obtenerValorDefectoSiNulo(cediOrigen, new CEDIEntidad.Builder().build());
 			return this;
 		}
 

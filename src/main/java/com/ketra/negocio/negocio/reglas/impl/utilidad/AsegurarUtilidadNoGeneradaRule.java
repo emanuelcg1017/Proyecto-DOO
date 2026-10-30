@@ -5,27 +5,22 @@ import java.util.UUID;
 import com.ketra.dao.factoria.DAOFactory;
 import com.ketra.entidad.ServicioEntidad;
 import com.ketra.entidad.UtilidadEntidad;
-import com.ketra.negocio.negocio.reglas.Rule;
 import com.ketra.transversal.catalogo.CatalogoMensajes;
 import com.ketra.transversal.excepciones.KETRANegocioException;
 
-public class AsegurarUtilidadNoGeneradaRule implements Rule<Object> {
+public class AsegurarUtilidadNoGeneradaRule {
 
 
-	private static final Rule<Object> instancia = new AsegurarUtilidadNoGeneradaRule();
+	private static final AsegurarUtilidadNoGeneradaRule instancia = new AsegurarUtilidadNoGeneradaRule();
 
 	private AsegurarUtilidadNoGeneradaRule() {
 	}
 
-	public static Rule<Object> obtenerInstancia() {
+	public static AsegurarUtilidadNoGeneradaRule obtenerInstancia() {
 		return instancia;
 	}
 
-	@Override
-	public void ejecutar(Object... datos) {
-
-		var idServicio = (UUID) datos[0];
-		var daoFactory = (DAOFactory) datos[1];
+    public void ejecutar(UUID idServicio, DAOFactory daoFactory) {
 
 		var servicioEntidad = new ServicioEntidad.Builder().id(idServicio).build();
 		var utilidadFiltro = new UtilidadEntidad.Builder().servicio(servicioEntidad).build();

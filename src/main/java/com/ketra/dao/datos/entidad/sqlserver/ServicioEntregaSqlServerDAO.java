@@ -1,5 +1,9 @@
 package com.ketra.dao.datos.entidad.sqlserver;
 
+import com.ketra.entidad.EstadoEntregaEntidad;
+
+import com.ketra.entidad.EstadoServicioEntidad;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,22 +33,28 @@ public class ServicioEntregaSqlServerDAO extends SqlDAO implements ServicioEntre
 	public ServicioEntregaEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					sen.id AS id,
-					ser.id AS ser_id,
-					ser.numeroServicio AS ser_numeroServicio,
-					ser.fechaServicio AS ser_fechaServicio,
-					ser.estado AS ser_estado,
-					ent.id AS ent_id,
-					ent.codigoEntrega AS ent_codigoEntrega,
-					ent.fechaEntrega AS ent_fechaEntrega,
-					ent.estadoEntrega AS ent_estadoEntrega,
-					ent.idPersona AS ent_idPersona
-				FROM ServicioEntrega sen
-				INNER JOIN Servicio ser ON sen.idServicio = ser.id
-				INNER JOIN Entrega ent ON sen.idEntrega = ent.id
-				WHERE sen.id = ?
-				""";
+                SELECT
+                    sen.id AS id,
+                    ser.id AS ser_id,
+                    ser.numeroServicio AS ser_numeroServicio,
+                    ser.fechaServicio AS ser_fechaServicio,
+                    ess.id AS ser_estado_id,
+                    ess.codigo AS ser_estado_codigo,
+                    ess.nombre AS ser_estado_nombre,
+                    ent.id AS ent_id,
+                    ent.codigoEntrega AS ent_codigoEntrega,
+                    ent.fechaEntrega AS ent_fechaEntrega,
+                    ese.id AS ent_estadoEntrega_id,
+                    ese.codigo AS ent_estadoEntrega_codigo,
+                    ese.nombre AS ent_estadoEntrega_nombre,
+                    ent.idPersona AS ent_idPersona
+                FROM ServicioEntrega sen
+                INNER JOIN Servicio ser ON sen.idServicio = ser.id
+                INNER JOIN EstadoServicio ess ON ser.idEstadoServicio = ess.id
+                INNER JOIN Entrega ent ON sen.idEntrega = ent.id
+                INNER JOIN EstadoEntrega ese ON ent.idEstadoEntrega = ese.id
+                WHERE sen.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -78,21 +88,27 @@ public class ServicioEntregaSqlServerDAO extends SqlDAO implements ServicioEntre
 	public List<ServicioEntregaEntidad> consultarPorFiltro(ServicioEntregaEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					sen.id AS id,
-					ser.id AS ser_id,
-					ser.numeroServicio AS ser_numeroServicio,
-					ser.fechaServicio AS ser_fechaServicio,
-					ser.estado AS ser_estado,
-					ent.id AS ent_id,
-					ent.codigoEntrega AS ent_codigoEntrega,
-					ent.fechaEntrega AS ent_fechaEntrega,
-					ent.estadoEntrega AS ent_estadoEntrega,
-					ent.idPersona AS ent_idPersona
-				FROM ServicioEntrega sen
-				INNER JOIN Servicio ser ON sen.idServicio = ser.id
-				INNER JOIN Entrega ent ON sen.idEntrega = ent.id
-				""");
+                SELECT
+                    sen.id AS id,
+                    ser.id AS ser_id,
+                    ser.numeroServicio AS ser_numeroServicio,
+                    ser.fechaServicio AS ser_fechaServicio,
+                    ess.id AS ser_estado_id,
+                    ess.codigo AS ser_estado_codigo,
+                    ess.nombre AS ser_estado_nombre,
+                    ent.id AS ent_id,
+                    ent.codigoEntrega AS ent_codigoEntrega,
+                    ent.fechaEntrega AS ent_fechaEntrega,
+                    ese.id AS ent_estadoEntrega_id,
+                    ese.codigo AS ent_estadoEntrega_codigo,
+                    ese.nombre AS ent_estadoEntrega_nombre,
+                    ent.idPersona AS ent_idPersona
+                FROM ServicioEntrega sen
+                INNER JOIN Servicio ser ON sen.idServicio = ser.id
+                INNER JOIN EstadoServicio ess ON ser.idEstadoServicio = ess.id
+                INNER JOIN Entrega ent ON sen.idEntrega = ent.id
+                INNER JOIN EstadoEntrega ese ON ent.idEstadoEntrega = ese.id
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 
@@ -159,7 +175,11 @@ public class ServicioEntregaSqlServerDAO extends SqlDAO implements ServicioEntre
 				.id(UUID.fromString(resultado.getString("ser_id")))
 				.numeroServicio(resultado.getString("ser_numeroServicio"))
 				.fechaServicio(resultado.getDate("ser_fechaServicio").toLocalDate())
-				.estado(resultado.getString("ser_estado"))
+				.estado(new EstadoServicioEntidad.Builder()
+						.id(UUID.fromString(resultado.getString("ser_estado_id")))
+						.codigo(resultado.getString("ser_estado_codigo"))
+						.nombre(resultado.getString("ser_estado_nombre"))
+						.build())
 				.build();
 
 		final PersonaEntidad per = new PersonaEntidad.Builder()
@@ -170,7 +190,11 @@ public class ServicioEntregaSqlServerDAO extends SqlDAO implements ServicioEntre
 				.id(UUID.fromString(resultado.getString("ent_id")))
 				.codigoEntrega(resultado.getString("ent_codigoEntrega"))
 				.fechaEntrega(resultado.getDate("ent_fechaEntrega").toLocalDate())
-				.estadoEntrega(resultado.getString("ent_estadoEntrega"))
+				.estadoEntrega(new EstadoEntregaEntidad.Builder()
+						.id(UUID.fromString(resultado.getString("ent_estadoEntrega_id")))
+						.codigo(resultado.getString("ent_estadoEntrega_codigo"))
+						.nombre(resultado.getString("ent_estadoEntrega_nombre"))
+						.build())
 				.persona(per)
 				.build();
 

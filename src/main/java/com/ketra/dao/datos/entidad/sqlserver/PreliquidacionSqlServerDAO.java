@@ -1,5 +1,7 @@
 package com.ketra.dao.datos.entidad.sqlserver;
 
+import com.ketra.entidad.EstadoPreliquidacionEntidad;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,26 +32,29 @@ public class PreliquidacionSqlServerDAO extends SqlDAO implements Preliquidacion
 	public PreliquidacionEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					pre.id AS id,
-					pre.numeroPreliquidacion AS numeroPreliquidacion,
-					pre.fechaPreliquidacion AS fechaPreliquidacion,
-					pre.estado AS estado,
-					ter.id AS ter_id,
-					ter.nombre AS ter_nombre,
-					ter.nit AS ter_nit,
-					ter.numeroContacto AS ter_numeroContacto,
-					ter.correoContacto AS ter_correoContacto,
-					cre.id AS cre_id,
-					cre.numeroCosto AS cre_numeroCosto,
-					cre.valorPorKM AS cre_valorPorKM,
-					cre.valorCosto AS cre_valorCosto,
-					cre.idDetalleEntrega AS cre_idDetalleEntrega
-				FROM Preliquidacion pre
-				INNER JOIN Tercero ter ON pre.idTercero = ter.id
-				INNER JOIN CostoRecorrido cre ON pre.idCostoRecorrido = cre.id
-				WHERE pre.id = ?
-				""";
+                SELECT
+                    pre.id AS id,
+                    pre.numeroPreliquidacion AS numeroPreliquidacion,
+                    pre.fechaPreliquidacion AS fechaPreliquidacion,
+                    esp.id AS estado_id,
+                    esp.codigo AS estado_codigo,
+                    esp.nombre AS estado_nombre,
+                    ter.id AS ter_id,
+                    ter.nombre AS ter_nombre,
+                    ter.nit AS ter_nit,
+                    ter.numeroContacto AS ter_numeroContacto,
+                    ter.correoContacto AS ter_correoContacto,
+                    cre.id AS cre_id,
+                    cre.numeroCosto AS cre_numeroCosto,
+                    cre.valorPorKM AS cre_valorPorKM,
+                    cre.valorCosto AS cre_valorCosto,
+                    cre.idDetalleEntrega AS cre_idDetalleEntrega
+                FROM Preliquidacion pre
+                INNER JOIN EstadoPreliquidacion esp ON pre.idEstadoPreliquidacion = esp.id
+                INNER JOIN Tercero ter ON pre.idTercero = ter.id
+                INNER JOIN CostoRecorrido cre ON pre.idCostoRecorrido = cre.id
+                WHERE pre.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -83,25 +88,28 @@ public class PreliquidacionSqlServerDAO extends SqlDAO implements Preliquidacion
 	public List<PreliquidacionEntidad> consultarPorFiltro(PreliquidacionEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					pre.id AS id,
-					pre.numeroPreliquidacion AS numeroPreliquidacion,
-					pre.fechaPreliquidacion AS fechaPreliquidacion,
-					pre.estado AS estado,
-					ter.id AS ter_id,
-					ter.nombre AS ter_nombre,
-					ter.nit AS ter_nit,
-					ter.numeroContacto AS ter_numeroContacto,
-					ter.correoContacto AS ter_correoContacto,
-					cre.id AS cre_id,
-					cre.numeroCosto AS cre_numeroCosto,
-					cre.valorPorKM AS cre_valorPorKM,
-					cre.valorCosto AS cre_valorCosto,
-					cre.idDetalleEntrega AS cre_idDetalleEntrega
-				FROM Preliquidacion pre
-				INNER JOIN Tercero ter ON pre.idTercero = ter.id
-				INNER JOIN CostoRecorrido cre ON pre.idCostoRecorrido = cre.id
-				""");
+                SELECT
+                    pre.id AS id,
+                    pre.numeroPreliquidacion AS numeroPreliquidacion,
+                    pre.fechaPreliquidacion AS fechaPreliquidacion,
+                    esp.id AS estado_id,
+                    esp.codigo AS estado_codigo,
+                    esp.nombre AS estado_nombre,
+                    ter.id AS ter_id,
+                    ter.nombre AS ter_nombre,
+                    ter.nit AS ter_nit,
+                    ter.numeroContacto AS ter_numeroContacto,
+                    ter.correoContacto AS ter_correoContacto,
+                    cre.id AS cre_id,
+                    cre.numeroCosto AS cre_numeroCosto,
+                    cre.valorPorKM AS cre_valorPorKM,
+                    cre.valorCosto AS cre_valorCosto,
+                    cre.idDetalleEntrega AS cre_idDetalleEntrega
+                FROM Preliquidacion pre
+                INNER JOIN EstadoPreliquidacion esp ON pre.idEstadoPreliquidacion = esp.id
+                INNER JOIN Tercero ter ON pre.idTercero = ter.id
+                INNER JOIN CostoRecorrido cre ON pre.idCostoRecorrido = cre.id
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 
@@ -130,9 +138,19 @@ public class PreliquidacionSqlServerDAO extends SqlDAO implements Preliquidacion
 			parametros.add(java.sql.Date.valueOf(filtro.getFechaPreliquidacion()));
 		}
 
-		if (!UtilTexto.getUtilTexto().esVacia(filtro.getEstado())) {
-			condiciones.add("pre.estado = ?");
-			parametros.add(filtro.getEstado());
+		if (!UtilUUID.UUID_DEFECTO.equals(filtro.getEstado().getId())) {
+			condiciones.add("pre.idEstadoPreliquidacion = ?");
+			parametros.add(filtro.getEstado().getId());
+		}
+
+		if (!UtilTexto.getUtilTexto().esVacia(filtro.getEstado().getCodigo())) {
+			condiciones.add("esp.codigo = ?");
+			parametros.add(filtro.getEstado().getCodigo());
+		}
+
+		if (!UtilTexto.getUtilTexto().esVacia(filtro.getEstado().getNombre())) {
+			condiciones.add("esp.nombre = ?");
+			parametros.add(filtro.getEstado().getNombre());
 		}
 
 		if (!condiciones.isEmpty()) {
@@ -181,16 +199,16 @@ public class PreliquidacionSqlServerDAO extends SqlDAO implements Preliquidacion
 	public void crear(PreliquidacionEntidad entidad) {
 
 		final String sql = """
-				INSERT INTO Preliquidacion (
-					id,
-					numeroPreliquidacion,
-					idTercero,
-					idCostoRecorrido,
-					fechaPreliquidacion,
-					estado
-				)
-				VALUES (?, ?, ?, ?, ?, ?)
-				""";
+                INSERT INTO Preliquidacion (
+                    id,
+                    numeroPreliquidacion,
+                    idTercero,
+                    idCostoRecorrido,
+                    fechaPreliquidacion,
+                    idEstadoPreliquidacion
+                )
+                VALUES (?, ?, ?, ?, ?, ?)
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -199,7 +217,7 @@ public class PreliquidacionSqlServerDAO extends SqlDAO implements Preliquidacion
 			sentencia.setObject(3, entidad.getTercero().getId());
 			sentencia.setObject(4, entidad.getValorCosto().getId());
 			sentencia.setDate(5, java.sql.Date.valueOf(entidad.getFechaPreliquidacion()));
-			sentencia.setString(6, entidad.getEstado());
+			sentencia.setObject(6, entidad.getEstado().getId());
 
 			sentencia.executeUpdate();
 
@@ -223,14 +241,14 @@ public class PreliquidacionSqlServerDAO extends SqlDAO implements Preliquidacion
 	public void actualizar(UUID id, PreliquidacionEntidad entidad) {
 
 		final String sql = """
-				UPDATE Preliquidacion
-				SET estado = ?
-				WHERE id = ?
-				""";
+                UPDATE Preliquidacion
+                SET idEstadoPreliquidacion = ?
+                WHERE id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
-			sentencia.setString(1, entidad.getEstado());
+			sentencia.setObject(1, entidad.getEstado().getId());
 			sentencia.setObject(2, id);
 
 			if (sentencia.executeUpdate() != 1) {
@@ -258,7 +276,7 @@ public class PreliquidacionSqlServerDAO extends SqlDAO implements Preliquidacion
 		final TerceroEntidad ter = new TerceroEntidad.Builder()
 				.id(UUID.fromString(resultado.getString("ter_id")))
 				.nombre(resultado.getString("ter_nombre"))
-				.NIT(resultado.getString("ter_nit"))
+				.nit(resultado.getString("ter_nit"))
 				.numeroContacto(resultado.getString("ter_numeroContacto"))
 				.correoContacto(resultado.getString("ter_correoContacto"))
 				.build();
@@ -281,7 +299,11 @@ public class PreliquidacionSqlServerDAO extends SqlDAO implements Preliquidacion
 				.tercero(ter)
 				.valorCosto(cre)
 				.fechaPreliquidacion(resultado.getDate("fechaPreliquidacion").toLocalDate())
-				.Estado(resultado.getString("estado"))
+				.estado(new EstadoPreliquidacionEntidad.Builder()
+						.id(UUID.fromString(resultado.getString("estado_id")))
+						.codigo(resultado.getString("estado_codigo"))
+						.nombre(resultado.getString("estado_nombre"))
+						.build())
 				.build();
 	}
 }

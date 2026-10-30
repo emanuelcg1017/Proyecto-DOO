@@ -13,6 +13,10 @@ import com.ketra.dao.datos.entidad.EmpresaDAO;
 import com.ketra.dao.datos.entidad.EmpresaServicioDAO;
 import com.ketra.dao.datos.entidad.EntregaDAO;
 import com.ketra.dao.datos.entidad.EntregaTerceroDAO;
+import com.ketra.dao.datos.entidad.EstadoEntregaDAO;
+import com.ketra.dao.datos.entidad.EstadoFacturaDAO;
+import com.ketra.dao.datos.entidad.EstadoPreliquidacionDAO;
+import com.ketra.dao.datos.entidad.EstadoServicioDAO;
 import com.ketra.dao.datos.entidad.FacturaDAO;
 import com.ketra.dao.datos.entidad.MunicipioDAO;
 import com.ketra.dao.datos.entidad.PaisDAO;
@@ -26,6 +30,10 @@ import com.ketra.dao.datos.entidad.ServicioFacturaDAO;
 import com.ketra.dao.datos.entidad.TerceroDAO;
 import com.ketra.dao.datos.entidad.TipoDireccionDAO;
 import com.ketra.dao.datos.entidad.TipoDocumentoDAO;
+import com.ketra.dao.datos.entidad.TransicionEstadoEntregaDAO;
+import com.ketra.dao.datos.entidad.TransicionEstadoFacturaDAO;
+import com.ketra.dao.datos.entidad.TransicionEstadoPreliquidacionDAO;
+import com.ketra.dao.datos.entidad.TransicionEstadoServicioDAO;
 import com.ketra.dao.datos.entidad.UtilidadDAO;
 import com.ketra.dao.factoria.enums.FactoriaEnum;
 import com.ketra.dao.factoria.impl.SqlServerDAOFactory;
@@ -37,66 +45,65 @@ public abstract class DAOFactory {
 
 	private Connection conexion;
 	private static FactoriaEnum factoria = FactoriaEnum.SQLSERVER;
-	
+
 	public static DAOFactory obtenerFactoria() {
 		switch (factoria) {
-		
+
 			case SQLSERVER: {
 				return new SqlServerDAOFactory();
 			}
 			default:
-				
+
 				var mensajeUsuario = CatalogoMensajes.DAOFactory.FUENTE_DATOS_NO_HABILITADA;
 				throw KETRAFachadaException.crear(mensajeUsuario);
 			}
 	}
-	
-	
+
 	protected DAOFactory() {
 		abrirConexion();
 	}
 
 	protected Connection getConexion() {
-		
+
 		return conexion;
-		
+
 	}
 
 	protected void setConexion(Connection conexion) {
-		
+
 		UtilSQL.asegurarConexionAbierta(conexion);
 		this.conexion = conexion;
-		
+
 	}
-	
+
 	protected abstract void abrirConexion();
-	
+
 	public void cerrarConexion() {
-		
+
 		UtilSQL.cerrarConexion(conexion);
-		
+
 	}
-	
+
 	public void iniciarTransaccion() {
-		
+
 		UtilSQL.iniciarTransaccion(conexion);
-		
+
 	}
-	
+
 	public void confirmarTransaccion() {
-		
+
 		UtilSQL.confirmarTransaccion(conexion);
-		
+
 	}
-	
+
 	public void cancelarTransaccion() {
-		
+
 		UtilSQL.cancelarTransaccion(conexion);
-		
+
 	}
-	
+
 	public abstract PaisDAO obtenerPaisDAO();
-	
+
 	public abstract DepartamentoDAO obtenerDepartamentoDAO();
 
 	public abstract UtilidadDAO obtenerUtilidadDAO();
@@ -106,7 +113,6 @@ public abstract class DAOFactory {
 	public abstract FacturaDAO obtenerFacturaDAO();
 
 	public abstract CostoRecorridoDAO obtenerCostoRecorridoDAO();
-
 
 	public abstract BarrioDAO obtenerBarrioDAO();
 
@@ -145,4 +151,21 @@ public abstract class DAOFactory {
 	public abstract TipoDireccionDAO obtenerTipoDireccionDAO();
 
 	public abstract TipoDocumentoDAO obtenerTipoDocumentoDAO();
+
+	public abstract EstadoServicioDAO obtenerEstadoServicioDAO();
+
+	public abstract EstadoEntregaDAO obtenerEstadoEntregaDAO();
+
+	public abstract EstadoFacturaDAO obtenerEstadoFacturaDAO();
+
+	public abstract EstadoPreliquidacionDAO obtenerEstadoPreliquidacionDAO();
+
+	public abstract TransicionEstadoServicioDAO obtenerTransicionEstadoServicioDAO();
+
+	public abstract TransicionEstadoEntregaDAO obtenerTransicionEstadoEntregaDAO();
+
+	public abstract TransicionEstadoFacturaDAO obtenerTransicionEstadoFacturaDAO();
+
+	public abstract TransicionEstadoPreliquidacionDAO obtenerTransicionEstadoPreliquidacionDAO();
+
 }

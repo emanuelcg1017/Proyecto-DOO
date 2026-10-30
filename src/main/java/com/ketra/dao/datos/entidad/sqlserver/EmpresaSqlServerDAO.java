@@ -26,16 +26,16 @@ public class EmpresaSqlServerDAO extends SqlDAO implements EmpresaDAO {
 	public EmpresaEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					emp.id AS id,
-					emp.nombre AS nombre,
-					emp.nit AS nit,
-					emp.correoContacto AS correoContacto,
-					emp.telefonoContacto AS telefonoContacto
-				FROM Empresa emp
+                SELECT
+                    emp.id AS id,
+                    emp.nombre AS nombre,
+                    emp.nit AS nit,
+                    emp.correoContacto AS correoContacto,
+                    emp.telefonoContacto AS telefonoContacto
+                FROM Empresa emp
 
-				WHERE emp.id = ?
-				""";
+                WHERE emp.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -69,14 +69,14 @@ public class EmpresaSqlServerDAO extends SqlDAO implements EmpresaDAO {
 	public List<EmpresaEntidad> consultarPorFiltro(EmpresaEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					emp.id AS id,
-					emp.nombre AS nombre,
-					emp.nit AS nit,
-					emp.correoContacto AS correoContacto,
-					emp.telefonoContacto AS telefonoContacto
-				FROM Empresa emp
-				""");
+                SELECT
+                    emp.id AS id,
+                    emp.nombre AS nombre,
+                    emp.nit AS nit,
+                    emp.correoContacto AS correoContacto,
+                    emp.telefonoContacto AS telefonoContacto
+                FROM Empresa emp
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 
@@ -90,9 +90,9 @@ public class EmpresaSqlServerDAO extends SqlDAO implements EmpresaDAO {
 			parametros.add(filtro.getNombre());
 		}
 
-		if (!UtilTexto.getUtilTexto().esVacia(filtro.getNIT())) {
+		if (!UtilTexto.getUtilTexto().esVacia(filtro.getNit())) {
 			condiciones.add("emp.nit = ?");
-			parametros.add(filtro.getNIT());
+			parametros.add(filtro.getNit());
 		}
 
 		if (!UtilTexto.getUtilTexto().esVacia(filtro.getCorreoContacto())) {
@@ -151,21 +151,21 @@ public class EmpresaSqlServerDAO extends SqlDAO implements EmpresaDAO {
 	public void crear(EmpresaEntidad entidad) {
 
 		final String sql = """
-				INSERT INTO Empresa (
-					id,
-					nombre,
-					nit,
-					correoContacto,
-					telefonoContacto
-				)
-				VALUES (?, ?, ?, ?, ?)
-				""";
+                INSERT INTO Empresa (
+                    id,
+                    nombre,
+                    nit,
+                    correoContacto,
+                    telefonoContacto
+                )
+                VALUES (?, ?, ?, ?, ?)
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
 			sentencia.setObject(1, entidad.getId());
 			sentencia.setString(2, entidad.getNombre());
-			sentencia.setString(3, entidad.getNIT());
+			sentencia.setString(3, entidad.getNit());
 			sentencia.setString(4, entidad.getCorreoContacto());
 			sentencia.setString(5, entidad.getTelefonoContacto());
 
@@ -191,19 +191,19 @@ public class EmpresaSqlServerDAO extends SqlDAO implements EmpresaDAO {
 	public void actualizar(UUID id, EmpresaEntidad entidad) {
 
 		final String sql = """
-				UPDATE Empresa
-				SET
-					nombre = ?,
-					nit = ?,
-					correoContacto = ?,
-					telefonoContacto = ?
-				WHERE id = ?
-				""";
+                UPDATE Empresa
+                SET
+                    nombre = ?,
+                    nit = ?,
+                    correoContacto = ?,
+                    telefonoContacto = ?
+                WHERE id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
 			sentencia.setString(1, entidad.getNombre());
-			sentencia.setString(2, entidad.getNIT());
+			sentencia.setString(2, entidad.getNit());
 			sentencia.setString(3, entidad.getCorreoContacto());
 			sentencia.setString(4, entidad.getTelefonoContacto());
 			sentencia.setObject(5, id);
@@ -231,7 +231,7 @@ public class EmpresaSqlServerDAO extends SqlDAO implements EmpresaDAO {
 		return new EmpresaEntidad.Builder()
 				.id(UUID.fromString(resultado.getString("id")))
 				.nombre(resultado.getString("nombre"))
-				.NIT(resultado.getString("nit"))
+				.nit(resultado.getString("nit"))
 				.correoContacto(resultado.getString("correoContacto"))
 				.telefonoContacto(resultado.getString("telefonoContacto"))
 				.build();

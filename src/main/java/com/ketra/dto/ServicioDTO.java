@@ -1,5 +1,7 @@
 package com.ketra.dto;
 
+import com.ketra.transversal.utilitarios.UtilObjeto;
+
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -15,7 +17,7 @@ public class ServicioDTO {
 
 	private LocalDate fechaServicio;
 
-	private String estado;
+	private EstadoServicioDTO estado;
 
 	public ServicioDTO() {
 
@@ -25,7 +27,7 @@ public class ServicioDTO {
 
 		setFechaServicio(UtilFecha.FECHA_DEFECTO);
 
-		setEstado(UtilTexto.VACIO);
+		setEstado(new EstadoServicioDTO());
 
 	}
 
@@ -65,15 +67,15 @@ public class ServicioDTO {
 
 	}
 
-	public String getEstado() {
+	public EstadoServicioDTO getEstado() {
 
 		return estado;
 
 	}
 
-	public void setEstado(String estado) {
+	public void setEstado(EstadoServicioDTO estado) {
 
-		this.estado = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(estado);
+		this.estado = UtilObjeto.obtenerValorDefectoSiNulo(estado, new EstadoServicioDTO());
 
 	}
 

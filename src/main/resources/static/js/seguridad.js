@@ -2,6 +2,8 @@
 
 window.SeguridadKetra = (function () {
 
+    let redirigiendoAlIngreso = false;
+
     function mostrarError(mensaje) {
 
         const elemento = document.querySelector('[role="status"]');
@@ -20,7 +22,13 @@ window.SeguridadKetra = (function () {
 
         if (respuesta.status === 401) {
 
-            window.location.assign('/login.html?sesion');
+            if (!redirigiendoAlIngreso) {
+
+                redirigiendoAlIngreso = true;
+
+                window.location.assign('/login.html?sesion');
+
+            }
 
             throw new Error('Tu sesión terminó. Inicia sesión nuevamente.');
 

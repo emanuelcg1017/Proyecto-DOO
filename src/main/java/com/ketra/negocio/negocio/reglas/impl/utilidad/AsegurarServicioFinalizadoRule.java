@@ -1,10 +1,10 @@
 package com.ketra.negocio.negocio.reglas.impl.utilidad;
 
 import com.ketra.dominio.ServicioDominio;
+import com.ketra.transversal.catalogo.CatalogoCodigosEstado;
 import com.ketra.negocio.negocio.reglas.Rule;
 import com.ketra.transversal.catalogo.CatalogoMensajes;
 import com.ketra.transversal.excepciones.KETRANegocioException;
-import com.ketra.transversal.utilitarios.UtilTexto;
 
 public class AsegurarServicioFinalizadoRule implements Rule<ServicioDominio>{
 
@@ -23,9 +23,8 @@ public class AsegurarServicioFinalizadoRule implements Rule<ServicioDominio>{
 
 		var servicio = datos[0];
 		
-		AsegurarServicioExisteRule.obtenerInstancia().ejecutar(servicio);
 
-		if (!"Finalizado".equalsIgnoreCase(UtilTexto.getUtilTexto().quitarEspacionEnBlanco(servicio.getEstado()))) {
+		if (!CatalogoCodigosEstado.Servicio.FINALIZADO.equals(servicio.getEstado().getCodigo())) {
 
 			var mensajeUsuario = CatalogoMensajes.UtilidadNegocioImpl.SERVICIO_DEBE_ESTAR_FINALIZADO;
 			throw KETRANegocioException.crear(mensajeUsuario);

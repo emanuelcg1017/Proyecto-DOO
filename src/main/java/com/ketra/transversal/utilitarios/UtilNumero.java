@@ -40,4 +40,17 @@ public class UtilNumero {
 		return incluirLimites ? mayorIgualQue(numeroUno, longitudInicial) && menorIgualQue(numeroUno, longitudFinal) :
 			mayorQue(numeroUno, longitudInicial) && menorQue(numeroUno, longitudFinal);
 	}
+
+	public static Double sumar(Number numeroUno, Number numeroDos) {
+
+		return obtenerValorDefecto(numeroUno).doubleValue() + obtenerValorDefecto(numeroDos).doubleValue();
+
+	}
+
+	public static Double restar(Number numeroUno, Number numeroDos) {
+
+		return obtenerValorDefecto(numeroUno).doubleValue() - obtenerValorDefecto(numeroDos).doubleValue();
+
+	}
+
 }

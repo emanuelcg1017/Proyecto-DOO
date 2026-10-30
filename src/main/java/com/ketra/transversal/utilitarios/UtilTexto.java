@@ -71,9 +71,9 @@ public class UtilTexto {
 		return longitud >= longitudInicial && longitud <= longitudFinal;
 	}
 	
-	public boolean formatoEsValido(String valor, String Patron) {
+	public boolean formatoEsValido(String valor, String patron) {
 		
-		return (obtenerValorDefecto(valor)).matches(obtenerValorDefecto(Patron));
+		return (obtenerValorDefecto(valor)).matches(obtenerValorDefecto(patron));
 	}
 }
 	

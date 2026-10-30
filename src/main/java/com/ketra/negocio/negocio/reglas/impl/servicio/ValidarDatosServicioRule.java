@@ -51,30 +51,6 @@ public class ValidarDatosServicioRule implements Rule<ServicioDominio> {
 
 		validarFechaServicio(filtro.getFechaServicio());
 
-		if (!UtilTexto.getUtilTexto().esVacia(filtro.getEstado())) {
-
-			AsegurarEstadoServicioValidoRule.obtenerInstancia().ejecutar(filtro.getEstado());
-
-		}
-
-	}
-
-	public void ejecutar(UUID id, ServicioDominio servicio) {
-
-		ejecutar(id);
-
-		if (UtilObjeto.esNulo(servicio)) {
-
-			throw KETRANegocioException.crear(CatalogoMensajes.ServicioNegocioImpl.DATOS_ESTADO_INVALIDOS);
-
-		}
-
-		validarEstadoObligatorio(servicio.getEstado());
-
-		validarIdentificadorSolicitud(id, servicio.getId());
-
-		AsegurarEstadoServicioValidoRule.obtenerInstancia().ejecutar(servicio.getEstado());
-
 	}
 
 	private void validarNumeroServicio(String numeroServicio) {
@@ -98,26 +74,6 @@ public class ValidarDatosServicioRule implements Rule<ServicioDominio> {
 		if (fechaServicio.getYear() < 1 || fechaServicio.getYear() > 9999) {
 
 			throw KETRANegocioException.crear(CatalogoMensajes.ServicioNegocioImpl.FECHA_FILTRO_INVALIDA);
-
-		}
-
-	}
-
-	private void validarIdentificadorSolicitud(UUID id, UUID idSolicitud) {
-
-		if (!UtilUUID.UUID_DEFECTO.equals(idSolicitud) && !id.equals(idSolicitud)) {
-
-			throw KETRANegocioException.crear(CatalogoMensajes.ServicioNegocioImpl.ID_NO_COINCIDE);
-
-		}
-
-	}
-
-	private void validarEstadoObligatorio(String estado) {
-
-		if (estado.isBlank() || !UtilTexto.getUtilTexto().longitudCadenaEsValida(estado, 1, 15, true)) {
-
-			throw KETRANegocioException.crear(CatalogoMensajes.ServicioNegocioImpl.DATOS_ESTADO_INVALIDOS);
 
 		}
 

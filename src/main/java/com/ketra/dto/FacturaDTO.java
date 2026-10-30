@@ -1,5 +1,7 @@
 package com.ketra.dto;
 
+import com.ketra.transversal.utilitarios.UtilObjeto;
+
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -18,7 +20,7 @@ public class FacturaDTO {
 
 	private Double ingresos;
 
-	private String estadoFactura;
+	private EstadoFacturaDTO estadoFactura;
 
 	public FacturaDTO() {
 
@@ -30,7 +32,7 @@ public class FacturaDTO {
 
 		setIngresos(UtilNumero.CERO_DECIMAL);
 
-		setEstadoFactura(UtilTexto.VACIO);
+		setEstadoFactura(new EstadoFacturaDTO());
 
 	}
 
@@ -82,15 +84,15 @@ public class FacturaDTO {
 
 	}
 
-	public String getEstadoFactura() {
+	public EstadoFacturaDTO getEstadoFactura() {
 
 		return estadoFactura;
 
 	}
 
-	public void setEstadoFactura(String estadoFactura) {
+	public void setEstadoFactura(EstadoFacturaDTO estadoFactura) {
 
-		this.estadoFactura = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(estadoFactura);
+		this.estadoFactura = UtilObjeto.obtenerValorDefectoSiNulo(estadoFactura, new EstadoFacturaDTO());
 
 	}
 

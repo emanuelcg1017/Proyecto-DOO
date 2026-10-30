@@ -35,7 +35,7 @@ public class EntregaDTOAssembler implements DTOAssembler<EntregaDominio, Entrega
 
 		resultado.setFechaEntrega(datos.getFechaEntrega());
 
-		resultado.setEstadoEntrega(datos.getEstadoEntrega());
+		resultado.setEstadoEntrega(EstadoEntregaDTOAssembler.getInstance().convertirADTO(datos.getEstadoEntrega()));
 
 		return resultado;
 
@@ -50,7 +50,7 @@ public class EntregaDTOAssembler implements DTOAssembler<EntregaDominio, Entrega
 				.id(datos.getId())
 				.codigoEntrega(datos.getCodigoEntrega())
 				.fechaEntrega(datos.getFechaEntrega())
-				.estadoEntrega(datos.getEstadoEntrega())
+				.estadoEntrega(EstadoEntregaDTOAssembler.getInstance().convertirADominio(datos.getEstadoEntrega()))
 				.build();
 
 	}

@@ -9,156 +9,138 @@ import com.ketra.dominio.ServicioDominio;
 import com.ketra.dto.ServicioDTO;
 import com.ketra.negocio.fachada.ServicioFachada;
 import com.ketra.negocio.fachada.assembler.impl.ServicioDTOAssembler;
-import com.ketra.negocio.negocio.ServicioNegocio;
 import com.ketra.negocio.negocio.impl.ServicioNegocioImpl;
+import com.ketra.negocio.negocio.impl.UtilidadNegocioImpl;
 import com.ketra.transversal.catalogo.CatalogoMensajes;
 import com.ketra.transversal.excepciones.KETRAExcepcion;
 import com.ketra.transversal.excepciones.KETRAFachadaException;
 
 public class ServicioFachadaImpl implements ServicioFachada {
 
-	private final DAOFactory daoFactory;
+    @Override
+    public ServicioDTO consultarPorId(UUID id) {
 
-	private final ServicioNegocio servicioNegocio;
+        var daoFactory = DAOFactory.obtenerFactoria();
 
-	public ServicioFachadaImpl() {
+        var servicioNegocio = new ServicioNegocioImpl(daoFactory);
 
-		daoFactory = DAOFactory.obtenerFactoria();
+        try {
 
-		servicioNegocio = new ServicioNegocioImpl(daoFactory);
+            var datos = servicioNegocio.consultarPorId(id);
 
-	}
+            return ServicioDTOAssembler.getInstance().convertirADTO(datos);
 
-	public ServicioFachadaImpl(DAOFactory daoFactory) {
+        } catch (KETRAExcepcion excepcion) {
 
-		this.daoFactory = daoFactory;
+            throw excepcion;
 
-		servicioNegocio = new ServicioNegocioImpl(daoFactory);
+        } catch (Exception excepcion) {
 
-	}
+            throw KETRAFachadaException.crear(
+                    CatalogoMensajes.ServicioFachadaImpl.ERROR_CONSULTANDO, excepcion.getMessage(), excepcion);
 
-	@Override
-	public ServicioDTO consultarPorId(UUID id) {
+        } finally {
 
-		try {
+            daoFactory.cerrarConexion();
 
-			var servicio = servicioNegocio.consultarPorId(id);
+        }
 
-			return ServicioDTOAssembler.getInstance().convertirADTO(servicio);
+    }
 
-		} catch (KETRAExcepcion excepcion) {
+    @Override
+    public List<ServicioDTO> consultarPorFiltro(ServicioDTO filtro) {
 
-			throw excepcion;
+        var daoFactory = DAOFactory.obtenerFactoria();
 
-		} catch (Exception excepcion) {
+        var servicioNegocio = new ServicioNegocioImpl(daoFactory);
 
-			var mensajeUsuario = CatalogoMensajes.ServicioFachadaImpl.ERROR_CONSULTANDO;
+        try {
 
-			throw KETRAFachadaException.crear(mensajeUsuario, excepcion.getMessage(), excepcion);
+            var filtroDominio = ServicioDTOAssembler.getInstance().convertirADominio(filtro);
 
-		} finally {
+            var datos = servicioNegocio.consultarPorFiltro(filtroDominio);
 
-			daoFactory.cerrarConexion();
+            final List<ServicioDTO> resultados = new ArrayList<>();
 
-		}
+            for (ServicioDominio dato : datos) {
 
-	}
+                resultados.add(ServicioDTOAssembler.getInstance().convertirADTO(dato));
 
-	@Override
-	public List<ServicioDTO> consultarPorFiltro(ServicioDTO filtro) {
+            }
 
-		try {
+            return resultados;
 
-			var filtroDominio = ServicioDTOAssembler.getInstance().convertirADominio(filtro);
+        } catch (KETRAExcepcion excepcion) {
 
-			var servicios = servicioNegocio.consultarPorFiltro(filtroDominio);
+            throw excepcion;
 
-			final List<ServicioDTO> resultados = new ArrayList<>();
+        } catch (Exception excepcion) {
 
-			for (ServicioDominio servicio : servicios) {
+            throw KETRAFachadaException.crear(
+                    CatalogoMensajes.ServicioFachadaImpl.ERROR_CONSULTANDO, excepcion.getMessage(), excepcion);
 
-				resultados.add(ServicioDTOAssembler.getInstance().convertirADTO(servicio));
+        } finally {
 
-			}
+            daoFactory.cerrarConexion();
 
-			return resultados;
+        }
 
-		} catch (KETRAExcepcion excepcion) {
+    }
 
-			throw excepcion;
+    @Override
+    public ServicioDTO finalizarServicio(UUID idServicio) {
 
-		} catch (Exception excepcion) {
+        var daoFactory = DAOFactory.obtenerFactoria();
 
-			var mensajeUsuario = CatalogoMensajes.ServicioFachadaImpl.ERROR_CONSULTANDO;
+        var servicioNegocio = new ServicioNegocioImpl(daoFactory);
 
-			throw KETRAFachadaException.crear(mensajeUsuario, excepcion.getMessage(), excepcion);
+        var utilidadNegocio = new UtilidadNegocioImpl(daoFactory);
 
-		} finally {
+        boolean transaccionIniciada = false;
 
-			daoFactory.cerrarConexion();
+        try {
 
-		}
+            daoFactory.iniciarTransaccion();
 
-	}
+            transaccionIniciada = true;
 
-	@Override
-	public List<ServicioDTO> consultarTodos() {
+            var servicio = servicioNegocio.finalizarServicio(idServicio);
 
-		return consultarPorFiltro(new ServicioDTO());
+            utilidadNegocio.generarUtilidad(idServicio);
 
-	}
+            var respuesta = ServicioDTOAssembler.getInstance().convertirADTO(servicio);
 
-	@Override
-	public ServicioDTO actualizarEstado(UUID id, ServicioDTO servicio) {
+            daoFactory.confirmarTransaccion();
 
-		boolean transaccionIniciada = false;
+            return respuesta;
 
-		try {
+        } catch (KETRAExcepcion excepcion) {
 
-			daoFactory.iniciarTransaccion();
+            if (transaccionIniciada) {
 
-			transaccionIniciada = true;
+                daoFactory.cancelarTransaccion();
 
-			var servicioDominio = ServicioDTOAssembler.getInstance().convertirADominio(servicio);
+            }
 
-			var actualizado = servicioNegocio.actualizarEstado(id, servicioDominio);
+            throw excepcion;
 
-			var respuesta = ServicioDTOAssembler.getInstance().convertirADTO(actualizado);
+        } catch (Exception excepcion) {
 
-			daoFactory.confirmarTransaccion();
+            if (transaccionIniciada) {
 
-			transaccionIniciada = false;
+                daoFactory.cancelarTransaccion();
 
-			return respuesta;
+            }
 
-		} catch (KETRAExcepcion excepcion) {
+            throw KETRAFachadaException.crear(
+                    CatalogoMensajes.FinalizacionServicio.ERROR_FINALIZANDO, excepcion.getMessage(), excepcion);
 
-			if (transaccionIniciada) {
+        } finally {
 
-				daoFactory.cancelarTransaccion();
+            daoFactory.cerrarConexion();
 
-			}
+        }
 
-			throw excepcion;
-
-		} catch (Exception excepcion) {
-
-			if (transaccionIniciada) {
-
-				daoFactory.cancelarTransaccion();
-
-			}
-
-			var mensajeUsuario = CatalogoMensajes.ServicioFachadaImpl.ERROR_ACTUALIZANDO;
-
-			throw KETRAFachadaException.crear(mensajeUsuario, excepcion.getMessage(), excepcion);
-
-		} finally {
-
-			daoFactory.cerrarConexion();
-
-		}
-
-	}
+    }
 
 }

@@ -1,5 +1,7 @@
 package com.ketra.dao.datos.entidad.sqlserver;
 
+import com.ketra.entidad.EstadoEntregaEntidad;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,23 +31,26 @@ public class EntregaTerceroSqlServerDAO extends SqlDAO implements EntregaTercero
 	public EntregaTerceroEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					ete.id AS id,
-					ent.id AS ent_id,
-					ent.codigoEntrega AS ent_codigoEntrega,
-					ent.fechaEntrega AS ent_fechaEntrega,
-					ent.estadoEntrega AS ent_estadoEntrega,
-					ent.idPersona AS ent_idPersona,
-					ter.id AS ter_id,
-					ter.nombre AS ter_nombre,
-					ter.nit AS ter_nit,
-					ter.numeroContacto AS ter_numeroContacto,
-					ter.correoContacto AS ter_correoContacto
-				FROM EntregaTercero ete
-				INNER JOIN Entrega ent ON ete.idEntrega = ent.id
-				INNER JOIN Tercero ter ON ete.idTercero = ter.id
-				WHERE ete.id = ?
-				""";
+                SELECT
+                    ete.id AS id,
+                    ent.id AS ent_id,
+                    ent.codigoEntrega AS ent_codigoEntrega,
+                    ent.fechaEntrega AS ent_fechaEntrega,
+                    ese.id AS ent_estadoEntrega_id,
+                    ese.codigo AS ent_estadoEntrega_codigo,
+                    ese.nombre AS ent_estadoEntrega_nombre,
+                    ent.idPersona AS ent_idPersona,
+                    ter.id AS ter_id,
+                    ter.nombre AS ter_nombre,
+                    ter.nit AS ter_nit,
+                    ter.numeroContacto AS ter_numeroContacto,
+                    ter.correoContacto AS ter_correoContacto
+                FROM EntregaTercero ete
+                INNER JOIN Entrega ent ON ete.idEntrega = ent.id
+                INNER JOIN EstadoEntrega ese ON ent.idEstadoEntrega = ese.id
+                INNER JOIN Tercero ter ON ete.idTercero = ter.id
+                WHERE ete.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -79,22 +84,25 @@ public class EntregaTerceroSqlServerDAO extends SqlDAO implements EntregaTercero
 	public List<EntregaTerceroEntidad> consultarPorFiltro(EntregaTerceroEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					ete.id AS id,
-					ent.id AS ent_id,
-					ent.codigoEntrega AS ent_codigoEntrega,
-					ent.fechaEntrega AS ent_fechaEntrega,
-					ent.estadoEntrega AS ent_estadoEntrega,
-					ent.idPersona AS ent_idPersona,
-					ter.id AS ter_id,
-					ter.nombre AS ter_nombre,
-					ter.nit AS ter_nit,
-					ter.numeroContacto AS ter_numeroContacto,
-					ter.correoContacto AS ter_correoContacto
-				FROM EntregaTercero ete
-				INNER JOIN Entrega ent ON ete.idEntrega = ent.id
-				INNER JOIN Tercero ter ON ete.idTercero = ter.id
-				""");
+                SELECT
+                    ete.id AS id,
+                    ent.id AS ent_id,
+                    ent.codigoEntrega AS ent_codigoEntrega,
+                    ent.fechaEntrega AS ent_fechaEntrega,
+                    ese.id AS ent_estadoEntrega_id,
+                    ese.codigo AS ent_estadoEntrega_codigo,
+                    ese.nombre AS ent_estadoEntrega_nombre,
+                    ent.idPersona AS ent_idPersona,
+                    ter.id AS ter_id,
+                    ter.nombre AS ter_nombre,
+                    ter.nit AS ter_nit,
+                    ter.numeroContacto AS ter_numeroContacto,
+                    ter.correoContacto AS ter_correoContacto
+                FROM EntregaTercero ete
+                INNER JOIN Entrega ent ON ete.idEntrega = ent.id
+                INNER JOIN EstadoEntrega ese ON ent.idEstadoEntrega = ese.id
+                INNER JOIN Tercero ter ON ete.idTercero = ter.id
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 
@@ -165,14 +173,18 @@ public class EntregaTerceroSqlServerDAO extends SqlDAO implements EntregaTercero
 				.id(UUID.fromString(resultado.getString("ent_id")))
 				.codigoEntrega(resultado.getString("ent_codigoEntrega"))
 				.fechaEntrega(resultado.getDate("ent_fechaEntrega").toLocalDate())
-				.estadoEntrega(resultado.getString("ent_estadoEntrega"))
+				.estadoEntrega(new EstadoEntregaEntidad.Builder()
+						.id(UUID.fromString(resultado.getString("ent_estadoEntrega_id")))
+						.codigo(resultado.getString("ent_estadoEntrega_codigo"))
+						.nombre(resultado.getString("ent_estadoEntrega_nombre"))
+						.build())
 				.persona(per)
 				.build();
 
 		final TerceroEntidad ter = new TerceroEntidad.Builder()
 				.id(UUID.fromString(resultado.getString("ter_id")))
 				.nombre(resultado.getString("ter_nombre"))
-				.NIT(resultado.getString("ter_nit"))
+				.nit(resultado.getString("ter_nit"))
 				.numeroContacto(resultado.getString("ter_numeroContacto"))
 				.correoContacto(resultado.getString("ter_correoContacto"))
 				.build();

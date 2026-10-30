@@ -9,13 +9,13 @@ public class ServicioCEDIDominio {
 
 	private UUID id;
 	private ServicioDominio servicio;
-	private CEDIDominio CEDI;
+	private CEDIDominio cedi;
 	private PedidoDominio pedido;
 
 	ServicioCEDIDominio(Builder builder) {
 		this.id = builder.id;
 		this.servicio = builder.servicio;
-		this.CEDI = builder.CEDI;
+		this.cedi = builder.cedi;
 		this.pedido = builder.pedido;
 	}
 
@@ -27,8 +27,8 @@ public class ServicioCEDIDominio {
 		return servicio;
 	}
 
-	public CEDIDominio getCEDI() {
-		return CEDI;
+	public CEDIDominio getCedi() {
+		return cedi;
 	}
 
 	public PedidoDominio getPedido() {
@@ -38,13 +38,13 @@ public class ServicioCEDIDominio {
 	public static class Builder {
 		private UUID id;
 		private ServicioDominio servicio;
-		private CEDIDominio CEDI;
+		private CEDIDominio cedi;
 		private PedidoDominio pedido;
 
 		public Builder() {
 			id = UtilUUID.obtenerValorDefecto(id);
 			servicio = new ServicioDominio.Builder().build();
-			CEDI = new CEDIDominio.Builder().build();
+			cedi = new CEDIDominio.Builder().build();
 			pedido = new PedidoDominio.Builder().build();
 		}
 
@@ -58,8 +58,8 @@ public class ServicioCEDIDominio {
 			return this;
 		}
 
-		public Builder CEDI(CEDIDominio CEDI) {
-			this.CEDI = UtilObjeto.obtenerValorDefectoSiNulo(CEDI, new CEDIDominio.Builder().build());
+		public Builder cedi(CEDIDominio cedi) {
+			this.cedi = UtilObjeto.obtenerValorDefectoSiNulo(cedi, new CEDIDominio.Builder().build());
 			return this;
 		}
 

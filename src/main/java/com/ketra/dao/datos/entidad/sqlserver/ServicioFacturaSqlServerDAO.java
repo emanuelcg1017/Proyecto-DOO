@@ -1,5 +1,9 @@
 package com.ketra.dao.datos.entidad.sqlserver;
 
+import com.ketra.entidad.EstadoFacturaEntidad;
+
+import com.ketra.entidad.EstadoServicioEntidad;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,22 +32,28 @@ public class ServicioFacturaSqlServerDAO extends SqlDAO implements ServicioFactu
 	public ServicioFacturaEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					sfa.id AS id,
-					ser.id AS ser_id,
-					ser.numeroServicio AS ser_numeroServicio,
-					ser.fechaServicio AS ser_fechaServicio,
-					ser.estado AS ser_estado,
-					fac.id AS fac_id,
-					fac.numeroFactura AS fac_numeroFactura,
-					fac.fechaFactura AS fac_fechaFactura,
-					fac.ingresos AS fac_ingresos,
-					fac.estadoFactura AS fac_estadoFactura
-				FROM ServicioFactura sfa
-				INNER JOIN Servicio ser ON sfa.idServicio = ser.id
-				INNER JOIN Factura fac ON sfa.idFactura = fac.id
-				WHERE sfa.id = ?
-				""";
+                SELECT
+                    sfa.id AS id,
+                    ser.id AS ser_id,
+                    ser.numeroServicio AS ser_numeroServicio,
+                    ser.fechaServicio AS ser_fechaServicio,
+                    ess.id AS ser_estado_id,
+                    ess.codigo AS ser_estado_codigo,
+                    ess.nombre AS ser_estado_nombre,
+                    fac.id AS fac_id,
+                    fac.numeroFactura AS fac_numeroFactura,
+                    fac.fechaFactura AS fac_fechaFactura,
+                    fac.ingresos AS fac_ingresos,
+                    esf.id AS fac_estadoFactura_id,
+                    esf.codigo AS fac_estadoFactura_codigo,
+                    esf.nombre AS fac_estadoFactura_nombre
+                FROM ServicioFactura sfa
+                INNER JOIN Servicio ser ON sfa.idServicio = ser.id
+                INNER JOIN EstadoServicio ess ON ser.idEstadoServicio = ess.id
+                INNER JOIN Factura fac ON sfa.idFactura = fac.id
+                INNER JOIN EstadoFactura esf ON fac.idEstadoFactura = esf.id
+                WHERE sfa.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -77,21 +87,27 @@ public class ServicioFacturaSqlServerDAO extends SqlDAO implements ServicioFactu
 	public List<ServicioFacturaEntidad> consultarPorFiltro(ServicioFacturaEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					sfa.id AS id,
-					ser.id AS ser_id,
-					ser.numeroServicio AS ser_numeroServicio,
-					ser.fechaServicio AS ser_fechaServicio,
-					ser.estado AS ser_estado,
-					fac.id AS fac_id,
-					fac.numeroFactura AS fac_numeroFactura,
-					fac.fechaFactura AS fac_fechaFactura,
-					fac.ingresos AS fac_ingresos,
-					fac.estadoFactura AS fac_estadoFactura
-				FROM ServicioFactura sfa
-				INNER JOIN Servicio ser ON sfa.idServicio = ser.id
-				INNER JOIN Factura fac ON sfa.idFactura = fac.id
-				""");
+                SELECT
+                    sfa.id AS id,
+                    ser.id AS ser_id,
+                    ser.numeroServicio AS ser_numeroServicio,
+                    ser.fechaServicio AS ser_fechaServicio,
+                    ess.id AS ser_estado_id,
+                    ess.codigo AS ser_estado_codigo,
+                    ess.nombre AS ser_estado_nombre,
+                    fac.id AS fac_id,
+                    fac.numeroFactura AS fac_numeroFactura,
+                    fac.fechaFactura AS fac_fechaFactura,
+                    fac.ingresos AS fac_ingresos,
+                    esf.id AS fac_estadoFactura_id,
+                    esf.codigo AS fac_estadoFactura_codigo,
+                    esf.nombre AS fac_estadoFactura_nombre
+                FROM ServicioFactura sfa
+                INNER JOIN Servicio ser ON sfa.idServicio = ser.id
+                INNER JOIN EstadoServicio ess ON ser.idEstadoServicio = ess.id
+                INNER JOIN Factura fac ON sfa.idFactura = fac.id
+                INNER JOIN EstadoFactura esf ON fac.idEstadoFactura = esf.id
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 
@@ -158,7 +174,11 @@ public class ServicioFacturaSqlServerDAO extends SqlDAO implements ServicioFactu
 				.id(UUID.fromString(resultado.getString("ser_id")))
 				.numeroServicio(resultado.getString("ser_numeroServicio"))
 				.fechaServicio(resultado.getDate("ser_fechaServicio").toLocalDate())
-				.estado(resultado.getString("ser_estado"))
+				.estado(new EstadoServicioEntidad.Builder()
+						.id(UUID.fromString(resultado.getString("ser_estado_id")))
+						.codigo(resultado.getString("ser_estado_codigo"))
+						.nombre(resultado.getString("ser_estado_nombre"))
+						.build())
 				.build();
 
 		final FacturaEntidad fac = new FacturaEntidad.Builder()
@@ -166,7 +186,11 @@ public class ServicioFacturaSqlServerDAO extends SqlDAO implements ServicioFactu
 				.numeroFactura(resultado.getString("fac_numeroFactura"))
 				.fechaFactura(resultado.getDate("fac_fechaFactura").toLocalDate())
 				.ingresos(resultado.getDouble("fac_ingresos"))
-				.EstadoFactura(resultado.getString("fac_estadoFactura"))
+				.estadoFactura(new EstadoFacturaEntidad.Builder()
+						.id(UUID.fromString(resultado.getString("fac_estadoFactura_id")))
+						.codigo(resultado.getString("fac_estadoFactura_codigo"))
+						.nombre(resultado.getString("fac_estadoFactura_nombre"))
+						.build())
 				.build();
 
 		return new ServicioFacturaEntidad.Builder()

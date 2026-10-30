@@ -27,16 +27,16 @@ public class DetallePedidoSqlServerDAO extends SqlDAO implements DetallePedidoDA
 	public DetallePedidoEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					dpe.id AS id,
-					ped.id AS ped_id,
-					ped.numeroPedido AS ped_numeroPedido,
-					ped.fechaPedido AS ped_fechaPedido,
-					dpe.codigoBarras AS codigoBarras
-				FROM DetallePedido dpe
-				INNER JOIN Pedido ped ON dpe.idPedido = ped.id
-				WHERE dpe.id = ?
-				""";
+                SELECT
+                    dpe.id AS id,
+                    ped.id AS ped_id,
+                    ped.numeroPedido AS ped_numeroPedido,
+                    ped.fechaPedido AS ped_fechaPedido,
+                    dpe.codigoBarras AS codigoBarras
+                FROM DetallePedido dpe
+                INNER JOIN Pedido ped ON dpe.idPedido = ped.id
+                WHERE dpe.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -70,15 +70,15 @@ public class DetallePedidoSqlServerDAO extends SqlDAO implements DetallePedidoDA
 	public List<DetallePedidoEntidad> consultarPorFiltro(DetallePedidoEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					dpe.id AS id,
-					ped.id AS ped_id,
-					ped.numeroPedido AS ped_numeroPedido,
-					ped.fechaPedido AS ped_fechaPedido,
-					dpe.codigoBarras AS codigoBarras
-				FROM DetallePedido dpe
-				INNER JOIN Pedido ped ON dpe.idPedido = ped.id
-				""");
+                SELECT
+                    dpe.id AS id,
+                    ped.id AS ped_id,
+                    ped.numeroPedido AS ped_numeroPedido,
+                    ped.fechaPedido AS ped_fechaPedido,
+                    dpe.codigoBarras AS codigoBarras
+                FROM DetallePedido dpe
+                INNER JOIN Pedido ped ON dpe.idPedido = ped.id
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 
@@ -143,13 +143,13 @@ public class DetallePedidoSqlServerDAO extends SqlDAO implements DetallePedidoDA
 	public void crear(DetallePedidoEntidad entidad) {
 
 		final String sql = """
-				INSERT INTO DetallePedido (
-					id,
-					idPedido,
-					codigoBarras
-				)
-				VALUES (?, ?, ?)
-				""";
+                INSERT INTO DetallePedido (
+                    id,
+                    idPedido,
+                    codigoBarras
+                )
+                VALUES (?, ?, ?)
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 

@@ -1,5 +1,7 @@
 package com.ketra.entidad;
 
+import com.ketra.transversal.utilitarios.UtilObjeto;
+
 import java.util.UUID;
 import java.time.LocalDate;
 
@@ -12,7 +14,7 @@ public class ServicioEntidad {
 	private UUID id;
 	private String numeroServicio;
 	private LocalDate fechaServicio;
-	private String estado;
+	private EstadoServicioEntidad estado;
 
 	private ServicioEntidad(Builder builder) {
 		this.id = builder.id;
@@ -33,7 +35,7 @@ public class ServicioEntidad {
 		return fechaServicio;
 	}
 
-	public String getEstado() {
+	public EstadoServicioEntidad getEstado() {
 		return estado;
 	}
 
@@ -42,13 +44,13 @@ public class ServicioEntidad {
 		private UUID id;
 		private String numeroServicio;
 		private LocalDate fechaServicio;
-		private String estado;
+		private EstadoServicioEntidad estado;
 
 		public Builder() {
 			id = UtilUUID.obtenerValorDefecto(id);
 			numeroServicio = UtilTexto.VACIO;
 			fechaServicio = UtilFecha.FECHA_DEFECTO;
-			estado = UtilTexto.VACIO;
+			estado = new EstadoServicioEntidad.Builder().build();
 		}
 
 		public Builder id(UUID id) {
@@ -66,8 +68,8 @@ public class ServicioEntidad {
 			return this;
 		}
 
-		public Builder estado(String estado) {
-			this.estado = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(estado);
+		public Builder estado(EstadoServicioEntidad estado) {
+			this.estado = UtilObjeto.obtenerValorDefectoSiNulo(estado, new EstadoServicioEntidad.Builder().build());
 			return this;
 		}
 

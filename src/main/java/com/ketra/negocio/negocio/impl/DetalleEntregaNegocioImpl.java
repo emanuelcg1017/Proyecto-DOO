@@ -1,14 +1,19 @@
 package com.ketra.negocio.negocio.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import com.ketra.dao.factoria.DAOFactory;
 import com.ketra.dominio.DetalleEntregaDominio;
+import com.ketra.dominio.EntregaDominio;
 import com.ketra.entidad.DetalleEntregaEntidad;
+import com.ketra.entidad.EntregaEntidad;
 import com.ketra.negocio.negocio.DetalleEntregaNegocio;
 import com.ketra.negocio.negocio.assembler.impl.DetalleEntregaEntidadAssembler;
+import com.ketra.negocio.negocio.reglas.impl.detalleentrega.ValidarDatosConsultarDetallesEntregaRule;
 
 public class DetalleEntregaNegocioImpl implements DetalleEntregaNegocio {
 
@@ -21,17 +26,31 @@ public class DetalleEntregaNegocioImpl implements DetalleEntregaNegocio {
 	}
 
 	@Override
-	public List<DetalleEntregaDominio> consultarPorServicio(UUID idServicio) {
+	public List<DetalleEntregaDominio> consultarDetallesEntrega(List<EntregaDominio> entregas) {
 
-		new ServicioNegocioImpl(daoFactory).consultarPorId(idServicio);
-
-		var entidades = daoFactory.obtenerDetalleEntregaDAO().consultarPorServicio(idServicio);
+		ValidarDatosConsultarDetallesEntregaRule.obtenerInstancia().ejecutar(entregas);
 
 		final List<DetalleEntregaDominio> resultados = new ArrayList<>();
 
-		for (DetalleEntregaEntidad entidad : entidades) {
+		final Set<UUID> identificadores = new HashSet<>();
 
-			resultados.add(DetalleEntregaEntidadAssembler.getInstance().convertirADominio(entidad));
+		for (EntregaDominio entrega : entregas) {
+
+			var referencia = new EntregaEntidad.Builder().id(entrega.getId()).build();
+
+			var filtro = new DetalleEntregaEntidad.Builder().entrega(referencia).build();
+
+			var entidades = daoFactory.obtenerDetalleEntregaDAO().consultarPorFiltro(filtro);
+
+			for (DetalleEntregaEntidad entidad : entidades) {
+
+				if (identificadores.add(entidad.getId())) {
+
+					resultados.add(DetalleEntregaEntidadAssembler.getInstance().convertirADominio(entidad));
+
+				}
+
+			}
 
 		}
 

@@ -1,5 +1,7 @@
 package com.ketra.dto;
 
+import com.ketra.transversal.utilitarios.UtilObjeto;
+
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -15,7 +17,7 @@ public class EntregaDTO {
 
 	private LocalDate fechaEntrega;
 
-	private String estadoEntrega;
+	private EstadoEntregaDTO estadoEntrega;
 
 	public EntregaDTO() {
 
@@ -25,7 +27,7 @@ public class EntregaDTO {
 
 		setFechaEntrega(UtilFecha.FECHA_DEFECTO);
 
-		setEstadoEntrega(UtilTexto.VACIO);
+		setEstadoEntrega(new EstadoEntregaDTO());
 
 	}
 
@@ -65,15 +67,15 @@ public class EntregaDTO {
 
 	}
 
-	public String getEstadoEntrega() {
+	public EstadoEntregaDTO getEstadoEntrega() {
 
 		return estadoEntrega;
 
 	}
 
-	public void setEstadoEntrega(String estadoEntrega) {
+	public void setEstadoEntrega(EstadoEntregaDTO estadoEntrega) {
 
-		this.estadoEntrega = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(estadoEntrega);
+		this.estadoEntrega = UtilObjeto.obtenerValorDefectoSiNulo(estadoEntrega, new EstadoEntregaDTO());
 
 	}
 

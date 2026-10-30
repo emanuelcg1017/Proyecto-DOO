@@ -1,5 +1,7 @@
 package com.ketra.dao.datos.entidad.sqlserver;
 
+import com.ketra.entidad.EstadoEntregaEntidad;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,32 +36,35 @@ public class DetalleEntregaSqlServerDAO extends SqlDAO implements DetalleEntrega
 	public DetalleEntregaEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					den.id AS id,
-					den.numeroDetalleEntrega AS numeroDetalleEntrega,
-					den.distanciaKM AS distanciaKM,
-					ped.id AS ped_id,
-					ped.numeroPedido AS ped_numeroPedido,
-					ped.fechaPedido AS ped_fechaPedido,
-					ent.id AS ent_id,
-					ent.codigoEntrega AS ent_codigoEntrega,
-					ent.fechaEntrega AS ent_fechaEntrega,
-					ent.estadoEntrega AS ent_estadoEntrega,
-					ent.idPersona AS ent_idPersona,
-					ced.id AS ced_id,
-					ced.nombre AS ced_nombre,
-					ced.idDireccion AS ced_idDireccion,
-					dir2.id AS dir2_id,
-					dir2.nombre AS dir2_nombre,
-					dir2.idBarrio AS dir2_idBarrio,
-					dir2.idTipoDireccion AS dir2_idTipoDireccion
-				FROM DetalleEntrega den
-				INNER JOIN Pedido ped ON den.idPedido = ped.id
-				INNER JOIN Entrega ent ON den.idEntrega = ent.id
-				INNER JOIN CEDI ced ON den.idCediOrigen = ced.id
-				INNER JOIN Direccion dir2 ON den.idDireccionDestino = dir2.id
-				WHERE den.id = ?
-				""";
+                SELECT
+                    den.id AS id,
+                    den.numeroDetalleEntrega AS numeroDetalleEntrega,
+                    den.distanciaKM AS distanciaKM,
+                    ped.id AS ped_id,
+                    ped.numeroPedido AS ped_numeroPedido,
+                    ped.fechaPedido AS ped_fechaPedido,
+                    ent.id AS ent_id,
+                    ent.codigoEntrega AS ent_codigoEntrega,
+                    ent.fechaEntrega AS ent_fechaEntrega,
+                    ese.id AS ent_estadoEntrega_id,
+                    ese.codigo AS ent_estadoEntrega_codigo,
+                    ese.nombre AS ent_estadoEntrega_nombre,
+                    ent.idPersona AS ent_idPersona,
+                    ced.id AS ced_id,
+                    ced.nombre AS ced_nombre,
+                    ced.idDireccion AS ced_idDireccion,
+                    dir2.id AS dir2_id,
+                    dir2.nombre AS dir2_nombre,
+                    dir2.idBarrio AS dir2_idBarrio,
+                    dir2.idTipoDireccion AS dir2_idTipoDireccion
+                FROM DetalleEntrega den
+                INNER JOIN Pedido ped ON den.idPedido = ped.id
+                INNER JOIN Entrega ent ON den.idEntrega = ent.id
+                INNER JOIN EstadoEntrega ese ON ent.idEstadoEntrega = ese.id
+                INNER JOIN CEDI ced ON den.idCediOrigen = ced.id
+                INNER JOIN Direccion dir2 ON den.idDireccionDestino = dir2.id
+                WHERE den.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -93,31 +98,34 @@ public class DetalleEntregaSqlServerDAO extends SqlDAO implements DetalleEntrega
 	public List<DetalleEntregaEntidad> consultarPorFiltro(DetalleEntregaEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					den.id AS id,
-					den.numeroDetalleEntrega AS numeroDetalleEntrega,
-					den.distanciaKM AS distanciaKM,
-					ped.id AS ped_id,
-					ped.numeroPedido AS ped_numeroPedido,
-					ped.fechaPedido AS ped_fechaPedido,
-					ent.id AS ent_id,
-					ent.codigoEntrega AS ent_codigoEntrega,
-					ent.fechaEntrega AS ent_fechaEntrega,
-					ent.estadoEntrega AS ent_estadoEntrega,
-					ent.idPersona AS ent_idPersona,
-					ced.id AS ced_id,
-					ced.nombre AS ced_nombre,
-					ced.idDireccion AS ced_idDireccion,
-					dir2.id AS dir2_id,
-					dir2.nombre AS dir2_nombre,
-					dir2.idBarrio AS dir2_idBarrio,
-					dir2.idTipoDireccion AS dir2_idTipoDireccion
-				FROM DetalleEntrega den
-				INNER JOIN Pedido ped ON den.idPedido = ped.id
-				INNER JOIN Entrega ent ON den.idEntrega = ent.id
-				INNER JOIN CEDI ced ON den.idCediOrigen = ced.id
-				INNER JOIN Direccion dir2 ON den.idDireccionDestino = dir2.id
-				""");
+                SELECT
+                    den.id AS id,
+                    den.numeroDetalleEntrega AS numeroDetalleEntrega,
+                    den.distanciaKM AS distanciaKM,
+                    ped.id AS ped_id,
+                    ped.numeroPedido AS ped_numeroPedido,
+                    ped.fechaPedido AS ped_fechaPedido,
+                    ent.id AS ent_id,
+                    ent.codigoEntrega AS ent_codigoEntrega,
+                    ent.fechaEntrega AS ent_fechaEntrega,
+                    ese.id AS ent_estadoEntrega_id,
+                    ese.codigo AS ent_estadoEntrega_codigo,
+                    ese.nombre AS ent_estadoEntrega_nombre,
+                    ent.idPersona AS ent_idPersona,
+                    ced.id AS ced_id,
+                    ced.nombre AS ced_nombre,
+                    ced.idDireccion AS ced_idDireccion,
+                    dir2.id AS dir2_id,
+                    dir2.nombre AS dir2_nombre,
+                    dir2.idBarrio AS dir2_idBarrio,
+                    dir2.idTipoDireccion AS dir2_idTipoDireccion
+                FROM DetalleEntrega den
+                INNER JOIN Pedido ped ON den.idPedido = ped.id
+                INNER JOIN Entrega ent ON den.idEntrega = ent.id
+                INNER JOIN EstadoEntrega ese ON ent.idEstadoEntrega = ese.id
+                INNER JOIN CEDI ced ON den.idCediOrigen = ced.id
+                INNER JOIN Direccion dir2 ON den.idDireccionDestino = dir2.id
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 
@@ -141,9 +149,9 @@ public class DetalleEntregaSqlServerDAO extends SqlDAO implements DetalleEntrega
 			parametros.add(filtro.getEntrega().getId());
 		}
 
-		if (!UtilUUID.UUID_DEFECTO.equals(filtro.getCEDIOrigen().getId())) {
+		if (!UtilUUID.UUID_DEFECTO.equals(filtro.getCediOrigen().getId())) {
 			condiciones.add("den.idCediOrigen = ?");
-			parametros.add(filtro.getCEDIOrigen().getId());
+			parametros.add(filtro.getCediOrigen().getId());
 		}
 
 		if (!UtilUUID.UUID_DEFECTO.equals(filtro.getDireccionDestino().getId())) {
@@ -202,17 +210,17 @@ public class DetalleEntregaSqlServerDAO extends SqlDAO implements DetalleEntrega
 	public void crear(DetalleEntregaEntidad entidad) {
 
 		final String sql = """
-				INSERT INTO DetalleEntrega (
-					id,
-					numeroDetalleEntrega,
-					idPedido,
-					idEntrega,
-					idCediOrigen,
-					idDireccionDestino,
-					distanciaKM
-				)
-				VALUES (?, ?, ?, ?, ?, ?, ?)
-				""";
+                INSERT INTO DetalleEntrega (
+                    id,
+                    numeroDetalleEntrega,
+                    idPedido,
+                    idEntrega,
+                    idCediOrigen,
+                    idDireccionDestino,
+                    distanciaKM
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -220,7 +228,7 @@ public class DetalleEntregaSqlServerDAO extends SqlDAO implements DetalleEntrega
 			sentencia.setString(2, entidad.getNumeroDetalleEntrega());
 			sentencia.setObject(3, entidad.getPedido().getId());
 			sentencia.setObject(4, entidad.getEntrega().getId());
-			sentencia.setObject(5, entidad.getCEDIOrigen().getId());
+			sentencia.setObject(5, entidad.getCediOrigen().getId());
 			sentencia.setObject(6, entidad.getDireccionDestino().getId());
 			sentencia.setDouble(7, entidad.getDistanciaKM());
 
@@ -242,74 +250,6 @@ public class DetalleEntregaSqlServerDAO extends SqlDAO implements DetalleEntrega
 		}
 	}
 
-	@Override
-	public List<DetalleEntregaEntidad> consultarPorServicio(UUID idServicio) {
-
-		final String sql = """
-				SELECT DISTINCT
-					den.id AS id,
-					den.numeroDetalleEntrega AS numeroDetalleEntrega,
-					den.distanciaKM AS distanciaKM,
-					ped.id AS ped_id,
-					ped.numeroPedido AS ped_numeroPedido,
-					ped.fechaPedido AS ped_fechaPedido,
-					ent.id AS ent_id,
-					ent.codigoEntrega AS ent_codigoEntrega,
-					ent.fechaEntrega AS ent_fechaEntrega,
-					ent.estadoEntrega AS ent_estadoEntrega,
-					ent.idPersona AS ent_idPersona,
-					ced.id AS ced_id,
-					ced.nombre AS ced_nombre,
-					ced.idDireccion AS ced_idDireccion,
-					dir2.id AS dir2_id,
-					dir2.nombre AS dir2_nombre,
-					dir2.idBarrio AS dir2_idBarrio,
-					dir2.idTipoDireccion AS dir2_idTipoDireccion
-				FROM DetalleEntrega den
-				INNER JOIN Pedido ped ON den.idPedido = ped.id
-				INNER JOIN Entrega ent ON den.idEntrega = ent.id
-				INNER JOIN CEDI ced ON den.idCediOrigen = ced.id
-				INNER JOIN Direccion dir2 ON den.idDireccionDestino = dir2.id
-				INNER JOIN ServicioEntrega sen ON sen.idEntrega = den.idEntrega
-				WHERE sen.idServicio = ?
-				""";
-
-		final List<DetalleEntregaEntidad> resultados = new ArrayList<>();
-
-		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
-
-			sentencia.setObject(1, idServicio);
-
-			try (ResultSet resultado = sentencia.executeQuery()) {
-
-				while (resultado.next()) {
-
-					resultados.add(construirDetalleEntregaEntidad(resultado));
-
-				}
-
-			}
-
-		} catch (SQLException excepcion) {
-
-			throw KETRADatosException.crear(
-					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_CONSULTAR, excepcion.getMessage()),
-					excepcion);
-
-		} catch (Exception excepcion) {
-
-			throw KETRADatosException.crear(
-					CatalogoMensajes.SqlServerDAO.USUARIO_ERROR_CONSULTAR,
-					UtilTexto.getUtilTexto().concatenar(CatalogoMensajes.SqlServerDAO.TECNICO_ERROR_NO_CONTROLADO_CONSULTAR, excepcion.getMessage()),
-					excepcion);
-
-		}
-
-		return resultados;
-
-	}
-
 	private DetalleEntregaEntidad construirDetalleEntregaEntidad(final ResultSet resultado) throws SQLException {
 
 		final PedidoEntidad ped = new PedidoEntidad.Builder()
@@ -326,7 +266,11 @@ public class DetalleEntregaSqlServerDAO extends SqlDAO implements DetalleEntrega
 				.id(UUID.fromString(resultado.getString("ent_id")))
 				.codigoEntrega(resultado.getString("ent_codigoEntrega"))
 				.fechaEntrega(resultado.getDate("ent_fechaEntrega").toLocalDate())
-				.estadoEntrega(resultado.getString("ent_estadoEntrega"))
+				.estadoEntrega(new EstadoEntregaEntidad.Builder()
+						.id(UUID.fromString(resultado.getString("ent_estadoEntrega_id")))
+						.codigo(resultado.getString("ent_estadoEntrega_codigo"))
+						.nombre(resultado.getString("ent_estadoEntrega_nombre"))
+						.build())
 				.persona(per)
 				.build();
 
@@ -360,7 +304,7 @@ public class DetalleEntregaSqlServerDAO extends SqlDAO implements DetalleEntrega
 				.numeroDetalleEntrega(resultado.getString("numeroDetalleEntrega"))
 				.pedido(ped)
 				.entrega(ent)
-				.CEDIOrigen(ced)
+				.cediOrigen(ced)
 				.direccionDestino(dir2)
 				.distanciaKM(resultado.getDouble("distanciaKM"))
 				.build();

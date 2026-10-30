@@ -15,7 +15,7 @@ public class PreliquidacionEntidad {
 	private TerceroEntidad tercero;
 	private CostoRecorridoEntidad valorCosto;
 	private LocalDate fechaPreliquidacion;
-	private String Estado;
+	private EstadoPreliquidacionEntidad estado;
 
 	private PreliquidacionEntidad(Builder builder) {
 		this.id = builder.id;
@@ -23,7 +23,7 @@ public class PreliquidacionEntidad {
 		this.tercero = builder.tercero;
 		this.valorCosto = builder.valorCosto;
 		this.fechaPreliquidacion = builder.fechaPreliquidacion;
-		this.Estado = builder.Estado;
+		this.estado = builder.estado;
 	}
 
 	public UUID getId() {
@@ -46,8 +46,8 @@ public class PreliquidacionEntidad {
 		return fechaPreliquidacion;
 	}
 
-	public String getEstado() {
-		return Estado;
+	public EstadoPreliquidacionEntidad getEstado() {
+		return estado;
 	}
 
 	public static class Builder {
@@ -57,7 +57,7 @@ public class PreliquidacionEntidad {
 		private TerceroEntidad tercero;
 		private CostoRecorridoEntidad valorCosto;
 		private LocalDate fechaPreliquidacion;
-		private String Estado;
+		private EstadoPreliquidacionEntidad estado;
 
 		public Builder() {
 			id = UtilUUID.obtenerValorDefecto(id);
@@ -65,7 +65,7 @@ public class PreliquidacionEntidad {
 			tercero = new TerceroEntidad.Builder().build();
 			valorCosto = new CostoRecorridoEntidad.Builder().build();
 			fechaPreliquidacion = UtilFecha.FECHA_DEFECTO;
-			Estado = UtilTexto.VACIO;
+			estado = new EstadoPreliquidacionEntidad.Builder().build();
 		}
 
 		public Builder id(UUID id) {
@@ -93,8 +93,8 @@ public class PreliquidacionEntidad {
 			return this;
 		}
 
-		public Builder Estado(String Estado) {
-			this.Estado = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(Estado);
+		public Builder estado(EstadoPreliquidacionEntidad estado) {
+			this.estado = UtilObjeto.obtenerValorDefectoSiNulo(estado, new EstadoPreliquidacionEntidad.Builder().build());
 			return this;
 		}
 

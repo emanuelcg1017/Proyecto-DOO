@@ -1,5 +1,7 @@
 package com.ketra.dominio;
 
+import com.ketra.transversal.utilitarios.UtilObjeto;
+
 import java.time.LocalDate;
 import java.util.UUID;
 import com.ketra.transversal.utilitarios.UtilFecha;
@@ -11,7 +13,7 @@ public class EntregaDominio {
 	private UUID id;
 	private String codigoEntrega;
 	private LocalDate fechaEntrega;
-	private String estadoEntrega;
+	private EstadoEntregaDominio estadoEntrega;
 
 	EntregaDominio(Builder builder) {
 		this.id = builder.id;
@@ -32,7 +34,7 @@ public class EntregaDominio {
 		return fechaEntrega;
 	}
 
-	public String getEstadoEntrega() {
+	public EstadoEntregaDominio getEstadoEntrega() {
 		return estadoEntrega;
 	}
 
@@ -40,13 +42,13 @@ public class EntregaDominio {
 		private UUID id;
 		private String codigoEntrega;
 		private LocalDate fechaEntrega;
-		private String estadoEntrega;
+		private EstadoEntregaDominio estadoEntrega;
 
 		public Builder() {
 			id = UtilUUID.obtenerValorDefecto(id);
 			codigoEntrega = UtilTexto.VACIO;
 			fechaEntrega = UtilFecha.FECHA_DEFECTO;
-			estadoEntrega = UtilTexto.VACIO;
+			estadoEntrega = new EstadoEntregaDominio.Builder().build();
 		}
 
 		public Builder id(UUID id) {
@@ -64,8 +66,8 @@ public class EntregaDominio {
 			return this;
 		}
 
-		public Builder estadoEntrega(String estadoEntrega) {
-			this.estadoEntrega = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(estadoEntrega);
+		public Builder estadoEntrega(EstadoEntregaDominio estadoEntrega) {
+			this.estadoEntrega = UtilObjeto.obtenerValorDefectoSiNulo(estadoEntrega, new EstadoEntregaDominio.Builder().build());
 			return this;
 		}
 

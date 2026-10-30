@@ -27,14 +27,14 @@ public class PedidoSqlServerDAO extends SqlDAO implements PedidoDAO {
 	public PedidoEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					ped.id AS id,
-					ped.numeroPedido AS numeroPedido,
-					ped.fechaPedido AS fechaPedido
-				FROM Pedido ped
+                SELECT
+                    ped.id AS id,
+                    ped.numeroPedido AS numeroPedido,
+                    ped.fechaPedido AS fechaPedido
+                FROM Pedido ped
 
-				WHERE ped.id = ?
-				""";
+                WHERE ped.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -68,12 +68,12 @@ public class PedidoSqlServerDAO extends SqlDAO implements PedidoDAO {
 	public List<PedidoEntidad> consultarPorFiltro(PedidoEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					ped.id AS id,
-					ped.numeroPedido AS numeroPedido,
-					ped.fechaPedido AS fechaPedido
-				FROM Pedido ped
-				""");
+                SELECT
+                    ped.id AS id,
+                    ped.numeroPedido AS numeroPedido,
+                    ped.fechaPedido AS fechaPedido
+                FROM Pedido ped
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 
@@ -138,13 +138,13 @@ public class PedidoSqlServerDAO extends SqlDAO implements PedidoDAO {
 	public void crear(PedidoEntidad entidad) {
 
 		final String sql = """
-				INSERT INTO Pedido (
-					id,
-					numeroPedido,
-					fechaPedido
-				)
-				VALUES (?, ?, ?)
-				""";
+                INSERT INTO Pedido (
+                    id,
+                    numeroPedido,
+                    fechaPedido
+                )
+                VALUES (?, ?, ?)
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 

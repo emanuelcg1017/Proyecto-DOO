@@ -28,7 +28,7 @@ public class EntregaEntidadAssembler implements EntidadAssembler<EntregaDominio,
 				.id(datos.getId())
 				.codigoEntrega(datos.getCodigoEntrega())
 				.fechaEntrega(datos.getFechaEntrega())
-				.estadoEntrega(datos.getEstadoEntrega())
+				.estadoEntrega(EstadoEntregaEntidadAssembler.getInstance().convertirAEntidad(datos.getEstadoEntrega()))
 				.build();
 
 	}
@@ -42,7 +42,7 @@ public class EntregaEntidadAssembler implements EntidadAssembler<EntregaDominio,
 				.id(datos.getId())
 				.codigoEntrega(datos.getCodigoEntrega())
 				.fechaEntrega(datos.getFechaEntrega())
-				.estadoEntrega(datos.getEstadoEntrega())
+				.estadoEntrega(EstadoEntregaEntidadAssembler.getInstance().convertirADominio(datos.getEstadoEntrega()))
 				.build();
 
 	}

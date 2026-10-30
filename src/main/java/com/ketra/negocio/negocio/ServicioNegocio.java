@@ -7,12 +7,10 @@ import com.ketra.dominio.ServicioDominio;
 
 public interface ServicioNegocio {
 
-	ServicioDominio consultarPorId(UUID id);
+    ServicioDominio consultarPorId(UUID id);
 
-	List<ServicioDominio> consultarPorFiltro(ServicioDominio filtro);
+    List<ServicioDominio> consultarPorFiltro(ServicioDominio filtro);
 
-	List<ServicioDominio> consultarTodos();
-
-	ServicioDominio actualizarEstado(UUID id, ServicioDominio servicio);
+    ServicioDominio finalizarServicio(UUID idServicio);
 
 }

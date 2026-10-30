@@ -29,19 +29,19 @@ public class DireccionSqlServerDAO extends SqlDAO implements DireccionDAO {
 	public DireccionEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					dir.id AS id,
-					dir.nombre AS nombre,
-					bar.id AS bar_id,
-					bar.nombre AS bar_nombre,
-					bar.idMunicipio AS bar_idMunicipio,
-					tdi.id AS tdi_id,
-					tdi.nombre AS tdi_nombre
-				FROM Direccion dir
-				INNER JOIN Barrio bar ON dir.idBarrio = bar.id
-				INNER JOIN TipoDireccion tdi ON dir.idTipoDireccion = tdi.id
-				WHERE dir.id = ?
-				""";
+                SELECT
+                    dir.id AS id,
+                    dir.nombre AS nombre,
+                    bar.id AS bar_id,
+                    bar.nombre AS bar_nombre,
+                    bar.idMunicipio AS bar_idMunicipio,
+                    tdi.id AS tdi_id,
+                    tdi.nombre AS tdi_nombre
+                FROM Direccion dir
+                INNER JOIN Barrio bar ON dir.idBarrio = bar.id
+                INNER JOIN TipoDireccion tdi ON dir.idTipoDireccion = tdi.id
+                WHERE dir.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -75,18 +75,18 @@ public class DireccionSqlServerDAO extends SqlDAO implements DireccionDAO {
 	public List<DireccionEntidad> consultarPorFiltro(DireccionEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					dir.id AS id,
-					dir.nombre AS nombre,
-					bar.id AS bar_id,
-					bar.nombre AS bar_nombre,
-					bar.idMunicipio AS bar_idMunicipio,
-					tdi.id AS tdi_id,
-					tdi.nombre AS tdi_nombre
-				FROM Direccion dir
-				INNER JOIN Barrio bar ON dir.idBarrio = bar.id
-				INNER JOIN TipoDireccion tdi ON dir.idTipoDireccion = tdi.id
-				""");
+                SELECT
+                    dir.id AS id,
+                    dir.nombre AS nombre,
+                    bar.id AS bar_id,
+                    bar.nombre AS bar_nombre,
+                    bar.idMunicipio AS bar_idMunicipio,
+                    tdi.id AS tdi_id,
+                    tdi.nombre AS tdi_nombre
+                FROM Direccion dir
+                INNER JOIN Barrio bar ON dir.idBarrio = bar.id
+                INNER JOIN TipoDireccion tdi ON dir.idTipoDireccion = tdi.id
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 
@@ -156,14 +156,14 @@ public class DireccionSqlServerDAO extends SqlDAO implements DireccionDAO {
 	public void crear(DireccionEntidad entidad) {
 
 		final String sql = """
-				INSERT INTO Direccion (
-					id,
-					nombre,
-					idBarrio,
-					idTipoDireccion
-				)
-				VALUES (?, ?, ?, ?)
-				""";
+                INSERT INTO Direccion (
+                    id,
+                    nombre,
+                    idBarrio,
+                    idTipoDireccion
+                )
+                VALUES (?, ?, ?, ?)
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -194,13 +194,13 @@ public class DireccionSqlServerDAO extends SqlDAO implements DireccionDAO {
 	public void actualizar(UUID id, DireccionEntidad entidad) {
 
 		final String sql = """
-				UPDATE Direccion
-				SET
-					nombre = ?,
-					idBarrio = ?,
-					idTipoDireccion = ?
-				WHERE id = ?
-				""";
+                UPDATE Direccion
+                SET
+                    nombre = ?,
+                    idBarrio = ?,
+                    idTipoDireccion = ?
+                WHERE id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 

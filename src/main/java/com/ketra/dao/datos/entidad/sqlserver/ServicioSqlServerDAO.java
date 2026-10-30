@@ -1,5 +1,7 @@
 package com.ketra.dao.datos.entidad.sqlserver;
 
+import com.ketra.entidad.EstadoServicioEntidad;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,15 +29,18 @@ public class ServicioSqlServerDAO extends SqlDAO implements ServicioDAO {
 	public ServicioEntidad consultarPorId(UUID id) {
 
 		final String sql = """
-				SELECT
-					ser.id AS id,
-					ser.numeroServicio AS numeroServicio,
-					ser.fechaServicio AS fechaServicio,
-					ser.estado AS estado
-				FROM Servicio ser
+                SELECT
+                    ser.id AS id,
+                    ser.numeroServicio AS numeroServicio,
+                    ser.fechaServicio AS fechaServicio,
+                    ess.id AS estado_id,
+                    ess.codigo AS estado_codigo,
+                    ess.nombre AS estado_nombre
+                FROM Servicio ser
+                INNER JOIN EstadoServicio ess ON ser.idEstadoServicio = ess.id
 
-				WHERE ser.id = ?
-				""";
+                WHERE ser.id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
@@ -69,13 +74,16 @@ public class ServicioSqlServerDAO extends SqlDAO implements ServicioDAO {
 	public List<ServicioEntidad> consultarPorFiltro(ServicioEntidad filtro) {
 
 		final StringBuilder sql = new StringBuilder("""
-				SELECT
-					ser.id AS id,
-					ser.numeroServicio AS numeroServicio,
-					ser.fechaServicio AS fechaServicio,
-					ser.estado AS estado
-				FROM Servicio ser
-				""");
+                SELECT
+                    ser.id AS id,
+                    ser.numeroServicio AS numeroServicio,
+                    ser.fechaServicio AS fechaServicio,
+                    ess.id AS estado_id,
+                    ess.codigo AS estado_codigo,
+                    ess.nombre AS estado_nombre
+                FROM Servicio ser
+                INNER JOIN EstadoServicio ess ON ser.idEstadoServicio = ess.id
+                """);
 		final List<String> condiciones = new ArrayList<>();
 		final List<Object> parametros = new ArrayList<>();
 
@@ -94,9 +102,19 @@ public class ServicioSqlServerDAO extends SqlDAO implements ServicioDAO {
 			parametros.add(java.sql.Date.valueOf(filtro.getFechaServicio()));
 		}
 
-		if (!UtilTexto.getUtilTexto().esVacia(filtro.getEstado())) {
-			condiciones.add("ser.estado = ?");
-			parametros.add(filtro.getEstado());
+		if (!UtilUUID.UUID_DEFECTO.equals(filtro.getEstado().getId())) {
+			condiciones.add("ser.idEstadoServicio = ?");
+			parametros.add(filtro.getEstado().getId());
+		}
+
+		if (!UtilTexto.getUtilTexto().esVacia(filtro.getEstado().getCodigo())) {
+			condiciones.add("ess.codigo = ?");
+			parametros.add(filtro.getEstado().getCodigo());
+		}
+
+		if (!UtilTexto.getUtilTexto().esVacia(filtro.getEstado().getNombre())) {
+			condiciones.add("ess.nombre = ?");
+			parametros.add(filtro.getEstado().getNombre());
 		}
 
 		if (!condiciones.isEmpty()) {
@@ -145,21 +163,21 @@ public class ServicioSqlServerDAO extends SqlDAO implements ServicioDAO {
 	public void crear(ServicioEntidad entidad) {
 
 		final String sql = """
-				INSERT INTO Servicio (
-					id,
-					numeroServicio,
-					fechaServicio,
-					estado
-				)
-				VALUES (?, ?, ?, ?)
-				""";
+                INSERT INTO Servicio (
+                    id,
+                    numeroServicio,
+                    fechaServicio,
+                    idEstadoServicio
+                )
+                VALUES (?, ?, ?, ?)
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
 			sentencia.setObject(1, entidad.getId());
 			sentencia.setString(2, entidad.getNumeroServicio());
 			sentencia.setDate(3, java.sql.Date.valueOf(entidad.getFechaServicio()));
-			sentencia.setString(4, entidad.getEstado());
+			sentencia.setObject(4, entidad.getEstado().getId());
 
 			sentencia.executeUpdate();
 
@@ -183,14 +201,14 @@ public class ServicioSqlServerDAO extends SqlDAO implements ServicioDAO {
 	public void actualizar(UUID id, ServicioEntidad entidad) {
 
 		final String sql = """
-				UPDATE Servicio
-				SET estado = ?
-				WHERE id = ?
-				""";
+                UPDATE Servicio
+                SET idEstadoServicio = ?
+                WHERE id = ?
+                """;
 
 		try (PreparedStatement sentencia = getConexion().prepareStatement(sql)) {
 
-			sentencia.setString(1, entidad.getEstado());
+			sentencia.setObject(1, entidad.getEstado().getId());
 			sentencia.setObject(2, id);
 
 			if (sentencia.executeUpdate() != 1) {
@@ -219,7 +237,11 @@ public class ServicioSqlServerDAO extends SqlDAO implements ServicioDAO {
 				.id(UUID.fromString(resultado.getString("id")))
 				.numeroServicio(resultado.getString("numeroServicio"))
 				.fechaServicio(resultado.getDate("fechaServicio").toLocalDate())
-				.estado(resultado.getString("estado"))
+				.estado(new EstadoServicioEntidad.Builder()
+						.id(UUID.fromString(resultado.getString("estado_id")))
+						.codigo(resultado.getString("estado_codigo"))
+						.nombre(resultado.getString("estado_nombre"))
+						.build())
 				.build();
 	}
 }

@@ -11,7 +11,7 @@ public class EmpresaDTO {
 
 	private String nombre;
 
-	private String NIT;
+	private String nit;
 
 	private String correoContacto;
 
@@ -23,7 +23,7 @@ public class EmpresaDTO {
 
 		setNombre(UtilTexto.VACIO);
 
-		setNIT(UtilTexto.VACIO);
+		setNit(UtilTexto.VACIO);
 
 		setCorreoContacto(UtilTexto.VACIO);
 
@@ -55,15 +55,15 @@ public class EmpresaDTO {
 
 	}
 
-	public String getNIT() {
+	public String getNit() {
 
-		return NIT;
+		return nit;
 
 	}
 
-	public void setNIT(String NIT) {
+	public void setNit(String nit) {
 
-		this.NIT = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(NIT);
+		this.nit = UtilTexto.getUtilTexto().quitarEspacionEnBlanco(nit);
 
 	}
 
