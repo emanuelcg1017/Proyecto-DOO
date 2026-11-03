@@ -6,60 +6,12 @@
 
 [Abrir diagrama en tamaño completo](imagenes/dominio.png)
 
-## Contenido
-
-| Objeto | Caracterización y responsabilidades | Datos de ejemplo | Políticas | Eventos |
-| --- | --- | --- | --- | --- |
-| Empresa | [Caracterización y responsabilidades](dominio/empresa.md#dominio-s31) | [Datos de ejemplo](dominio/empresa.md#dominio-s32) |  | [Eventos y colaboración](dominio/empresa.md#dominio-s33) |
-| EstadoEntrega | [Caracterización y responsabilidades](dominio/estado-entrega.md#dominio-s47) | [Datos de ejemplo](dominio/estado-entrega.md#dominio-s48) | [Políticas](dominio/estado-entrega.md#dominio-s50) | [Eventos y colaboración](dominio/estado-entrega.md#dominio-s49) |
-| EstadoFactura | [Caracterización y responsabilidades](dominio/estado-factura.md#dominio-s51) | [Datos de ejemplo](dominio/estado-factura.md#dominio-s52) | [Políticas](dominio/estado-factura.md#dominio-s54) | [Eventos y colaboración](dominio/estado-factura.md#dominio-s53) |
-| EstadoPreliquidacion | [Caracterización y responsabilidades](dominio/estado-preliquidacion.md#dominio-s55) | [Datos de ejemplo](dominio/estado-preliquidacion.md#dominio-s56) | [Políticas](dominio/estado-preliquidacion.md#dominio-s58) | [Eventos y colaboración](dominio/estado-preliquidacion.md#dominio-s57) |
-| EstadoServicio | [Caracterización y responsabilidades](dominio/estado-servicio.md#dominio-s59) | [Datos de ejemplo](dominio/estado-servicio.md#dominio-s60) | [Políticas](dominio/estado-servicio.md#dominio-s62) | [Eventos y colaboración](dominio/estado-servicio.md#dominio-s61) |
-| Pais | [Caracterización y responsabilidades](dominio/pais.md#dominio-s71) | [Datos de ejemplo](dominio/pais.md#dominio-s72) | [Políticas](dominio/pais.md#dominio-s74) | [Eventos y colaboración](dominio/pais.md#dominio-s73) |
-| Pedido | [Caracterización y responsabilidades](dominio/pedido.md#dominio-s75) | [Datos de ejemplo](dominio/pedido.md#dominio-s76) | [Políticas](dominio/pedido.md#dominio-s78) | [Eventos y colaboración](dominio/pedido.md#dominio-s77) |
-| Tercero | [Caracterización y responsabilidades](dominio/tercero.md#dominio-s103) | [Datos de ejemplo](dominio/tercero.md#dominio-s104) | [Políticas](dominio/tercero.md#dominio-s106) | [Eventos y colaboración](dominio/tercero.md#dominio-s105) |
-| TipoDireccion | [Caracterización y responsabilidades](dominio/tipo-direccion.md#dominio-s111) | [Datos de ejemplo](dominio/tipo-direccion.md#dominio-s108) | [Políticas](dominio/tipo-direccion.md#dominio-s110) | [Eventos y colaboración](dominio/tipo-direccion.md#dominio-s109) |
-| TipoDocumento | [Caracterización y responsabilidades](dominio/tipo-documento.md#dominio-s107) | [Datos de ejemplo](dominio/tipo-documento.md#dominio-s112) | [Políticas](dominio/tipo-documento.md#dominio-s114) | [Eventos y colaboración](dominio/tipo-documento.md#dominio-s113) |
-| DetallePedido | [Caracterización y responsabilidades](dominio/detalle-pedido.md#dominio-s23) | [Datos de ejemplo](dominio/detalle-pedido.md#dominio-s24) | [Políticas](dominio/detalle-pedido.md#dominio-s26) | [Eventos y colaboración](dominio/detalle-pedido.md#dominio-s25) |
-| Departamento | [Caracterización y responsabilidades](dominio/departamento.md#dominio-s15) | [Datos de ejemplo](dominio/departamento.md#dominio-s16) | [Políticas](dominio/departamento.md#dominio-s34) | [Eventos y colaboración](dominio/departamento.md#dominio-s17) |
-| TransicionEstadoEntrega | [Caracterización y responsabilidades](dominio/transicion-estado-entrega.md#dominio-s115) | [Datos de ejemplo](dominio/transicion-estado-entrega.md#dominio-s116) | [Políticas](dominio/transicion-estado-entrega.md#dominio-s118) | [Eventos y colaboración](dominio/transicion-estado-entrega.md#dominio-s117) |
-| TransicionEstadoFactura | [Caracterización y responsabilidades](dominio/transicion-estado-factura.md#dominio-s119) | [Datos de ejemplo](dominio/transicion-estado-factura.md#dominio-s120) | [Políticas](dominio/transicion-estado-factura.md#dominio-s122) | [Eventos y colaboración](dominio/transicion-estado-factura.md#dominio-s121) |
-| TransicionEstadoPreliquidacion | [Caracterización y responsabilidades](dominio/transicion-estado-preliquidacion.md#dominio-s123) | [Datos de ejemplo](dominio/transicion-estado-preliquidacion.md#dominio-s124) | [Políticas](dominio/transicion-estado-preliquidacion.md#dominio-s126) | [Eventos y colaboración](dominio/transicion-estado-preliquidacion.md#dominio-s125) |
-| TransicionEstadoServicio | [Caracterización y responsabilidades](dominio/transicion-estado-servicio.md#dominio-s127) | [Datos de ejemplo](dominio/transicion-estado-servicio.md#dominio-s128) | [Políticas](dominio/transicion-estado-servicio.md#dominio-s130) | [Eventos y colaboración](dominio/transicion-estado-servicio.md#dominio-s129) |
-| Persona | [Caracterización y responsabilidades](dominio/persona.md#dominio-s79) | [Datos de ejemplo](dominio/persona.md#dominio-s80) | [Políticas](dominio/persona.md#dominio-s82) | [Eventos y colaboración](dominio/persona.md#dominio-s81) |
-| Municipio | [Caracterización y responsabilidades](dominio/municipio.md#dominio-s67) | [Datos de ejemplo](dominio/municipio.md#dominio-s68) | [Políticas](dominio/municipio.md#dominio-s70) | [Eventos y colaboración](dominio/municipio.md#dominio-s69) |
-| Barrio | [Caracterización y responsabilidades](dominio/barrio.md#dominio-s3) | [Datos de ejemplo](dominio/barrio.md#dominio-s4) | [Políticas](dominio/barrio.md#dominio-s5) | [Eventos y colaboración](dominio/barrio.md#dominio-s6) |
-| Direccion | [Caracterización y responsabilidades](dominio/direccion.md#dominio-s27) | [Datos de ejemplo](dominio/direccion.md#dominio-s28) | [Políticas](dominio/direccion.md#dominio-s30) | [Eventos y colaboración](dominio/direccion.md#dominio-s29) |
-| CEDI | [Caracterización y responsabilidades](dominio/cedi.md#dominio-s7) | [Datos de ejemplo](dominio/cedi.md#dominio-s8) | [Políticas](dominio/cedi.md#dominio-s10) | [Eventos y colaboración](dominio/cedi.md#dominio-s9) |
-| Servicio | [Caracterización y responsabilidades](dominio/servicio.md#dominio-s87) | [Datos de ejemplo](dominio/servicio.md#dominio-s88) | [Políticas](dominio/servicio.md#dominio-s90) | [Eventos y colaboración](dominio/servicio.md#dominio-s89) |
-| Entrega | [Caracterización y responsabilidades](dominio/entrega.md#dominio-s39) | [Datos de ejemplo](dominio/entrega.md#dominio-s40) | [Políticas](dominio/entrega.md#dominio-s42) | [Eventos y colaboración](dominio/entrega.md#dominio-s41) |
-| EmpresaServicio | [Caracterización y responsabilidades](dominio/empresa-servicio.md#dominio-s35) | [Datos de ejemplo](dominio/empresa-servicio.md#dominio-s36) | [Políticas](dominio/empresa-servicio.md#dominio-s38) | [Eventos y colaboración](dominio/empresa-servicio.md#dominio-s37) |
-| Factura | [Caracterización y responsabilidades](dominio/factura.md#dominio-s63) | [Datos de ejemplo](dominio/factura.md#dominio-s64) | [Políticas](dominio/factura.md#dominio-s66) | [Eventos y colaboración](dominio/factura.md#dominio-s65) |
-| ServicioCEDI | [Caracterización y responsabilidades](dominio/servicio-cedi.md#dominio-s91) | [Datos de ejemplo](dominio/servicio-cedi.md#dominio-s92) | [Políticas](dominio/servicio-cedi.md#dominio-s94) | [Eventos y colaboración](dominio/servicio-cedi.md#dominio-s93) |
-| DetalleEntrega | [Caracterización y responsabilidades](dominio/detalle-entrega.md#dominio-s19) | [Datos de ejemplo](dominio/detalle-entrega.md#dominio-s20) | [Políticas](dominio/detalle-entrega.md#dominio-s22) | [Eventos y colaboración](dominio/detalle-entrega.md#dominio-s21) |
-| EntregaTercero | [Caracterización y responsabilidades](dominio/entrega-tercero.md#dominio-s43) | [Datos de ejemplo](dominio/entrega-tercero.md#dominio-s44) | [Políticas](dominio/entrega-tercero.md#dominio-s46) | [Eventos y colaboración](dominio/entrega-tercero.md#dominio-s45) |
-| ServicioEntrega | [Caracterización y responsabilidades](dominio/servicio-entrega.md#dominio-s95) | [Datos de ejemplo](dominio/servicio-entrega.md#dominio-s96) | [Políticas](dominio/servicio-entrega.md#dominio-s98) | [Eventos y colaboración](dominio/servicio-entrega.md#dominio-s97) |
-| ServicioFactura | [Caracterización y responsabilidades](dominio/servicio-factura.md#dominio-s99) | [Datos de ejemplo](dominio/servicio-factura.md#dominio-s100) | [Políticas](dominio/servicio-factura.md#dominio-s102) | [Eventos y colaboración](dominio/servicio-factura.md#dominio-s101) |
-| CostoRecorrido | [Caracterización y responsabilidades](dominio/costo-recorrido.md#dominio-s11) | [Datos de ejemplo](dominio/costo-recorrido.md#dominio-s12) | [Políticas](dominio/costo-recorrido.md#dominio-s14) | [Eventos y colaboración](dominio/costo-recorrido.md#dominio-s13) |
-| Utilidad | [Caracterización y responsabilidades](dominio/utilidad.md#dominio-s131) | [Datos de ejemplo](dominio/utilidad.md#dominio-s132) | [Políticas](dominio/utilidad.md#dominio-s134) | [Eventos y colaboración](dominio/utilidad.md#dominio-s133) |
-| Preliquidación | [Caracterización y responsabilidades](dominio/preliquidacion.md#dominio-s83) | [Datos de ejemplo](dominio/preliquidacion.md#dominio-s84) | [Políticas](dominio/preliquidacion.md#dominio-s86) | [Eventos y colaboración](dominio/preliquidacion.md#dominio-s85) |
-
-## Índice del modelo original
-
 <a id="dominio-s1"></a>
-
-## modelo de dominio
-
-<table>
-<tr>
-<td><a id="dominio-s1-a1"></a><a href="modelo-dominio.md#dominio-s2-a1">Ir a Objetos de dominio&gt;&gt;&gt;</a></td>
-</tr>
-</table>
-
+<a id="dominio-s1-a1"></a>
 
 <a id="dominio-s2"></a>
 
-## objetos de dominio
+## Objetos de dominio
 
 <table>
 <tr>
@@ -87,7 +39,7 @@
 <td><a href="dominio/empresa.md#dominio-s32-a1">Ver</a></td>
 <td><a href="dominio/empresa.md#dominio-s31-a1">Ver</a></td>
 <td><a href="dominio/empresa.md#dominio-s33-a1">Ver</a></td>
-<td><a href="dominio/departamento.md#dominio-s34-a1">Ver</a></td>
+<td><a href="dominio/empresa.md#dominio-s34-a1">Ver</a></td>
 </tr>
 <tr>
 <td>EstadoEntrega</td>
@@ -378,36 +330,3 @@
 <td><a href="dominio/preliquidacion.md#dominio-s86-a1">Ver</a></td>
 </tr>
 </table>
-
-
-## Referencias pendientes en el Excel de origen
-
-Las siguientes celdas ya contienen referencias rotas o destinos no disponibles en el Excel. Se conserva el contenido disponible sin inventar el dato que falta.
-
-| Hoja | Celda | Situación | Referencia de origen |
-| --- | --- | --- | --- |
-| Entrega_C | A8 | Referencia rota en el Excel | Entrega_D!#REF! |
-| TransicionEstadoEntrega_C | O21 | Referencia rota en el Excel | TransicionEstadoEntrega_P!#REF! |
-| TransicionEstadoEntrega_C | O22 | Referencia rota en el Excel | TransicionEstadoEntrega_P!#REF! |
-| TransicionEstadoEntrega_C | O23 | Referencia rota en el Excel | TransicionEstadoEntrega_P!#REF! |
-| TransicionEstadoEntrega_C | P21 | Referencia rota en el Excel | TransicionEstadoEntrega_P!#REF! |
-| TransicionEstadoEntrega_C | P22 | Referencia rota en el Excel | TransicionEstadoEntrega_P!#REF! |
-| TransicionEstadoEntrega_C | P23 | Referencia rota en el Excel | TransicionEstadoEntrega_P!#REF! |
-| TransicionEstadoFactura_C | O21 | Referencia rota en el Excel | TransicionEstadoFactura_P!#REF! |
-| TransicionEstadoFactura_C | O22 | Referencia rota en el Excel | TransicionEstadoFactura_P!#REF! |
-| TransicionEstadoFactura_C | O23 | Referencia rota en el Excel | TransicionEstadoFactura_P!#REF! |
-| TransicionEstadoFactura_C | P21 | Referencia rota en el Excel | TransicionEstadoFactura_P!#REF! |
-| TransicionEstadoFactura_C | P22 | Referencia rota en el Excel | TransicionEstadoFactura_P!#REF! |
-| TransicionEstadoFactura_C | P23 | Referencia rota en el Excel | TransicionEstadoFactura_P!#REF! |
-| TransicionEstadoPreliq_C | O21 | Referencia rota en el Excel | TransicionEstadoPreliq_P!#REF! |
-| TransicionEstadoPreliq_C | O22 | Referencia rota en el Excel | TransicionEstadoPreliq_P!#REF! |
-| TransicionEstadoPreliq_C | O23 | Referencia rota en el Excel | TransicionEstadoPreliq_P!#REF! |
-| TransicionEstadoPreliq_C | P21 | Referencia rota en el Excel | TransicionEstadoPreliq_P!#REF! |
-| TransicionEstadoPreliq_C | P22 | Referencia rota en el Excel | TransicionEstadoPreliq_P!#REF! |
-| TransicionEstadoPreliq_C | P23 | Referencia rota en el Excel | TransicionEstadoPreliq_P!#REF! |
-| TransicionEstadoServicio_C | O21 | Referencia rota en el Excel | TransicionEstadoServicio_P!#REF! |
-| TransicionEstadoServicio_C | O22 | Referencia rota en el Excel | TransicionEstadoServicio_P!#REF! |
-| TransicionEstadoServicio_C | O23 | Referencia rota en el Excel | TransicionEstadoServicio_P!#REF! |
-| TransicionEstadoServicio_C | P21 | Referencia rota en el Excel | TransicionEstadoServicio_P!#REF! |
-| TransicionEstadoServicio_C | P22 | Referencia rota en el Excel | TransicionEstadoServicio_P!#REF! |
-| TransicionEstadoServicio_C | P23 | Referencia rota en el Excel | TransicionEstadoServicio_P!#REF! |

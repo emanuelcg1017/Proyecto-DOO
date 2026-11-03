@@ -6,51 +6,8 @@
 
 [Abrir diagrama en tamaño completo](imagenes/mer.png)
 
-## Contenido
-
-| Entidad | Detalle |
-| --- | --- |
-| Empresa | [Consultar](mer/empresa.md) |
-| EstadoEntrega | [Consultar](mer/estado-entrega.md) |
-| EstadoFactura | [Consultar](mer/estado-factura.md) |
-| EstadoPreliquidacion | [Consultar](mer/estado-preliquidacion.md) |
-| EstadoServicio | [Consultar](mer/estado-servicio.md) |
-| Pais | [Consultar](mer/pais.md) |
-| Pedido | [Consultar](mer/pedido.md) |
-| Tercero | [Consultar](mer/tercero.md) |
-| TipoDireccion | [Consultar](mer/tipo-direccion.md) |
-| TipoDocumento | [Consultar](mer/tipo-documento.md) |
-| DetallePedido | [Consultar](mer/detalle-pedido.md) |
-| Departamento | [Consultar](mer/departamento.md) |
-| TransicionEstadoEntrega | [Consultar](mer/transicion-estado-entrega.md) |
-| TransicionEstadoFactura | [Consultar](mer/transicion-estado-factura.md) |
-| TransicionEstadoPreliquidacion | [Consultar](mer/transicion-estado-preliquidacion.md) |
-| TransicionEstadoServicio | [Consultar](mer/transicion-estado-servicio.md) |
-| Persona | [Consultar](mer/persona.md) |
-| Municipio | [Consultar](mer/municipio.md) |
-| Barrio | [Consultar](mer/barrio.md) |
-| Direccion | [Consultar](mer/direccion.md) |
-| CEDI | [Consultar](mer/cedi.md) |
-| Servicio | [Consultar](mer/servicio.md) |
-| Entrega | [Consultar](mer/entrega.md) |
-| EmpresaServicio | [Consultar](mer/empresa-servicio.md) |
-| Factura | [Consultar](mer/factura.md) |
-| ServicioCEDI | [Consultar](mer/servicio-cedi.md) |
-| DetalleEntrega | [Consultar](mer/detalle-entrega.md) |
-| EntregaTercero | [Consultar](mer/entrega-tercero.md) |
-| ServicioEntrega | [Consultar](mer/servicio-entrega.md) |
-| ServicioFactura | [Consultar](mer/servicio-factura.md) |
-| CostoRecorrido | [Consultar](mer/costo-recorrido.md) |
-| Utilidad | [Consultar](mer/utilidad.md) |
-| Preliquidacion | [Consultar](mer/preliquidacion.md) |
-
-## Índice del modelo original
-
 <a id="mer-s1"></a>
-
-## MER
-
-
+<a id="mer-s1-a1"></a>
 
 <a id="mer-s2"></a>
 

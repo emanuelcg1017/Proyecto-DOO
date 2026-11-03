@@ -83,7 +83,7 @@
 <td><a id="dominio-s87-v4"></a><a href="servicio.md#dominio-s87-a18">Registra la informacion de un nuevo servicio</a></td>
 <td><a id="dominio-s87-w4"></a><a href="servicio.md#dominio-s87-a22">Consultar informacion de un servicio por su identificador</a></td>
 <td colspan="2"><a id="dominio-s87-x4"></a><a href="servicio.md#dominio-s87-a23">Consultar informacion de los servicios</a></td>
-<td colspan="2"><a id="dominio-s87-z4"></a><a href="servicio.md#dominio-s87-a24">Actualizar el estado de un servicio</a></td>
+<td colspan="2"><a id="dominio-s87-z4"></a><a href="servicio.md#dominio-s87-a24">Finalizar un servicio</a></td>
 </tr>
 <tr>
 <td>ID</td>
@@ -553,13 +553,13 @@
 <td></td>
 </tr>
 <tr>
-<td rowspan="4" colspan="2"><a id="dominio-s87-a24"></a><a href="servicio.md#dominio-s87-z4">Actualizar el estado de un servicio</a></td>
-<td rowspan="4" colspan="4">Accion que permite actualizar el estado de un servicio que se encuentra registrada en el sistema</td>
-<td rowspan="4">Datos</td>
-<td rowspan="4">Servicio</td>
-<td rowspan="4">Contiene el estado actualizado del servicio que se desea modificar</td>
-<td rowspan="4"></td>
-<td rowspan="4" colspan="4"></td>
+<td rowspan="5" colspan="2"><a id="dominio-s87-a24"></a><a href="servicio.md#dominio-s87-z4">Finalizar un servicio</a></td>
+<td rowspan="5" colspan="4">Acción que permite finalizar un servicio registrado y generar su utilidad dentro de la misma transacción.</td>
+<td rowspan="5">idServicio</td>
+<td rowspan="5">UUID</td>
+<td rowspan="5">Identificador del servicio que se desea finalizar.</td>
+<td rowspan="5"></td>
+<td rowspan="5" colspan="4"></td>
 <td>P-SER-0001</td>
 <td>Asegurar que los datos requeridos para llevar a cabo la operación deseada sean válidos a nivel de tipo de dato, longitud, obligatoriedad, formato y rango.</td>
 <td>Generar una excepcion indicandole al usuario que existen problemas con los datos y de ser posible indicarle como solucionarlos</td>
@@ -608,6 +608,21 @@
 <td>P-SER-0006</td>
 <td>Asegurar que la transición para cambiar el estado de servicio sea válida.</td>
 <td>Generar una excepción indicando que la transición solicitada no está permitida.</td>
+<td>Detener operacion</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="servicio.md#dominio-s90-a11">P-SER-0007</a></td>
+<td>Asegurar que, para finalizar un servicio, todas sus entregas asociadas se encuentren en estado Entregada o Cancelada.</td>
+<td>Generar una excepción indicándole al usuario que el servicio solo puede finalizar cuando todas sus entregas estén en estado Entregada o Cancelada.</td>
 <td>Detener operacion</td>
 <td></td>
 <td></td>
@@ -847,17 +862,17 @@
 <td></td>
 </tr>
 <tr>
-<td rowspan="4">Administrador del sistema</td>
-<td rowspan="4">Actualizar estado del servicio</td>
-<td rowspan="4">Permite actualizar el estado de un servicio </td>
-<td rowspan="4">Servicio</td>
+<td rowspan="5">Administrador del sistema</td>
+<td rowspan="5">Finalizar servicio</td>
+<td rowspan="5">Permite finalizar un servicio y generar su utilidad dentro de la misma transacción.</td>
+<td rowspan="5">Servicio</td>
 <td></td>
 <td></td>
 <td><a href="servicio.md#dominio-s90-a5">P-SER-0001</a></td>
 <td>Asegurar que los datos requeridos para llevar a cabo la operación deseada sean válidos a nivel de tipo de dato, longitud, obligatoriedad, formato y rango.</td>
-<td rowspan="4"></td>
-<td rowspan="4">Estado del servicio actualizado</td>
-<td rowspan="4"></td>
+<td rowspan="5"></td>
+<td rowspan="5">Servicio finalizado y utilidad generada</td>
+<td rowspan="5"></td>
 </tr>
 <tr>
 <td>EstadoServicio</td>
@@ -874,6 +889,12 @@
 <tr>
 <td><a href="servicio.md#dominio-s90-a10">P-SER-0006</a></td>
 <td>Asegurar que la transición para cambiar el estado de servicio sea válida.</td>
+</tr>
+<tr>
+<td>Entrega</td>
+<td>Consultar las entregas asociadas al servicio para comprobar que se encuentren en estado Entregada o Cancelada.</td>
+<td><a href="servicio.md#dominio-s90-a11">P-SER-0007</a></td>
+<td>Asegurar que, para finalizar un servicio, todas sus entregas asociadas se encuentren en estado Entregada o Cancelada.</td>
 </tr>
 </table>
 
@@ -938,5 +959,11 @@
 <td>Asegurar que la transición para cambiar el estado de servicio sea válida.</td>
 <td>TransicionEstadoServicio</td>
 <td><a href="transicion-estado-servicio.md#dominio-s130-a5">P-TSS-0001</a></td>
+</tr>
+<tr>
+<td><a id="dominio-s90-a11"></a>P-SER-0007</td>
+<td>Asegurar que, para finalizar un servicio, todas sus entregas asociadas se encuentren en estado Entregada o Cancelada.</td>
+<td>Servicio</td>
+<td></td>
 </tr>
 </table>

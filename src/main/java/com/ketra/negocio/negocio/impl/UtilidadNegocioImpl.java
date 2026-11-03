@@ -10,8 +10,8 @@ import com.ketra.negocio.negocio.UtilidadNegocio;
 import com.ketra.negocio.negocio.assembler.impl.UtilidadEntidadAssembler;
 import com.ketra.negocio.negocio.reglas.impl.utilidad.AsegurarServicioFinalizadoRule;
 import com.ketra.negocio.negocio.reglas.impl.utilidad.AsegurarUtilidadNoGeneradaRule;
-import com.ketra.negocio.negocio.reglas.impl.utilidad.ConsiderarCostoDeEntregaRealizadaRule;
-import com.ketra.negocio.negocio.reglas.impl.utilidad.ConsiderarFacturaEnIngresosRule;
+import com.ketra.negocio.negocio.reglas.impl.utilidad.VerificarEntregaRealizadaRule;
+import com.ketra.negocio.negocio.reglas.impl.utilidad.VerificarFacturaNoAnuladaRule;
 import com.ketra.negocio.negocio.reglas.impl.utilidad.ValidarDatosGenerarUtilidadRule;
 import com.ketra.transversal.utilitarios.UtilNumero;
 import com.ketra.transversal.utilitarios.UtilUUID;
@@ -70,11 +70,13 @@ public class UtilidadNegocioImpl implements UtilidadNegocio {
 
         var facturas = new FacturaNegocioImpl(daoFactory).consultarPorServicio(idServicio);
 
+        var regla = VerificarFacturaNoAnuladaRule.obtenerInstancia();
+
         Double total = UtilNumero.CERO_DECIMAL;
 
         for (var factura : facturas) {
 
-            if (ConsiderarFacturaEnIngresosRule.obtenerInstancia().cumple(factura)) {
+            if (regla.cumple(factura)) {
 
                 total = UtilNumero.sumar(total, factura.getIngresos());
 
@@ -101,11 +103,15 @@ public class UtilidadNegocioImpl implements UtilidadNegocio {
 
         var costos = new CostoRecorridoNegocioImpl(daoFactory).consultarCostosRecorrido(detalles);
 
+        var regla = VerificarEntregaRealizadaRule.obtenerInstancia();
+
         Double total = UtilNumero.CERO_DECIMAL;
 
         for (var costo : costos) {
 
-            if (ConsiderarCostoDeEntregaRealizadaRule.obtenerInstancia().cumple(costo)) {
+            var entrega = costo.getDetalleEntrega().getEntrega();
+
+            if (regla.cumple(entrega)) {
 
                 total = UtilNumero.sumar(total, costo.getValorCosto());
 

@@ -6,7 +6,7 @@ window.SeguridadKetra = (function () {
 
     function mostrarError(mensaje) {
 
-        const elemento = document.querySelector('[role="status"]');
+        const elemento = document.querySelector('output[aria-live]');
 
         if (elemento) {
 
@@ -66,7 +66,7 @@ window.SeguridadKetra = (function () {
 
     async function solicitar(url, opciones = {}) {
 
-        const configuracion = Object.assign({}, opciones);
+        const configuracion = {...opciones};
 
         const encabezados = new Headers(configuracion.headers || {});
 
@@ -151,15 +151,15 @@ window.SeguridadKetra = (function () {
 
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-
-        cargarSesion();
+    document.addEventListener('DOMContentLoaded', async function () {
 
         for (const boton of document.querySelectorAll('[data-cerrar-sesion]')) {
 
             boton.addEventListener('click', cerrarSesion);
 
         }
+
+        await cargarSesion();
 
     });
 

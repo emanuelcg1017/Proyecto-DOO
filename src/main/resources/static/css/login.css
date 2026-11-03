@@ -46,7 +46,7 @@
     margin:0 0 12px;
 }
 
-.login-card p {
+.login-card p,.login-message {
     font-size:14px;
     line-height:1.65;
     color:#63758a;
@@ -75,8 +75,9 @@
 }
 
 .login-message {
+    display:block;
     min-height:44px;
-    margin-bottom:0;
+    margin:14px 0 0;
 }
 
 .login-message.error {

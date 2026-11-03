@@ -1,16 +1,16 @@
 package com.ketra.negocio.negocio.reglas.impl.servicio;
 
 import com.ketra.dominio.EntregaDominio;
-import com.ketra.transversal.catalogo.CatalogoCodigosEstado;
+import com.ketra.transversal.catalogo.catalogocodigosdeestado.enums.EstadoEntregaEnum;
 import com.ketra.negocio.negocio.reglas.Rule;
 import com.ketra.transversal.catalogo.CatalogoMensajes;
 import com.ketra.transversal.excepciones.KETRANegocioException;
 
-public class AsegurarEntregaEstaEntregadaRule implements Rule<EntregaDominio> {
+public class AsegurarEntregaEntregadaOCanceladaRule implements Rule<EntregaDominio> {
 
-	private static final Rule<EntregaDominio> instancia = new AsegurarEntregaEstaEntregadaRule();
+	private static final Rule<EntregaDominio> instancia = new AsegurarEntregaEntregadaOCanceladaRule();
 
-	private AsegurarEntregaEstaEntregadaRule() {
+	private AsegurarEntregaEntregadaOCanceladaRule() {
 
 	}
 
@@ -25,7 +25,10 @@ public class AsegurarEntregaEstaEntregadaRule implements Rule<EntregaDominio> {
 
 		for (EntregaDominio entrega : datos) {
 
-			if (!CatalogoCodigosEstado.Entrega.ENTREGADA.equals(entrega.getEstadoEntrega().getCodigo())) {
+			var codigoEstado = entrega.getEstadoEntrega().getCodigo();
+
+			if (!EstadoEntregaEnum.ENTREGADA.getCodigo().equals(codigoEstado)
+					&& !EstadoEntregaEnum.CANCELADA.getCodigo().equals(codigoEstado)) {
 
 				throw KETRANegocioException.crear(CatalogoMensajes.ServicioNegocioImpl.ENTREGAS_SIN_COMPLETAR);
 

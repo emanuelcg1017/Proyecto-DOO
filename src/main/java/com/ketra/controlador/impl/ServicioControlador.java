@@ -18,7 +18,7 @@ import com.ketra.dto.TransicionEstadoServicioDTO;
 import com.ketra.negocio.fachada.impl.ServicioFachadaImpl;
 import com.ketra.negocio.fachada.impl.EstadoServicioFachadaImpl;
 import com.ketra.negocio.fachada.impl.TransicionEstadoServicioFachadaImpl;
-import com.ketra.transversal.catalogo.CatalogoCodigosEstado;
+import com.ketra.transversal.catalogo.catalogocodigosdeestado.enums.EstadoServicioEnum;
 import com.ketra.transversal.catalogo.CatalogoMensajes;
 
 @RestController
@@ -84,7 +84,7 @@ public class ServicioControlador extends AbstractRestController {
 
         var filtro = new EstadoServicioDTO();
 
-        filtro.setCodigo(CatalogoCodigosEstado.Servicio.FINALIZADO);
+        filtro.setCodigo(EstadoServicioEnum.FINALIZADO.getCodigo());
 
         var fachada = new EstadoServicioFachadaImpl();
 
@@ -101,7 +101,7 @@ public class ServicioControlador extends AbstractRestController {
 
         var estadoDestino = new EstadoServicioDTO();
 
-        estadoDestino.setCodigo(CatalogoCodigosEstado.Servicio.FINALIZADO);
+        estadoDestino.setCodigo(EstadoServicioEnum.FINALIZADO.getCodigo());
 
         var filtro = new TransicionEstadoServicioDTO();
 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.ketra.transversal.catalogo.CatalogoCodigosEstado;
+import com.ketra.transversal.catalogo.catalogocodigosdeestado.enums.EstadoServicioEnum;
 import com.ketra.dao.factoria.DAOFactory;
 import com.ketra.dominio.EstadoServicioDominio;
 import com.ketra.dominio.ServicioDominio;
@@ -13,7 +13,7 @@ import com.ketra.entidad.ServicioEntidad;
 import com.ketra.negocio.negocio.EstadoServicioNegocio;
 import com.ketra.negocio.negocio.ServicioNegocio;
 import com.ketra.negocio.negocio.assembler.impl.ServicioEntidadAssembler;
-import com.ketra.negocio.negocio.reglas.impl.servicio.AsegurarEntregaEstaEntregadaRule;
+import com.ketra.negocio.negocio.reglas.impl.servicio.AsegurarEntregaEntregadaOCanceladaRule;
 import com.ketra.negocio.negocio.reglas.impl.servicio.AsegurarEstadoServicioDiferenteRule;
 import com.ketra.negocio.negocio.reglas.impl.servicio.AsegurarEstadoServicioExisteRule;
 import com.ketra.negocio.negocio.reglas.impl.servicio.AsegurarTransicionEstadoServicioPermitidaRule;
@@ -92,7 +92,7 @@ public class ServicioNegocioImpl implements ServicioNegocio {
         var actual = consultarPorId(idServicio);
 
         var filtroEstado = new EstadoServicioDominio.Builder()
-                .codigo(CatalogoCodigosEstado.Servicio.FINALIZADO)
+                .codigo(EstadoServicioEnum.FINALIZADO.getCodigo())
                 .build();
 
         var estados = estadoServicioNegocio.consultarPorFiltro(filtroEstado);
@@ -116,7 +116,7 @@ public class ServicioNegocioImpl implements ServicioNegocio {
 
         for (var entrega : entregas) {
 
-            AsegurarEntregaEstaEntregadaRule.obtenerInstancia().ejecutar(entrega);
+            AsegurarEntregaEntregadaOCanceladaRule.obtenerInstancia().ejecutar(entrega);
 
         }
 
