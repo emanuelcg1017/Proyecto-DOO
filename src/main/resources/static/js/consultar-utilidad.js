@@ -335,4 +335,4 @@ formularioUtilidad.addEventListener('submit', async function (evento) {
 
 });
 
-cargarServiciosFinalizados();
+await cargarServiciosFinalizados();

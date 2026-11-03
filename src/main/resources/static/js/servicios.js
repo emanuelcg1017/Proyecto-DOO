@@ -126,9 +126,9 @@ function mostrarServicios(servicios) {
                 ? 'El backend comprobará las entregas y generará la utilidad.'
                 : 'No hay una transición de finalización configurada desde este estado.';
 
-            boton.addEventListener('click', function () {
+            boton.addEventListener('click', async function () {
 
-                finalizarServicio(servicio.id);
+                await finalizarServicio(servicio.id);
 
             });
 
@@ -345,4 +345,4 @@ async function cargarCatalogosServicio() {
 
 }
 
-cargarCatalogosServicio();
+await cargarCatalogosServicio();

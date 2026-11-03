@@ -201,7 +201,7 @@ public class CatalogoMensajes {
 
 		public static final String ENTREGA_EN_TRANSITO = "El servicio no puede cancelarse porque tiene una entrega en tránsito.";
 
-		public static final String ENTREGAS_SIN_COMPLETAR = "El servicio solo puede finalizar cuando todas sus entregas estén en estado Entregada.";
+		public static final String ENTREGAS_SIN_COMPLETAR = "El servicio solo puede finalizar cuando todas sus entregas estén en estado Entregada o Cancelada.";
 	}
 
 	public static final class EstadoServicioFachadaImpl {

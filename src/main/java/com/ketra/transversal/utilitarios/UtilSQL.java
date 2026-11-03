@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import com.ketra.transversal.catalogo.CatalogoMensajes;
-import com.ketra.transversal.excepciones.KETRAControladorException;
 import com.ketra.transversal.excepciones.KETRATransversalException;
 
 public final class UtilSQL {
@@ -40,7 +39,7 @@ public final class UtilSQL {
 			if(!conexionEstaAbierta(conexion)) {
 				
 				var mensajeUsuario = CatalogoMensajes.UtilSQL.USUARIO_ERROR_PROBLEMA_VALIDANDO_SI_CONEXION_SQL_ESTA_ABIERTA;
-				throw KETRAControladorException.crear(mensajeUsuario);
+				throw KETRATransversalException.crear(mensajeUsuario);
 			
 			}
 		}
@@ -58,7 +57,7 @@ public final class UtilSQL {
 			}catch(Exception excepcion) {
 				
 				var mensajeUsuario = CatalogoMensajes.UtilSQL.USUARIO_ERROR_PROBLEMA_NO_CONTROLADO_VALIDANDO_SI_TRANSACCION_SQL_ESTA_INICIADA;
-				throw KETRAControladorException.crear(mensajeUsuario, excepcion.getMessage(), excepcion);
+					throw KETRATransversalException.crear(mensajeUsuario, excepcion.getMessage(), excepcion);
 			}
 		}
 		

@@ -2,7 +2,7 @@
 
 [Volver al modelo de dominio](../modelo-dominio.md) · [Proyecto](../../README.md)
 
-[Caracterización y responsabilidades](#dominio-s15) · [Datos de ejemplo](#dominio-s16) · [Políticas](#dominio-s18) · [Políticas](#dominio-s34) · [Eventos y colaboración](#dominio-s17)
+[Caracterización y responsabilidades](#dominio-s15) · [Datos de ejemplo](#dominio-s16) · [Políticas](#dominio-s18) · [Eventos y colaboración](#dominio-s17)
 
 <a id="dominio-s15"></a>
 
@@ -602,58 +602,6 @@
 <td><a id="dominio-s18-a5"></a>P-DEP-0001</td>
 <td>Asegurar que los datos requeridos para llevar a cabo la operación deseada sean válidos a nivel de tipo de dato, longitud, obligatoriedad, formato y rango.</td>
 <td>Departamento</td>
-<td></td>
-</tr>
-</table>
-
-
-<a id="dominio-s34"></a>
-
-## Políticas
-
-<table>
-<tr>
-<td><a id="dominio-s34-a1"></a><a href="../modelo-dominio.md#dominio-s1-a1">&lt;&lt;&lt;Ir a modelo de dominio</a></td>
-<td><a href="../modelo-dominio.md#dominio-s2-a1">&lt;&lt;&lt;Ir a Objetos de dominio</a></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Objeto de Dominio</td>
-<td colspan="3">Departamento</td>
-</tr>
-<tr>
-<td>Descripcion:</td>
-<td colspan="3">Representa a cada uno de los departamentos de un país, donde se encuentran los municipios y direcciones</td>
-</tr>
-<tr>
-<td>Numero politica </td>
-<td>Descripcion politica</td>
-<td>Objeto responsable </td>
-<td>Objeto referenciado</td>
-</tr>
-<tr>
-<td><a id="dominio-s34-a5"></a>P-EMP-0001</td>
-<td>Asegurar que los datos requeridos para llevar a cabo la operación deseada sean válidos a nivel de tipo de dato, longitud, obligatoriedad, formato y rango.</td>
-<td>Empresa</td>
-<td></td>
-</tr>
-<tr>
-<td><a id="dominio-s34-a6"></a>P-EMP-0002</td>
-<td>Asegurar que el identiticador generado para la empresa ya no esté siendo utilizado por otra empresa</td>
-<td>Empresa</td>
-<td></td>
-</tr>
-<tr>
-<td><a id="dominio-s34-a7"></a>P-EMP-0003</td>
-<td>Asegurar que no exista otra empresa registrada con la misma combinacion de nombre y NIT </td>
-<td>Empresa</td>
-<td></td>
-</tr>
-<tr>
-<td><a id="dominio-s34-a8"></a>P-EMP-0004</td>
-<td>Asegurar que almenos un dato a modificar sea diferente a los que se tienen actualmente</td>
-<td>Empresa</td>
 <td></td>
 </tr>
 </table>

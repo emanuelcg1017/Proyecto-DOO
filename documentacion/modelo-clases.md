@@ -6,51 +6,8 @@
 
 [Abrir diagrama en tamaño completo](imagenes/clases.png)
 
-## Contenido
-
-| Clase | Detalle |
-| --- | --- |
-| Empresa | [Consultar](clases/empresa.md) |
-| Pais | [Consultar](clases/pais.md) |
-| Pedido | [Consultar](clases/pedido.md) |
-| Tercero | [Consultar](clases/tercero.md) |
-| TipoDireccion | [Consultar](clases/tipo-direccion.md) |
-| TipoDocumento | [Consultar](clases/tipo-documento.md) |
-| DetallePedido | [Consultar](clases/detalle-pedido.md) |
-| Departamento | [Consultar](clases/departamento.md) |
-| Persona | [Consultar](clases/persona.md) |
-| Municipio | [Consultar](clases/municipio.md) |
-| Barrio | [Consultar](clases/barrio.md) |
-| Direccion | [Consultar](clases/direccion.md) |
-| CEDI | [Consultar](clases/cedi.md) |
-| Servicio | [Consultar](clases/servicio.md) |
-| Entrega | [Consultar](clases/entrega.md) |
-| EmpresaServicio | [Consultar](clases/empresa-servicio.md) |
-| EntregaTercero | [Consultar](clases/entrega-tercero.md) |
-| Factura | [Consultar](clases/factura.md) |
-| ServicioCEDI | [Consultar](clases/servicio-cedi.md) |
-| DetalleEntrega | [Consultar](clases/detalle-entrega.md) |
-| ServicioEntrega | [Consultar](clases/servicio-entrega.md) |
-| ServicioFactura | [Consultar](clases/servicio-factura.md) |
-| CostoRecorrido | [Consultar](clases/costo-recorrido.md) |
-| Utilidad | [Consultar](clases/utilidad.md) |
-| Preliquidacion | [Consultar](clases/preliquidacion.md) |
-| EstadoServicio | [Consultar](clases/estado-servicio.md) |
-| EstadoEntrega | [Consultar](clases/estado-entrega.md) |
-| EstadoFactura | [Consultar](clases/estado-factura.md) |
-| EstadoPreliquidacion | [Consultar](clases/estado-preliquidacion.md) |
-| TransicionEstadoServicio | [Consultar](clases/transicion-estado-servicio.md) |
-| TransicionEstadoEntrega | [Consultar](clases/transicion-estado-entrega.md) |
-| TransicionEstadoFactura | [Consultar](clases/transicion-estado-factura.md) |
-| TransicionEstadoPreliquidacion | [Consultar](clases/transicion-estado-preliquidacion.md) |
-
-## Índice del modelo original
-
 <a id="clases-s1"></a>
-
-## Diagrama de clases
-
-
+<a id="clases-s1-a1"></a>
 
 <a id="clases-s2"></a>
 

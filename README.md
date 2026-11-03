@@ -27,7 +27,7 @@ documentacion/
 
 Los archivos `.md` contienen el texto y las tablas. La carpeta `imagenes` contiene los tres diagramas que se muestran en los modelos. Los enlaces son relativos para que funcionen al clonar el proyecto y en GitHub.
 
-Las tablas usan HTML dentro de Markdown para conservar las celdas combinadas de los Excel. Las celdas vacías permanecen vacías. Las referencias que ya estaban rotas en el documento de origen se identifican al final del modelo correspondiente.
+Las tablas usan HTML dentro de Markdown para conservar las celdas combinadas de los Excel. Las celdas vacías permanecen vacías.
 
 ## Proyecto
 

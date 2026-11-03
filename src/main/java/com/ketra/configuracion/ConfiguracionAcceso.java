@@ -25,13 +25,13 @@ public class ConfiguracionAcceso {
 	@Bean
 	public SecurityFilterChain configurarAcceso(HttpSecurity http) {
 
-		http.authorizeHttpRequests(permisos -> {
+		http.authorizeHttpRequests(permisos -> 
 
 			permisos.requestMatchers(RUTA_LOGIN, "/css/**", "/js/**", "/favicon.ico",
 						"/oauth2/**", "/login/**", "/error", "/api/v1/sesion/csrf").permitAll()
-					.anyRequest().authenticated();
+					.anyRequest().authenticated()
 
-		});
+		);
 
 		http.oauth2Login(ingreso -> {
 
